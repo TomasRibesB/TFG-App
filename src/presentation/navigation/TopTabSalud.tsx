@@ -1,6 +1,6 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {MiSaludScreen} from '../screens/saludScreens/PlanNutricionalScreen';
-import {ProfesionalesScreen} from '../screens/saludScreens/NutricionistaScreen';
+import {MiSaludScreen} from '../screens/saludScreens/MiSaludScreen';
+import {ProfesionalesScreen} from '../screens/saludScreens/ProfesionalesScreen';
 import {MainLayout} from '../layouts/MainLayout';
 import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
