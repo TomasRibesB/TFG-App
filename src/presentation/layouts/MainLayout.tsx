@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import {StyleProp, useColorScheme, View, ViewStyle} from 'react-native';
+import {ScrollView, StyleProp, useColorScheme, View, ViewStyle} from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
@@ -23,6 +23,20 @@ export const MainLayout = ({
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
+
+  const childrenView = (
+    <View
+      style={[
+        {
+          flex: 1,
+          flexDirection: 'column',
+          paddingHorizontal: 14,
+        },
+        stylesChild,
+      ]}>
+      {children}
+    </View>
+  );
 
   return (
     <View
@@ -53,17 +67,13 @@ export const MainLayout = ({
         </View>
         {title && <Avatar.Icon icon="person-outline" size={48} />}
       </View>
-      <View
-        style={[
-          {
-            flex: 1,
-            flexDirection: 'column',
-            paddingHorizontal: 14,
-          },
-          stylesChild,
-        ]}>
-        {children}
-      </View>
+      {title ? (
+        <ScrollView contentContainerStyle={{flexGrow: 1}} style={{flex: 1}}>
+          {childrenView}
+        </ScrollView>
+      ) : (
+        childrenView
+      )}
     </View>
   );
 };
