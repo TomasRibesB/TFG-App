@@ -1,12 +1,16 @@
-import React, {Component, useContext} from 'react';
+import React from 'react';
 import {MainLayout} from '../layouts/MainLayout';
-import {Avatar, Button, Card, Text, TextInput} from 'react-native-paper';
+import {Avatar, Button, Text, TextInput} from 'react-native-paper';
 import {CardContainer} from '../components/CardContainer';
 import {ScrollView} from 'react-native-gesture-handler';
-import {globalTheme, globalVariables} from '../../config/theme/global-theme';
+import {globalVariables} from '../../config/theme/global-theme';
 import {View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParams } from '../navigation/StackNavigator';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export const LoginScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
 
   return (
     <MainLayout>
@@ -36,7 +40,7 @@ export const LoginScreen = () => {
             Iniciar Sesión
           </Text>
           <TextInput
-            label="Email"
+            label="Correo Electrónico"
             mode="outlined"
             keyboardType="email-address"
             style={{
@@ -44,7 +48,7 @@ export const LoginScreen = () => {
             }}
           />
           <TextInput
-            label="Password"
+            label="Contraseña"
             mode="outlined"
             secureTextEntry
             style={{marginBottom: globalVariables.padding * 2}}
@@ -56,9 +60,15 @@ export const LoginScreen = () => {
               marginBottom: globalVariables.padding,
             }}
             children="Entrar"
+            onPress={() => navigation.navigate('BotTabNavigator')}
           />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Button mode="text" style={{padding: 0}}>¿No tienes una cuenta? Regístrate</Button>
+            <Button
+              mode="text"
+              style={{padding: 0}}
+              onPress={() => navigation.navigate('RegisterScreen')}>
+              ¿No tienes una cuenta? Regístrate
+            </Button>
           </View>
         </CardContainer>
       </ScrollView>
