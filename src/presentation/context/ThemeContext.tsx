@@ -1,42 +1,20 @@
-import { createContext, PropsWithChildren } from "react";
+import {PropsWithChildren} from 'react';
 
 import {
-    NavigationContainer,
-    DarkTheme as NavigationDarkTheme,
-    DefaultTheme as NavigationDefaultTheme,
+  NavigationContainer,
 } from '@react-navigation/native';
-import { adaptNavigationTheme, PaperProvider } from 'react-native-paper';
-import { useColorScheme } from "react-native";
-
+import {PaperProvider} from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import { View } from 'react-native';
 
-const { LightTheme, DarkTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
-});
+export const ThemecontextProvider = ({children}: PropsWithChildren) => {
 
-export const ThemeContext = createContext({
-    isDark: false,
-    theme: LightTheme,
-})
-
-
-export const ThemecontextProvider = ({ children }: PropsWithChildren) => {
-
-    const colorScheme = useColorScheme();
-
-    const isDark = colorScheme === 'dark';
-
-
-    const theme = isDark ? DarkTheme : LightTheme;
-
-    return (
-        <PaperProvider settings={{ icon: props => <IonIcon {...props} /> }} theme={theme}>
-            <NavigationContainer theme={theme}>
-                <ThemeContext.Provider value={{ isDark: isDark, theme }}>
-                    {children}
-                </ThemeContext.Provider>
-            </NavigationContainer>
-        </PaperProvider>
-    )
-}
+  return (
+    <PaperProvider
+      settings={{icon: props => <IonIcon {...props} />}}>
+      <NavigationContainer>
+          {children}
+      </NavigationContainer>
+    </PaperProvider>
+  );
+};
