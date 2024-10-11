@@ -15,10 +15,11 @@ export const CardContainer = ({children, title, icon, contentStyle}: Props) => {
   return (
     <Card
       style={[
-        globalTheme.containerBorder,
-        {width: '100%'},
+        {width: '98%'},
         title ? {} : {paddingTop: globalVariables.padding},
-      ]}>
+      ]}
+      elevation={1}
+      >
       {title && (
         <Card.Title
           title={title}

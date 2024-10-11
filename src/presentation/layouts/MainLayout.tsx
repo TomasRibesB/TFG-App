@@ -20,7 +20,7 @@ export const MainLayout = ({title, subtitle, children = null}: Props) => {
       style={{
         flex: 1,
         paddingTop: title? top + 16 : 0,
-        paddingHorizontal: 16,
+        paddingHorizontal: 14,
         backgroundColor: isDarkMode ? MD3DarkTheme.colors.background : MD3LightTheme.colors.background,
       }}>
       <View
