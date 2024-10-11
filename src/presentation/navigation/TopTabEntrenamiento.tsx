@@ -1,6 +1,6 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {RutinaScreen} from '../screens/entrenamientoScreens/RutinaScreen';
-import {GymScreen} from '../screens/entrenamientoScreens/GymScreen';
+import {GimnasioScreen} from '../screens/entrenamientoScreens/GimnasioScreen';
 import {MainLayout} from '../layouts/MainLayout';
 import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
 import {useColorScheme} from 'react-native';
@@ -37,7 +37,7 @@ export const TopTabEntrenamiento = () => {
         }}>
         <Tab.Screen
           name="Gym"
-          component={GymScreen}
+          component={GimnasioScreen}
           options={{tabBarLabel: 'Gimnasio'}}
         />
         <Tab.Screen
