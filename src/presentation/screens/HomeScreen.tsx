@@ -1,6 +1,6 @@
-import {Text, View} from 'react-native';
 import React, {Component} from 'react';
 import { MainLayout } from '../layouts/MainLayout';
+import { Text } from 'react-native-paper';
 
 export const HomeScreen = () => {
   return (
