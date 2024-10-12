@@ -36,14 +36,14 @@ export const TopTabSalud = () => {
           },
         }}>
         <Tab.Screen
-          name="Profesionales"
-          component={ProfesionalesScreen}
-          options={{tabBarLabel: 'Profesionales'}}
-        />
-        <Tab.Screen
           name="MiSalud"
           component={MiSaludScreen}
           options={{tabBarLabel: 'Mi Salud'}}
+        />
+        <Tab.Screen
+          name="Profesionales"
+          component={ProfesionalesScreen}
+          options={{tabBarLabel: 'Profesionales'}}
         />
       </Tab.Navigator>
     </MainLayout>
