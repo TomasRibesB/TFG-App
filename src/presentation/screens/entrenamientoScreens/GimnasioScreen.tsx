@@ -1,19 +1,13 @@
 import React from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {Avatar, Text} from 'react-native-paper';
-import {CardContainer} from '../../components/CardContainer';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import { TicketComponent } from '../../components/TicketComponent';
+import { ProfesionalComponent } from '../../components/ProfesionalComponent';
 
 export const GimnasioScreen = () => {
   return (
     <MainLayout>
-      <CardContainer title="Entrenador">
-        <View style={styles.container}>
-          <Text>Tomás Ribes</Text>
-          <Avatar.Icon size={70} icon="accessibility-outline" style={styles.avatar} />
-        </View>
-      </CardContainer>
+      <ProfesionalComponent title="Entrenador" name="Tomás" lastName="Ribes" />
       <TicketComponent />
     </MainLayout>
   );
