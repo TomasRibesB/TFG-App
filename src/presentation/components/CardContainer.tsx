@@ -15,7 +15,7 @@ export const CardContainer = ({children, title, icon, contentStyle}: Props) => {
   return (
     <Card
       style={[
-        {width: '98%', marginBottom: globalVariables.margin},
+        {width: '100%', marginBottom: globalVariables.margin},
         title ? {} : {paddingTop: globalVariables.padding},
       ]}
       elevation={1}
