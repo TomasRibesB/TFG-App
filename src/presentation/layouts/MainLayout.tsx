@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
 
 interface Props {
   title?: string;
@@ -29,6 +29,7 @@ export const MainLayout = ({
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
+  const theme = useTheme();
 
   const childrenView = (
     <View
@@ -49,9 +50,7 @@ export const MainLayout = ({
       style={[
         {
           flex: 1,
-          backgroundColor: isDarkMode
-            ? MD3DarkTheme.colors.background
-            : MD3LightTheme.colors.background,
+          backgroundColor: theme.colors.background,
         },
         styles,
       ]}>

@@ -7,7 +7,7 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Card, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { globalVariables } from '../../config/theme/global-theme';
 
@@ -28,6 +28,7 @@ export const DesplegableCard = ({
   const animation = useRef(new Animated.Value(0)).current;
   const rotateAnimation = useRef(new Animated.Value(0)).current;
   const [contentHeight, setContentHeight] = useState(0);
+  const theme = useTheme();
 
   const toggleExpand = () => {
     if (contentHeight === 0) return; // No hacer nada si la altura del contenido aún no se ha medido.
@@ -67,12 +68,12 @@ export const DesplegableCard = ({
           right={props =>
             icon && (
               <View style={{ flexDirection: 'row' }}>
-                <Icon name={icon} size={24} style={{ marginRight: 16 }} />
+                <Icon name={icon} size={24} style={{ marginRight: 16, color: theme.colors.secondary }} />
                 <Animated.View style={{ transform: [{ rotate }] }}>
                   <Icon
                     name="chevron-forward"
                     size={24}
-                    style={{ marginRight: 16 }}
+                    style={{ marginRight: 16, color: theme.colors.secondary }}
                   />
                 </Animated.View>
               </View>

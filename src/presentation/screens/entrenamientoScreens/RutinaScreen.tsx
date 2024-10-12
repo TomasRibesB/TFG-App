@@ -21,7 +21,7 @@ export const RutinaScreen = () => {
   const [selectedExercise, setSelectedExercise] =
     useState<EjercicioElement | null>(null);
 
-  const theme = useTheme(); // Obtener el tema actual para los colores y elevaciones
+  const theme = useTheme();
 
   const handleCheckboxPress = (id: number) => {
     setChecked(prevState => ({
@@ -126,18 +126,91 @@ export const RutinaScreen = () => {
               </Text>
               <Text
                 style={[
-                  styles.modalText,
-                  {color: theme.colors.onSurfaceVariant},
-                ]}>
-                {selectedExercise.series}x{selectedExercise.repeticiones}
-              </Text>
-              <Text
-                style={[
-                  styles.modalText,
+                  styles.modalDescription,
                   {color: theme.colors.onSurfaceVariant},
                 ]}>
                 {selectedExercise.ejercicio.descripcion}
               </Text>
+              <View style={styles.modalRow}>
+                <Text
+                  style={[
+                    styles.modalLabel,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  Series:
+                </Text>
+                <Text
+                  style={[
+                    styles.modalText,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.series}
+                </Text>
+              </View>
+              <View style={styles.modalRow}>
+                <Text
+                  style={[
+                    styles.modalLabel,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  Repeticiones:
+                </Text>
+                <Text
+                  style={[
+                    styles.modalText,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.repeticiones}
+                </Text>
+              </View>
+              <View style={styles.modalRow}>
+                <Text
+                  style={[
+                    styles.modalLabel,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.ejercicio.unidadMedida}:
+                </Text>
+                <Text
+                  style={[
+                    styles.modalText,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.medicion}
+                </Text>
+              </View>
+              <View style={styles.modalRow}>
+                <Text
+                  style={[
+                    styles.modalLabel,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  Grupos musculares:
+                </Text>
+                <Text
+                  style={[
+                    styles.modalText,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.ejercicio.gruposMuscularesId.join(', ')}
+                </Text>
+              </View>
+              <View style={styles.modalRow}>
+                <Text
+                  style={[
+                    styles.modalLabel,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  Categorías:
+                </Text>
+                <Text
+                  style={[
+                    styles.modalText,
+                    {color: theme.colors.onSurfaceVariant},
+                  ]}>
+                  {selectedExercise.ejercicio.categoriasId.join(', ')}
+                </Text>
+              </View>
               <Text
                 style={[
                   styles.modalText,
@@ -163,23 +236,39 @@ const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: 'center',
     padding: globalVariables.padding,
+    shadowColor: 'transparent', // Sin sombra
   },
   modalContent: {
-    padding: globalVariables.padding,
-    borderRadius: globalVariables.containerBorderRadius,
-    elevation: 5,
-    shadowColor: 'rgba(0,0,0,0.2)',
+    padding: globalVariables.padding * 1.5,
+    borderRadius: globalVariables.containerBorderRadius * 1.5, // Bordes más redondeados
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 24, // Título más grande y destacable
     fontWeight: 'bold',
     marginBottom: globalVariables.margin,
+    textAlign: 'center', // Centrar el título
+  },
+  modalRow: {
+    flexDirection: 'row', // Estilo en fila para etiquetas y valores
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: globalVariables.margin / 2,
+  },
+  modalLabel: {
+    fontSize: 18,
+    fontWeight: '600', // Etiquetas más prominentes
   },
   modalText: {
+    fontSize: 18,
+  },
+  modalDescription: {
     fontSize: 16,
+    fontStyle: 'italic', // Dar estilo cursivo a la descripción
     marginBottom: globalVariables.margin,
   },
   closeButton: {
     marginTop: globalVariables.margin,
+    alignSelf: 'center', // Botón centrado
+    width: '50%', // Botón más ancho
   },
 });
