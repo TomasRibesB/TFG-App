@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Animated,
   TouchableOpacity,
@@ -7,28 +7,46 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import { Card, useTheme } from 'react-native-paper';
+import {Card, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { globalVariables } from '../../config/theme/global-theme';
+import {globalVariables} from '../../config/theme/global-theme';
 
 interface Props {
   children: React.ReactNode;
   title?: string;
+  subtitle?: string;
   icon?: string;
   contentStyle?: StyleProp<ViewStyle>;
+  isExpanded?: boolean;
 }
 
 export const DesplegableCard = ({
   children,
   title,
+  subtitle,
   icon,
   contentStyle,
+  isExpanded = false,
 }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
   const rotateAnimation = useRef(new Animated.Value(0)).current;
   const [contentHeight, setContentHeight] = useState(0);
   const theme = useTheme();
+
+  useEffect(() => {
+    setExpanded(isExpanded);
+    Animated.timing(animation, {
+      toValue: isExpanded ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(rotateAnimation, {
+      toValue: isExpanded ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isExpanded]);
 
   const toggleExpand = () => {
     if (contentHeight === 0) return; // No hacer nada si la altura del contenido aún no se ha medido.
@@ -65,15 +83,20 @@ export const DesplegableCard = ({
       <TouchableOpacity onPress={toggleExpand}>
         <Card.Title
           title={title}
+          subtitle={subtitle}
           right={props =>
             icon && (
-              <View style={{ flexDirection: 'row' }}>
-                <Icon name={icon} size={24} style={{ marginRight: 16, color: theme.colors.secondary }} />
-                <Animated.View style={{ transform: [{ rotate }] }}>
+              <View style={{flexDirection: 'row'}}>
+                <Icon
+                  name={icon}
+                  size={24}
+                  style={{marginRight: 16, color: theme.colors.secondary}}
+                />
+                <Animated.View style={{transform: [{rotate}]}}>
                   <Icon
                     name="chevron-forward"
                     size={24}
-                    style={{ marginRight: 16, color: theme.colors.secondary }}
+                    style={{marginRight: 16, color: theme.colors.secondary}}
                   />
                 </Animated.View>
               </View>
@@ -83,7 +106,8 @@ export const DesplegableCard = ({
       </TouchableOpacity>
 
       {/* Vista oculta para medir la altura del contenido */}
-      <View style={{ position: 'absolute', opacity: 0, zIndex: -1, width: '100%' }}>
+      <View
+        style={{position: 'absolute', opacity: 0, zIndex: -1, width: '100%'}}>
         <View
           onLayout={event => {
             const height = event.nativeEvent.layout.height;
@@ -98,7 +122,7 @@ export const DesplegableCard = ({
       {/* Contenido animado */}
       {contentHeight > 0 && (
         <Animated.View
-          style={[{ height: animatedHeight, overflow: 'hidden' }, contentStyle]}>
+          style={[{height: animatedHeight, overflow: 'hidden'}, contentStyle]}>
           <Card.Content>{children}</Card.Content>
         </Animated.View>
       )}
