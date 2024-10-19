@@ -37,6 +37,8 @@ local.properties
 # node.js
 #
 node_modules/
+!node_modules/react-native-tab-view/src/TabBar.tsx
+!node_modules/react-native-paper/src/components/BottomNavigation/BottomNavigationBar.tsx
 npm-debug.log
 yarn-error.log
 
