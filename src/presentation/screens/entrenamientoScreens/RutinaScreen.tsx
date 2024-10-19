@@ -12,7 +12,7 @@ import {
 import {DesplegableCard} from '../../components/DesplegableCard';
 import rutinasData from './Rutinas.json';
 import {View, StyleSheet} from 'react-native';
-import {globalVariables} from '../../../config/theme/global-theme';
+import {globalVariables, globalTheme} from '../../../config/theme/global-theme';
 import {EjercicioElement} from './RutinaType';
 
 export const RutinaScreen = () => {
@@ -112,116 +112,103 @@ export const RutinaScreen = () => {
       <Modal
         visible={modalVisible}
         onDismiss={closeModal}
-        contentContainerStyle={styles.modalContainer}>
+        contentContainerStyle={globalTheme.modalContainer}>
         <View
           style={[
-            styles.modalContent,
-            {backgroundColor: theme.colors.surface},
+            globalTheme.modalContent,
           ]}>
           {selectedExercise && (
             <>
               <Text
-                style={[styles.modalTitle, {color: theme.colors.onSurface}]}>
+                style={[globalTheme.modalTitle, {color: theme.colors.onSurface}]}>
                 {selectedExercise.ejercicio.nombre}
               </Text>
               <Text
                 style={[
-                  styles.modalDescription,
-                  {color: theme.colors.onSurfaceVariant},
+                  globalTheme.modalDescription,
                 ]}>
                 {selectedExercise.ejercicio.descripcion}
               </Text>
-              <View style={styles.modalRow}>
+              <View style={globalTheme.modalRow}>
                 <Text
                   style={[
-                    styles.modalLabel,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalLabel,
                   ]}>
                   Series:
                 </Text>
                 <Text
                   style={[
-                    styles.modalText,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalText,
                   ]}>
                   {selectedExercise.series}
                 </Text>
               </View>
-              <View style={styles.modalRow}>
+              <View style={globalTheme.modalRow}>
                 <Text
                   style={[
-                    styles.modalLabel,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalLabel,
                   ]}>
                   Repeticiones:
                 </Text>
                 <Text
                   style={[
-                    styles.modalText,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalText,
                   ]}>
                   {selectedExercise.repeticiones}
                 </Text>
               </View>
-              <View style={styles.modalRow}>
+              <View style={globalTheme.modalRow}>
                 <Text
                   style={[
-                    styles.modalLabel,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalLabel,
                   ]}>
                   {selectedExercise.ejercicio.unidadMedida}:
                 </Text>
                 <Text
                   style={[
-                    styles.modalText,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalText,
                   ]}>
                   {selectedExercise.medicion}
                 </Text>
               </View>
-              <View style={styles.modalRow}>
+              <View style={globalTheme.modalRow}>
                 <Text
                   style={[
-                    styles.modalLabel,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalLabel,
                   ]}>
                   Grupos musculares:
                 </Text>
                 <Text
                   style={[
-                    styles.modalText,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalText,
                   ]}>
                   {selectedExercise.ejercicio.gruposMuscularesId.join(', ')}
                 </Text>
               </View>
-              <View style={styles.modalRow}>
+              <View style={globalTheme.modalRow}>
                 <Text
                   style={[
-                    styles.modalLabel,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalLabel,
                   ]}>
                   Categorías:
                 </Text>
                 <Text
                   style={[
-                    styles.modalText,
-                    {color: theme.colors.onSurfaceVariant},
+                    globalTheme.modalText,
                   ]}>
                   {selectedExercise.ejercicio.categoriasId.join(', ')}
                 </Text>
               </View>
               <Text
                 style={[
-                  styles.modalText,
-                  {color: theme.colors.onSurfaceVariant},
+                  globalTheme.modalText,
                 ]}>
                 {selectedExercise.ejercicio.video}
               </Text>
               <Button
                 onPress={closeModal}
                 mode="contained"
-                style={styles.closeButton}>
+                style={globalTheme.modalCloseButton}>
                 Cerrar
               </Button>
             </>
@@ -231,44 +218,3 @@ export const RutinaScreen = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    justifyContent: 'center',
-    padding: globalVariables.padding,
-    shadowColor: 'transparent', // Sin sombra
-  },
-  modalContent: {
-    padding: globalVariables.padding * 1.5,
-    borderRadius: globalVariables.containerBorderRadius * 1.5, // Bordes más redondeados
-  },
-  modalTitle: {
-    fontSize: 24, // Título más grande y destacable
-    fontWeight: 'bold',
-    marginBottom: globalVariables.margin,
-    textAlign: 'center', // Centrar el título
-  },
-  modalRow: {
-    flexDirection: 'row', // Estilo en fila para etiquetas y valores
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: globalVariables.margin / 2,
-  },
-  modalLabel: {
-    fontSize: 18,
-    fontWeight: '600', // Etiquetas más prominentes
-  },
-  modalText: {
-    fontSize: 18,
-  },
-  modalDescription: {
-    fontSize: 16,
-    fontStyle: 'italic', // Dar estilo cursivo a la descripción
-    marginBottom: globalVariables.margin,
-  },
-  closeButton: {
-    marginTop: globalVariables.margin,
-    alignSelf: 'center', // Botón centrado
-    width: '50%', // Botón más ancho
-  },
-});

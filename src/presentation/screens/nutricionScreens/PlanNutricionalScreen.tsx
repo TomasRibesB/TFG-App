@@ -1,11 +1,25 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {Chip, Text} from 'react-native-paper';
+import {Button, Chip, Modal, Text} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {globalTheme} from '../../../config/theme/global-theme';
 
 export const PlanNutricionalScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedNote, setSelectedNote] = useState('');
+
+  const handleNotePress = (nota: string) => {
+    setSelectedNote(nota);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedNote('');
+  };
+
   const plan = [
     {
       id: 1,
@@ -52,69 +66,92 @@ export const PlanNutricionalScreen = () => {
   ];
 
   return (
-    <MainLayout>
-      {plan.map(item => (
-        <DesplegableCard
-          key={item.id}
-          title={item.name}
-          icon="restaurant-outline"
-          subtitle={item.dateCreated}>
-          <Text>{item.description}</Text>
-          <View style={{marginTop: 16, flexDirection: 'column'}}>
-            <Text variant="titleMedium">Objetivos</Text>
-            {item.objectives.map((objective, index) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: 5,
-                }}>
-                <Icon name="chevron-forward-outline" size={20} />
-                <Text style={{marginLeft: 5}}>{objective}</Text>
-              </View>
-            ))}
-          </View>
-          <View
-            style={{
-              marginVertical: 10,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}>
-            <Chip
-              icon="restaurant-outline"
-              onPress={() => {}}
-              style={{margin: 5}}>
-              {item.dailyCalories} Calorias × Dia
-            </Chip>
-            {item.macronutrients.map((macro, index) => (
-              <Chip onPress={() => {}} key={index} style={{margin: 5}}>
-                {item.macronutrients[index]}
-              </Chip>
-            ))}
-          </View>
+    <>
+      <MainLayout>
+        {plan.map(item => (
           <DesplegableCard
-            title="Notas Adicionales"
-            icon="alert-circle-outline">
-            <Text>{item.additionalNotes}</Text>
+            key={item.id}
+            title={item.name}
+            icon="restaurant-outline"
+            subtitle={item.dateCreated}>
+            <Text>{item.description}</Text>
+            <View style={{marginTop: 16, flexDirection: 'column'}}>
+              <Text variant="titleMedium">Objetivos</Text>
+              {item.objectives.map((objective, index) => (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 5,
+                  }}>
+                  <Icon name="chevron-forward-outline" size={20} />
+                  <Text style={{marginLeft: 5}}>{objective}</Text>
+                </View>
+              ))}
+            </View>
+            <View
+              style={{
+                marginVertical: 10,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              <Chip
+                icon="restaurant-outline"
+                onPress={() => {}}
+                style={{margin: 5}}>
+                {item.dailyCalories} Calorias × Dia
+              </Chip>
+              {item.macronutrients.map((macro, index) => (
+                <Chip onPress={() => {}} key={index} style={{margin: 5}}>
+                  {item.macronutrients[index]}
+                </Chip>
+              ))}
+            </View>
+            <Button
+              icon="document-text-outline"
+              mode="outlined"
+              onPress={() => {
+                handleNotePress(item.additionalNotes);
+              }}
+              style={{marginVertical: 10}}>
+              Notas Adicionales
+            </Button>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 10,
+                justifyContent: 'flex-end',
+              }}>
+              <Text style={{marginRight: 3}}>Diseñado por</Text>
+              <Icon
+                name="person-circle-outline"
+                size={24}
+                style={{marginRight: 3}}
+              />
+              <Text>{item.nutritionist.name}</Text>
+            </View>
           </DesplegableCard>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 10,
-              justifyContent: 'flex-end',
-            }}>
-            <Text style={{marginRight: 3}}>Diseñado por</Text>
-            <Icon
-              name="person-circle-outline"
-              size={24}
-              style={{marginRight: 3}}
-            />
-            <Text>{item.nutritionist.name}</Text>
-          </View>
-        </DesplegableCard>
-      ))}
-    </MainLayout>
+        ))}
+      </MainLayout>
+      <Modal
+        visible={modalVisible}
+        onDismiss={closeModal}
+        contentContainerStyle={globalTheme.modalContainer}>
+        <View style={[globalTheme.modalContent]}>
+          <Text style={globalTheme.modalTitle}>Notas Adicionales</Text>
+          <Text style={[globalTheme.modalDescription, {fontStyle: 'normal'}]}>
+            {selectedNote}
+          </Text>
+          <Button
+            mode="contained"
+            onPress={closeModal}
+            style={globalTheme.modalCloseButton}>
+            Cerrar
+          </Button>
+        </View>
+      </Modal>
+    </>
   );
 };
