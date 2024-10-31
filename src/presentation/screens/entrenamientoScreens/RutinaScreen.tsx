@@ -3,7 +3,6 @@ import {MainLayout} from '../../layouts/MainLayout';
 import {
   Checkbox,
   List,
-  Modal,
   ProgressBar,
   Text,
   Button,
@@ -14,6 +13,8 @@ import rutinasData from './Rutinas.json';
 import {View, StyleSheet} from 'react-native';
 import {globalVariables, globalTheme} from '../../../config/theme/global-theme';
 import {EjercicioElement} from './RutinaType';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { ExerciseDialog } from '../../components/DialogEjercicio';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -78,8 +79,8 @@ export const RutinaScreen = () => {
                     <Checkbox
                       status={
                         checked[ejercicio.rutinaEjercicioId]
-                          ? 'checked'
-                          : 'unchecked'
+                        ? 'checked'
+                        : 'unchecked'
                       }
                       onPress={() =>
                         handleCheckboxPress(ejercicio.rutinaEjercicioId)
@@ -105,116 +106,32 @@ export const RutinaScreen = () => {
                   borderRadius: globalVariables.innerBorderRadius,
                 }}
               />
+              {rutina?.entrenador && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 10,
+                    justifyContent: 'flex-end',
+                  }}>
+                  <Text style={{marginRight: 3}}>Diseñado por</Text>
+                  <Icon
+                    name="person-circle-outline"
+                    size={24}
+                    style={{marginRight: 3}}
+                  />
+                  <Text>{rutina?.entrenador?.nombre}</Text>
+                </View>
+              )}
             </View>
           </DesplegableCard>
         ))}
       </MainLayout>
-      <Modal
+      <ExerciseDialog
         visible={modalVisible}
         onDismiss={closeModal}
-        contentContainerStyle={globalTheme.modalContainer}>
-        <View
-          style={[
-            globalTheme.modalContent,
-          ]}>
-          {selectedExercise && (
-            <>
-              <Text
-                style={[globalTheme.modalTitle, {color: theme.colors.onSurface}]}>
-                {selectedExercise.ejercicio.nombre}
-              </Text>
-              <Text
-                style={[
-                  globalTheme.modalDescription,
-                ]}>
-                {selectedExercise.ejercicio.descripcion}
-              </Text>
-              <View style={globalTheme.modalRow}>
-                <Text
-                  style={[
-                    globalTheme.modalLabel,
-                  ]}>
-                  Series:
-                </Text>
-                <Text
-                  style={[
-                    globalTheme.modalText,
-                  ]}>
-                  {selectedExercise.series}
-                </Text>
-              </View>
-              <View style={globalTheme.modalRow}>
-                <Text
-                  style={[
-                    globalTheme.modalLabel,
-                  ]}>
-                  Repeticiones:
-                </Text>
-                <Text
-                  style={[
-                    globalTheme.modalText,
-                  ]}>
-                  {selectedExercise.repeticiones}
-                </Text>
-              </View>
-              <View style={globalTheme.modalRow}>
-                <Text
-                  style={[
-                    globalTheme.modalLabel,
-                  ]}>
-                  {selectedExercise.ejercicio.unidadMedida}:
-                </Text>
-                <Text
-                  style={[
-                    globalTheme.modalText,
-                  ]}>
-                  {selectedExercise.medicion}
-                </Text>
-              </View>
-              <View style={globalTheme.modalRow}>
-                <Text
-                  style={[
-                    globalTheme.modalLabel,
-                  ]}>
-                  Grupos musculares:
-                </Text>
-                <Text
-                  style={[
-                    globalTheme.modalText,
-                  ]}>
-                  {selectedExercise.ejercicio.gruposMuscularesId.join(', ')}
-                </Text>
-              </View>
-              <View style={globalTheme.modalRow}>
-                <Text
-                  style={[
-                    globalTheme.modalLabel,
-                  ]}>
-                  Categorías:
-                </Text>
-                <Text
-                  style={[
-                    globalTheme.modalText,
-                  ]}>
-                  {selectedExercise.ejercicio.categoriasId.join(', ')}
-                </Text>
-              </View>
-              <Text
-                style={[
-                  globalTheme.modalText,
-                ]}>
-                {selectedExercise.ejercicio.video}
-              </Text>
-              <Button
-                onPress={closeModal}
-                mode="contained"
-                style={globalTheme.modalCloseButton}>
-                Cerrar
-              </Button>
-            </>
-          )}
-        </View>
-      </Modal>
+        exercise={selectedExercise}
+      />
     </>
   );
 };

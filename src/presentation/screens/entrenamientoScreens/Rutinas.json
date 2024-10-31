@@ -1,399 +1,403 @@
 {
-    "rutinas": [
-      {
-        "rutinaId": 1,
-        "fechaCreacion": "2024-10-11",
-        "nombre": "Rutina de Fuerza",
-        "descripcion": "Rutina enfocada en el desarrollo de fuerza muscular.",
+  "rutinas": [
+    {
+      "rutinaId": 1,
+      "fechaCreacion": "2024-10-11",
+      "nombre": "Rutina de Fuerza",
+      "descripcion": "Rutina enfocada en el desarrollo de fuerza muscular.",
+      "entrenador": {
         "entrenadorId": 101,
-        "usuarioId": 201,
-        "ejercicios": [
-          {
-            "rutinaEjercicioId": 1,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 1,
-              "nombre": "Press de Banca",
-              "descripcion": "Ejercicio para el desarrollo del pectoral mayor.",
-              "gruposMuscularesId": [1, 2],
-              "categoriasId": [1],
-              "video": "https://youtube.com/demo_press_banca",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 6,
-            "medicion": 100
-          },
-          {
-            "rutinaEjercicioId": 2,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 2,
-              "nombre": "Sentadilla",
-              "descripcion": "Ejercicio compuesto para piernas.",
-              "gruposMuscularesId": [3, 4],
-              "categoriasId": [2],
-              "video": "https://youtube.com/demo_sentadilla",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 8,
-            "medicion": 80
-          },
-          {
-            "rutinaEjercicioId": 3,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 3,
-              "nombre": "Peso Muerto",
-              "descripcion": "Ejercicio para fortalecer la espalda baja y piernas.",
-              "gruposMuscularesId": [5],
-              "categoriasId": [3],
-              "video": "https://youtube.com/demo_peso_muerto",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 5,
-            "medicion": 120
-          },
-          {
-            "rutinaEjercicioId": 4,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 4,
-              "nombre": "Dominadas",
-              "descripcion": "Ejercicio para la espalda alta y bíceps.",
-              "gruposMuscularesId": [5, 6],
-              "categoriasId": [4],
-              "video": "https://youtube.com/demo_dominadas",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 8,
-            "medicion": 0
-          },
-          {
-            "rutinaEjercicioId": 5,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 5,
-              "nombre": "Press Militar",
-              "descripcion": "Ejercicio para los hombros.",
-              "gruposMuscularesId": [7],
-              "categoriasId": [1],
-              "video": "https://youtube.com/demo_press_militar",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 6,
-            "medicion": 50
-          },
-          {
-            "rutinaEjercicioId": 6,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 6,
-              "nombre": "Remo con Barra",
-              "descripcion": "Ejercicio para espalda media.",
-              "gruposMuscularesId": [5],
-              "categoriasId": [3],
-              "video": "https://youtube.com/demo_remo_barra",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 10,
-            "medicion": 70
-          },
-          {
-            "rutinaEjercicioId": 7,
-            "fechaBaja": null,
-            "rutinaId": 1,
-            "ejercicio": {
-              "ejercicioId": 7,
-              "nombre": "Curl de Bíceps",
-              "descripcion": "Ejercicio aislado para bíceps.",
-              "gruposMuscularesId": [6],
-              "categoriasId": [5],
-              "video": "https://youtube.com/demo_curl_biceps",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 12,
-            "medicion": 25
-          }
-        ]
+        "nombre": "Juan Pérez",
+        "especialidad": "Entrenador Personal",
+        "descripcion": "Entrenador con más de 10 años de experiencia en el desarrollo de rutinas de entrenamiento."
       },
-      {
-        "rutinaId": 2,
-        "fechaCreacion": "2024-10-11",
-        "nombre": "Rutina de Hipertrofia",
-        "descripcion": "Rutina enfocada en el aumento de masa muscular.",
-        "entrenadorId": 102,
-        "usuarioId": 202,
-        "ejercicios": [
-          {
-            "rutinaEjercicioId": 8,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 8,
-              "nombre": "Press Inclinado",
-              "descripcion": "Ejercicio para trabajar el pectoral superior.",
-              "gruposMuscularesId": [1],
-              "categoriasId": [1],
-              "video": "https://youtube.com/demo_press_inclinado",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 8,
-            "medicion": 60
+      "usuarioId": 201,
+      "ejercicios": [
+        {
+          "rutinaEjercicioId": 1,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 1,
+            "nombre": "Press de Banca",
+            "descripcion": "Ejercicio para el desarrollo del pectoral mayor.",
+            "gruposMuscularesId": [1, 2],
+            "categoriasId": [1],
+            "video": "https://youtube.com/demo_press_banca",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 9,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 9,
-              "nombre": "Prensa de Pierna",
-              "descripcion": "Ejercicio para el desarrollo de la fuerza en las piernas.",
-              "gruposMuscularesId": [3],
-              "categoriasId": [2],
-              "video": "https://youtube.com/demo_prensa_pierna",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 10,
-            "medicion": 150
+          "series": 4,
+          "repeticiones": 6,
+          "medicion": 100
+        },
+        {
+          "rutinaEjercicioId": 2,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 2,
+            "nombre": "Sentadilla",
+            "descripcion": "Ejercicio compuesto para piernas.",
+            "gruposMuscularesId": [3, 4],
+            "categoriasId": [2],
+            "video": "https://youtube.com/demo_sentadilla",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 10,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 10,
-              "nombre": "Curl de Bíceps en Banco Scott",
-              "descripcion": "Ejercicio de aislamiento para el bíceps.",
-              "gruposMuscularesId": [6],
-              "categoriasId": [5],
-              "video": "https://youtube.com/demo_curl_biceps_scott",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 12,
-            "medicion": 25
+          "series": 3,
+          "repeticiones": 8,
+          "medicion": 80
+        },
+        {
+          "rutinaEjercicioId": 3,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 3,
+            "nombre": "Peso Muerto",
+            "descripcion": "Ejercicio para fortalecer la espalda baja y piernas.",
+            "gruposMuscularesId": [5],
+            "categoriasId": [3],
+            "video": "https://youtube.com/demo_peso_muerto",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 11,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 11,
-              "nombre": "Extensiones de Cuádriceps",
-              "descripcion": "Ejercicio para trabajar el cuádriceps.",
-              "gruposMuscularesId": [3],
-              "categoriasId": [2],
-              "video": "https://youtube.com/demo_extensiones_cuadriceps",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 12,
-            "medicion": 50
+          "series": 4,
+          "repeticiones": 5,
+          "medicion": 120
+        },
+        {
+          "rutinaEjercicioId": 4,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 4,
+            "nombre": "Dominadas",
+            "descripcion": "Ejercicio para la espalda alta y bíceps.",
+            "gruposMuscularesId": [5, 6],
+            "categoriasId": [4],
+            "video": "https://youtube.com/demo_dominadas",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 12,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 12,
-              "nombre": "Remo con Mancuernas",
-              "descripcion": "Ejercicio para trabajar la espalda media.",
-              "gruposMuscularesId": [5],
-              "categoriasId": [3],
-              "video": "https://youtube.com/demo_remo_mancuernas",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 4,
-            "repeticiones": 10,
-            "medicion": 35
+          "series": 3,
+          "repeticiones": 8,
+          "medicion": 0
+        },
+        {
+          "rutinaEjercicioId": 5,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 5,
+            "nombre": "Press Militar",
+            "descripcion": "Ejercicio para los hombros.",
+            "gruposMuscularesId": [7],
+            "categoriasId": [1],
+            "video": "https://youtube.com/demo_press_militar",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 13,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 13,
-              "nombre": "Elevaciones Laterales",
-              "descripcion": "Ejercicio de aislamiento para los hombros.",
-              "gruposMuscularesId": [7],
-              "categoriasId": [1],
-              "video": "https://youtube.com/demo_elevaciones_laterales",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 15,
-            "medicion": 10
+          "series": 4,
+          "repeticiones": 6,
+          "medicion": 50
+        },
+        {
+          "rutinaEjercicioId": 6,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 6,
+            "nombre": "Remo con Barra",
+            "descripcion": "Ejercicio para espalda media.",
+            "gruposMuscularesId": [5],
+            "categoriasId": [3],
+            "video": "https://youtube.com/demo_remo_barra",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 14,
-            "fechaBaja": null,
-            "rutinaId": 2,
-            "ejercicio": {
-              "ejercicioId": 14,
-              "nombre": "Crunch Abdominal en Máquina",
-              "descripcion": "Ejercicio para el desarrollo de los abdominales.",
-              "gruposMuscularesId": [8],
-              "categoriasId": [6],
-              "video": "https://youtube.com/demo_crunch_abdominal",
-              "unidadMedida": "Kilogramos"
-            },
-            "series": 3,
-            "repeticiones": 20,
-            "medicion": 30
-          }
-        ]
-      },
-      {
-        "rutinaId": 3,
-        "fechaCreacion": "2024-10-11",
-        "nombre": "Rutina de Resistencia",
-        "descripcion": "Rutina enfocada en mejorar la capacidad cardiovascular y la resistencia muscular.",
-        "entrenadorId": 103,
-        "usuarioId": 203,
-        "ejercicios": [
-          {
-            "rutinaEjercicioId": 15,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 15,
-              "nombre": "Cinta de Correr",
-              "descripcion": "Ejercicio cardiovascular para aumentar la resistencia.",
-              "gruposMuscularesId": [3, 9],
-              "categoriasId": [7],
-              "video": "https://youtube.com/demo_cinta_correr",
-              "unidadMedida": "Kilómetros por hora"
-            },
-            "series": 1,
-            "repeticiones": 0,
-            "medicion": 10,
-            "unidadMedida": "km/h"
+          "series": 3,
+          "repeticiones": 10,
+          "medicion": 70
+        },
+        {
+          "rutinaEjercicioId": 7,
+          "fechaBaja": null,
+          "rutinaId": 1,
+          "ejercicio": {
+            "ejercicioId": 7,
+            "nombre": "Curl de Bíceps",
+            "descripcion": "Ejercicio aislado para bíceps.",
+            "gruposMuscularesId": [6],
+            "categoriasId": [5],
+            "video": "https://youtube.com/demo_curl_biceps",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 16,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 16,
-              "nombre": "Sentadillas con Salto",
-              "descripcion": "Ejercicio pliométrico para resistencia y explosividad.",
-              "gruposMuscularesId": [3],
-              "categoriasId": [2],
-              "video": "https://youtube.com/demo_sentadillas_salto",
-              "unidadMedida": "Repeticiones"
-            },
-            "series": 3,
-            "repeticiones": 15,
-            "medicion": 0,
-            "unidadMedida": "reps"
+          "series": 3,
+          "repeticiones": 12,
+          "medicion": 25
+        }
+      ]
+    },
+    {
+      "rutinaId": 2,
+      "fechaCreacion": "2024-10-11",
+      "nombre": "Rutina de Hipertrofia",
+      "descripcion": "Rutina enfocada en el aumento de masa muscular.",
+      "entrenadorId": 102,
+      "usuarioId": 202,
+      "ejercicios": [
+        {
+          "rutinaEjercicioId": 8,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 8,
+            "nombre": "Press Inclinado",
+            "descripcion": "Ejercicio para trabajar el pectoral superior.",
+            "gruposMuscularesId": [1],
+            "categoriasId": [1],
+            "video": "https://youtube.com/demo_press_inclinado",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 17,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 17,
-              "nombre": "Burpees",
-              "descripcion": "Ejercicio de cuerpo completo para resistencia cardiovascular.",
-              "gruposMuscularesId": [1, 3, 5],
-              "categoriasId": [7],
-              "video": "https://youtube.com/demo_burpees",
-              "unidadMedida": "Repeticiones"
-            },
-            "series": 3,
-            "repeticiones": 12,
-            "medicion": 0,
-            "unidadMedida": "reps"
+          "series": 4,
+          "repeticiones": 8,
+          "medicion": 60
+        },
+        {
+          "rutinaEjercicioId": 9,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 9,
+            "nombre": "Prensa de Pierna",
+            "descripcion": "Ejercicio para el desarrollo de la fuerza en las piernas.",
+            "gruposMuscularesId": [3],
+            "categoriasId": [2],
+            "video": "https://youtube.com/demo_prensa_pierna",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 18,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 18,
-              "nombre": "Remo en Máquina",
-              "descripcion": "Ejercicio cardiovascular para fortalecer la espalda y mejorar la resistencia.",
-              "gruposMuscularesId": [5],
-              "categoriasId": [7],
-              "video": "https://youtube.com/demo_remo_maquina",
-              "unidadMedida": "Minutos"
-            },
-            "series": 1,
-            "repeticiones": 0,
-            "medicion": 15,
-            "unidadMedida": "min"
+          "series": 4,
+          "repeticiones": 10,
+          "medicion": 150
+        },
+        {
+          "rutinaEjercicioId": 10,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 10,
+            "nombre": "Curl de Bíceps en Banco Scott",
+            "descripcion": "Ejercicio de aislamiento para el bíceps.",
+            "gruposMuscularesId": [6],
+            "categoriasId": [5],
+            "video": "https://youtube.com/demo_curl_biceps_scott",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 19,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 19,
-              "nombre": "Plancha Abdominal",
-              "descripcion": "Ejercicio isométrico para fortalecer el core y mejorar la resistencia.",
-              "gruposMuscularesId": [8],
-              "categoriasId": [6],
-              "video": "https://youtube.com/demo_plancha_abdominal",
-              "unidadMedida": "Minutos"
-            },
-            "series": 3,
-            "repeticiones": 0,
-            "medicion": 1,
-            "unidadMedida": "min"
+          "series": 4,
+          "repeticiones": 12,
+          "medicion": 25
+        },
+        {
+          "rutinaEjercicioId": 11,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 11,
+            "nombre": "Extensiones de Cuádriceps",
+            "descripcion": "Ejercicio para trabajar el cuádriceps.",
+            "gruposMuscularesId": [3],
+            "categoriasId": [2],
+            "video": "https://youtube.com/demo_extensiones_cuadriceps",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 20,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 20,
-              "nombre": "Bicicleta Estática",
-              "descripcion": "Ejercicio cardiovascular para mejorar la resistencia aeróbica.",
-              "gruposMuscularesId": [3, 9],
-              "categoriasId": [7],
-              "video": "https://youtube.com/demo_bicicleta_estatica",
-              "unidadMedida": "Minutos"
-            },
-            "series": 1,
-            "repeticiones": 0,
-            "medicion": 20,
-            "unidadMedida": "min"
+          "series": 4,
+          "repeticiones": 12,
+          "medicion": 50
+        },
+        {
+          "rutinaEjercicioId": 12,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 12,
+            "nombre": "Remo con Mancuernas",
+            "descripcion": "Ejercicio para trabajar la espalda media.",
+            "gruposMuscularesId": [5],
+            "categoriasId": [3],
+            "video": "https://youtube.com/demo_remo_mancuernas",
+            "unidadMedida": "Kilogramos"
           },
-          {
-            "rutinaEjercicioId": 21,
-            "fechaBaja": null,
-            "rutinaId": 3,
-            "ejercicio": {
-              "ejercicioId": 21,
-              "nombre": "Mountain Climbers",
-              "descripcion": "Ejercicio dinámico de resistencia y cardio.",
-              "gruposMuscularesId": [1, 3],
-              "categoriasId": [7],
-              "video": "https://youtube.com/demo_mountain_climbers",
-              "unidadMedida": "Repeticiones"
-            },
-            "series": 3,
-            "repeticiones": 20,
-            "medicion": 0,
-            "unidadMedida": "reps"
-          }
-        ]
-      }
-    ]
-  }
-  
+          "series": 4,
+          "repeticiones": 10,
+          "medicion": 35
+        },
+        {
+          "rutinaEjercicioId": 13,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 13,
+            "nombre": "Elevaciones Laterales",
+            "descripcion": "Ejercicio de aislamiento para los hombros.",
+            "gruposMuscularesId": [7],
+            "categoriasId": [1],
+            "video": "https://youtube.com/demo_elevaciones_laterales",
+            "unidadMedida": "Kilogramos"
+          },
+          "series": 3,
+          "repeticiones": 15,
+          "medicion": 10
+        },
+        {
+          "rutinaEjercicioId": 14,
+          "fechaBaja": null,
+          "rutinaId": 2,
+          "ejercicio": {
+            "ejercicioId": 14,
+            "nombre": "Crunch Abdominal en Máquina",
+            "descripcion": "Ejercicio para el desarrollo de los abdominales.",
+            "gruposMuscularesId": [8],
+            "categoriasId": [6],
+            "video": "https://youtube.com/demo_crunch_abdominal",
+            "unidadMedida": "Kilogramos"
+          },
+          "series": 3,
+          "repeticiones": 20,
+          "medicion": 30
+        }
+      ]
+    },
+    {
+      "rutinaId": 3,
+      "fechaCreacion": "2024-10-11",
+      "nombre": "Rutina de Resistencia",
+      "descripcion": "Rutina enfocada en mejorar la capacidad cardiovascular y la resistencia muscular.",
+      "entrenadorId": 103,
+      "usuarioId": 203,
+      "ejercicios": [
+        {
+          "rutinaEjercicioId": 15,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 15,
+            "nombre": "Cinta de Correr",
+            "descripcion": "Ejercicio cardiovascular para aumentar la resistencia.",
+            "gruposMuscularesId": [3, 9],
+            "categoriasId": [7],
+            "video": "https://youtube.com/demo_cinta_correr",
+            "unidadMedida": "Kilómetros por hora"
+          },
+          "series": 1,
+          "repeticiones": 0,
+          "medicion": 10,
+          "unidadMedida": "km/h"
+        },
+        {
+          "rutinaEjercicioId": 16,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 16,
+            "nombre": "Sentadillas con Salto",
+            "descripcion": "Ejercicio pliométrico para resistencia y explosividad.",
+            "gruposMuscularesId": [3],
+            "categoriasId": [2],
+            "video": "https://youtube.com/demo_sentadillas_salto",
+            "unidadMedida": "Repeticiones"
+          },
+          "series": 3,
+          "repeticiones": 15,
+          "medicion": 0,
+          "unidadMedida": "reps"
+        },
+        {
+          "rutinaEjercicioId": 17,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 17,
+            "nombre": "Burpees",
+            "descripcion": "Ejercicio de cuerpo completo para resistencia cardiovascular.",
+            "gruposMuscularesId": [1, 3, 5],
+            "categoriasId": [7],
+            "video": "https://youtube.com/demo_burpees",
+            "unidadMedida": "Repeticiones"
+          },
+          "series": 3,
+          "repeticiones": 12,
+          "medicion": 0,
+          "unidadMedida": "reps"
+        },
+        {
+          "rutinaEjercicioId": 18,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 18,
+            "nombre": "Remo en Máquina",
+            "descripcion": "Ejercicio cardiovascular para fortalecer la espalda y mejorar la resistencia.",
+            "gruposMuscularesId": [5],
+            "categoriasId": [7],
+            "video": "https://youtube.com/demo_remo_maquina",
+            "unidadMedida": "Minutos"
+          },
+          "series": 1,
+          "repeticiones": 0,
+          "medicion": 15,
+          "unidadMedida": "min"
+        },
+        {
+          "rutinaEjercicioId": 19,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 19,
+            "nombre": "Plancha Abdominal",
+            "descripcion": "Ejercicio isométrico para fortalecer el core y mejorar la resistencia.",
+            "gruposMuscularesId": [8],
+            "categoriasId": [6],
+            "video": "https://youtube.com/demo_plancha_abdominal",
+            "unidadMedida": "Minutos"
+          },
+          "series": 3,
+          "repeticiones": 0,
+          "medicion": 1,
+          "unidadMedida": "min"
+        },
+        {
+          "rutinaEjercicioId": 20,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 20,
+            "nombre": "Bicicleta Estática",
+            "descripcion": "Ejercicio cardiovascular para mejorar la resistencia aeróbica.",
+            "gruposMuscularesId": [3, 9],
+            "categoriasId": [7],
+            "video": "https://youtube.com/demo_bicicleta_estatica",
+            "unidadMedida": "Minutos"
+          },
+          "series": 1,
+          "repeticiones": 0,
+          "medicion": 20,
+          "unidadMedida": "min"
+        },
+        {
+          "rutinaEjercicioId": 21,
+          "fechaBaja": null,
+          "rutinaId": 3,
+          "ejercicio": {
+            "ejercicioId": 21,
+            "nombre": "Mountain Climbers",
+            "descripcion": "Ejercicio dinámico de resistencia y cardio.",
+            "gruposMuscularesId": [1, 3],
+            "categoriasId": [7],
+            "video": "https://youtube.com/demo_mountain_climbers",
+            "unidadMedida": "Repeticiones"
+          },
+          "series": 3,
+          "repeticiones": 20,
+          "medicion": 0,
+          "unidadMedida": "reps"
+        }
+      ]
+    }
+  ]
+}
