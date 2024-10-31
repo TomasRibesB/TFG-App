@@ -26,7 +26,7 @@ export const PlanNutricionalScreen = () => {
       dateCreated: '2023-05-15',
       name: 'Balanced Nutrition Plan',
       description:
-        'A comprehensive plan designed to meet your nutritional needs and fitness goals.',
+        'Se enfoca en proporcionar las calorías y macronutrientes necesarios para aumentar masa muscular de manera efectiva. Incluye una ingesta elevada de proteínas para la reparación y crecimiento muscular, carbohidratos complejos para energía sostenida durante el entrenamiento, y grasas saludables para el soporte hormonal. Además, se ajusta según la intensidad del entrenamiento, con énfasis en las comidas pre y post-entrenamiento para optimizar el rendimiento y la recuperación.',
       nutritionist: {
         name: 'Ignacio Baquero',
         avatar: '/placeholder.svg?height=40&width=40',
@@ -40,7 +40,7 @@ export const PlanNutricionalScreen = () => {
       dailyCalories: 2200,
       macronutrients: ['Carbs: 50%', 'Protein: 30%', 'Fats: 20%'],
       additionalNotes:
-        'Remember to stay hydrated and adjust portion sizes based on activity level.',
+        'Consumir al menos 3 litros de agua al día. Incluir una comida rica en carbohidratos y proteínas en la ventana post-entrenamiento (dentro de 1 hora después del entrenamiento). Evitar alimentos procesados y priorizar fuentes de proteínas magras, carbohidratos complejos y grasas saludables.',
     },
     {
       id: 2,
