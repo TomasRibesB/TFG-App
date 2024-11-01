@@ -4,6 +4,8 @@ import {Text, List, Dialog, Portal, Button, Avatar} from 'react-native-paper';
 import {CardContainer} from '../../components/CardContainer';
 import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {TicketComponent} from '../../components/TicketComponent';
+import {TurnoComponent} from '../../components/TurnoComponent';
 
 const Profesionales = [
   {
@@ -61,15 +63,20 @@ export const ProfesionalesScreen = () => {
             }
             right={() =>
               profesional.isUser ? (
-                <Icon name="document-outline" size={24} />
+                <>
+                  <Icon name="information-outline" size={26} style={{marginRight: -10}} />
+                  <Icon name="person-circle-outline" size={17} style={{top: -7}} />
+                </>
               ) : (
-                <Icon name="person-remove-outline" size={24} />
+                <Icon name="remove-circle-outline" size={17} />
               )
             }
             left={() => <Avatar.Text size={48} label={profesional.name[0]} />}
           />
         ))}
       </CardContainer>
+      <TicketComponent />
+      <TurnoComponent />
       <Portal>
         <Dialog visible={dialogVisible} onDismiss={closeDialog}>
           <Dialog.Title>Información del Profesional</Dialog.Title>
