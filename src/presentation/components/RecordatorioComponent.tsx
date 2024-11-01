@@ -30,7 +30,7 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
     setCurrentRecordatorio(recordatorios);
   }, [recordatorios]);
 
-  const screenWidth = Dimensions.get('window').width * 0.85;
+  const screenWidth = Dimensions.get('window').width - 32;
 
   const showDialog = (id: number) => {
     setRecordatorioSeleccionado(id);
@@ -56,7 +56,7 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          style={{width: screenWidth}}>
+          style={{width: screenWidth - globalVariables.padding * 1.9}}>
           {currentRecordatorio.map((recordatorio, index) => (
             <TouchableOpacity
               key={index}
@@ -65,9 +65,8 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
               }}
               onLongPress={() => showDialog(recordatorio.id)}
               style={{
-                width: screenWidth,
+                width: screenWidth - globalVariables.padding * 1.9,
                 justifyContent: 'center',
-                alignItems: 'center',
               }}>
               <View
                 style={{
@@ -77,8 +76,8 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
                   borderRadius: globalVariables.containerBorderRadius,
                   padding: globalVariables.padding,
                   marginVertical: 8,
-                  marginHorizontal: 16,
-                  width: screenWidth * 0.9,
+                  marginHorizontal: 8,
+                  width: screenWidth - globalVariables.padding * 3,
                 }}>
                 <View style={{flex: 1, paddingRight: 8}}>
                   {(recordatorio.date || recordatorio.time) && (
@@ -132,9 +131,9 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
       </CardContainer>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Confirmar eliminación</Dialog.Title>
+          <Dialog.Title>Eliminar Recordatorio</Dialog.Title>
           <Dialog.Content>
-            <Text>¿Deseas eliminar este recordatorio?</Text>
+            <Text>¿Estás seguro de que deseas eliminar este recordatorio?</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Cancelar</Button>
