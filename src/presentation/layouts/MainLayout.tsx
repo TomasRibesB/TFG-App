@@ -73,9 +73,17 @@ export const MainLayout = ({
         {title && <Avatar.Icon icon="person-outline" size={48} />}
       </View>
       {title ? (
-        childrenView
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          style={{flex: 1}}
+          showsVerticalScrollIndicator={false}>
+          {childrenView}
+        </ScrollView>
       ) : (
-        <ScrollView contentContainerStyle={{flexGrow: 1}} style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          style={{flex: 1}}
+          showsVerticalScrollIndicator={false}>
           {childrenView}
         </ScrollView>
       )}
