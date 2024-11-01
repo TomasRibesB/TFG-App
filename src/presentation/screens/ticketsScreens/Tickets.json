@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "titulo": "Evaluación de frecuencia cardíaca en reposo",
+    "estado": "Activo",
+    "fechaAbierto": "05/10/24",
+    "solicitante": {
+      "usuario": {
+        "id": 1,
+        "nombre": "Valeria Almonte"
+      },
+      "profesion": "Médico deportólogo"
+    },
+    "receptor": {
+      "usuario": {
+        "id": 2,
+        "nombre": "Ignacio Baquero"
+      },
+      "profesion": "Nutricionista"
+    },
+    "usuario": {
+      "id": 3,
+      "nombre": "Yo"
+    },
+    "mensajes": [
+      {
+        "id": 1,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "05/10/24",
+        "time": "10:00",
+        "content": "Hola Ignacio, estuve revisando los últimos resultados del chequeo médico. Su frecuencia cardíaca en reposo está un poco elevada. ¿Qué opinas?"
+      },
+      {
+        "id": 2,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "05/10/24",
+        "time": "10:15",
+        "content": "Creo que podemos ajustar su dieta, especialmente los carbohidratos en días de descanso."
+      },
+      {
+        "id": 3,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "05/10/24",
+        "time": "10:30",
+        "content": "Podríamos también incorporar cardio de baja intensidad."
+      },
+      {
+        "id": 4,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "05/10/24",
+        "time": "10:45",
+        "content": "Perfecto, también sugiero comidas pre-entrenamiento más ligeras."
+      },
+      {
+        "id": 5,
+        "usuario": {
+          "id": 3,
+          "nombre": "Yo"
+        },
+        "date": "05/10/24",
+        "time": "11:00",
+        "content": "¡Genial, gracias a ambos!"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "titulo": "Plan de alimentación para mejorar rendimiento",
+    "estado": "Activo",
+    "fechaAbierto": "06/10/24",
+    "solicitante": {
+      "usuario": {
+        "id": 2,
+        "nombre": "Ignacio Baquero"
+      },
+      "profesion": "Nutricionista"
+    },
+    "receptor": {
+      "usuario": {
+        "id": 1,
+        "nombre": "Valeria Almonte"
+      },
+      "profesion": "Médico deportólogo"
+    },
+    "usuario": {
+      "id": 3,
+      "nombre": "Yo"
+    },
+    "mensajes": [
+      {
+        "id": 1,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "06/10/24",
+        "time": "09:00",
+        "content": "Hola Valeria, quiero ajustar su dieta para mejorar su rendimiento general."
+      },
+      {
+        "id": 2,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "06/10/24",
+        "time": "09:15",
+        "content": "De acuerdo, creo que sería útil incluir más proteínas post-entrenamiento."
+      },
+      {
+        "id": 3,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "06/10/24",
+        "time": "09:30",
+        "content": "Eso suena bien. ¿Qué piensas sobre incluir algunos suplementos?"
+      },
+      {
+        "id": 4,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "06/10/24",
+        "time": "09:45",
+        "content": "Sí, con moderación podrían ayudar."
+      },
+      {
+        "id": 5,
+        "usuario": {
+          "id": 3,
+          "nombre": "Yo"
+        },
+        "date": "06/10/24",
+        "time": "10:00",
+        "content": "Me parece muy bien. ¿Qué suplementos recomendarían?"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "titulo": "Control de niveles de glucosa",
+    "estado": "Autorizado",
+    "fechaAbierto": "07/10/24",
+    "fechaCerrado": "08/10/24",
+    "solicitante": {
+      "usuario": {
+        "id": 1,
+        "nombre": "Valeria Almonte"
+      },
+      "profesion": "Médico deportólogo"
+    },
+    "receptor": {
+      "usuario": {
+        "id": 2,
+        "nombre": "Ignacio Baquero"
+      },
+      "profesion": "Nutricionista"
+    },
+    "usuario": {
+      "id": 3,
+      "nombre": "Yo"
+    },
+    "mensajes": [
+      {
+        "id": 1,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "07/10/24",
+        "time": "08:00",
+        "content": "He notado una ligera elevación en sus niveles de glucosa. ¿Algún cambio en la dieta?"
+      },
+      {
+        "id": 2,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "07/10/24",
+        "time": "08:20",
+        "content": "Podríamos reducir el consumo de azúcares y aumentar fibra."
+      },
+      {
+        "id": 3,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "07/10/24",
+        "time": "08:40",
+        "content": "De acuerdo, también monitorearemos su actividad física en los días de descanso."
+      },
+      {
+        "id": 4,
+        "usuario": {
+          "id": 3,
+          "nombre": "Yo"
+        },
+        "date": "07/10/24",
+        "time": "09:00",
+        "content": "Gracias, me comprometo a seguir las recomendaciones."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "titulo": "Ajustes en el plan de entrenamiento",
+    "estado": "Activo",
+    "fechaAbierto": "08/10/24",
+    "solicitante": {
+      "usuario": {
+        "id": 1,
+        "nombre": "Valeria Almonte"
+      },
+      "profesion": "Médico deportólogo"
+    },
+    "receptor": {
+      "usuario": {
+        "id": 2,
+        "nombre": "Ignacio Baquero"
+      },
+      "profesion": "Nutricionista"
+    },
+    "usuario": {
+      "id": 3,
+      "nombre": "Yo"
+    },
+    "mensajes": [
+      {
+        "id": 1,
+        "usuario": {
+          "id": 1,
+          "nombre": "Valeria Almonte"
+        },
+        "date": "08/10/24",
+        "time": "11:00",
+        "content": "Propongo reducir la carga de ejercicios de fuerza esta semana."
+      },
+      {
+        "id": 2,
+        "usuario": {
+          "id": 2,
+          "nombre": "Ignacio Baquero"
+        },
+        "date": "08/10/24",
+        "time": "11:15",
+        "content": "Eso está bien, además podríamos ajustar la dieta en consecuencia."
+      },
+      {
+        "id": 3,
+        "usuario": {
+          "id": 3,
+          "nombre": "Yo"
+        },
+        "date": "08/10/24",
+        "time": "11:30",
+        "content": "Me parece perfecto, ¡gracias por el seguimiento!"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "titulo": "Evaluación de resistencia aeróbica",
+    "estado": "Pendiente",
+    "fechaAbierto": "09/10/24",
+    "solicitante": {
+      "usuario": {
+        "id": 1,
+        "nombre": "Valeria Almonte"
+      },
+      "profesion": "Médico deportólogo"
+    },
+    "receptor": {
+      "usuario": {
+        "id": 2,
+        "nombre": "Ignacio Baquero"
+      },
+      "profesion": "Nutricionista"
+    },
+    "usuario": {
+      "id": 3,
+      "nombre": "Yo"
+    },
+    "mensajes": []
+  }
+]

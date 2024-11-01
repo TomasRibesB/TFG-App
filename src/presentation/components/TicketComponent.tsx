@@ -1,8 +1,11 @@
 import {View} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {CardContainer} from './CardContainer';
-
+import {useNavigation} from '@react-navigation/native';
+import {RootStackParams} from '../navigation/StackNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
 export const TicketComponent = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   return (
     <CardContainer title="Tickets" icon="chatbox-outline">
       <View
@@ -11,7 +14,12 @@ export const TicketComponent = () => {
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
         }}>
-        <IconButton icon="arrow-forward-outline" size={20} mode="contained" />
+        <IconButton
+          icon="arrow-forward-outline"
+          size={20}
+          mode="contained"
+          onPress={() => navigation.navigate('TicketListScreen')}
+        />
       </View>
     </CardContainer>
   );
