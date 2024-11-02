@@ -6,9 +6,11 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {Avatar, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
+import {Image} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from 'react-native-paper';
+import { globalVariables } from '../../config/theme/global-theme';
 
 interface Props {
   title?: string;
@@ -70,7 +72,13 @@ export const MainLayout = ({
           {title && <Text variant="displaySmall">{title}</Text>}
           {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
         </View>
-        {title && <Avatar.Icon icon="person-outline" size={48} />}
+        {title &&         <Image
+          source={require('../../assets/logo.png')}
+          style={{
+            width: 48,
+            height: 48,
+          }}
+        />}
       </View>
       {title ? (
         <ScrollView

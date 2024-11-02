@@ -1,6 +1,7 @@
 import React from 'react';
 import {MainLayout} from '../layouts/MainLayout';
-import {Avatar, Button, Text, TextInput} from 'react-native-paper';
+import {Button, Text, TextInput} from 'react-native-paper';
+import { Image } from 'react-native';
 import {CardContainer} from '../components/CardContainer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {globalVariables} from '../../config/theme/global-theme';
@@ -24,10 +25,13 @@ export const LoginScreen = () => {
           alignItems: 'center',
           flex: 1,
         }}>
-        <Avatar.Icon
-          icon="person-outline"
-          size={150}
-          style={{marginBottom: globalVariables.padding}}
+        <Image
+          source={require('../../assets/logo.png')}
+          style={{
+            width: 200,
+            height: 200,
+            marginBottom: globalVariables.padding * 2,
+          }}
         />
         <CardContainer>
           <Text
@@ -56,7 +60,6 @@ export const LoginScreen = () => {
           <Button
             mode="contained"
             style={{
-              borderRadius: globalVariables.innerBorderRadius,
               marginBottom: globalVariables.padding,
             }}
             children="Entrar"
