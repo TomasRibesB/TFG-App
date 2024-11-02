@@ -67,17 +67,17 @@ export const TicketListScreen = () => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  marginVertical: 10,
+                  marginVertical: 8,
                   flexWrap: 'wrap',
                 }}>
-                <Chip icon="information" style={{marginRight: 8}}>
+                <Chip icon="information" style={{margin: 5}}>
                   {item.estado}
                 </Chip>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Icon
                     name="person-circle-outline"
                     size={24}
-                    style={{marginRight: 8}}
+                    style={{margin: 5}}
                   />
                   <Text>{item.solicitante.usuario.nombre}</Text>
                 </View>
@@ -85,7 +85,7 @@ export const TicketListScreen = () => {
                   <Icon
                     name="person-circle-outline"
                     size={24}
-                    style={{marginHorizontal: 8}}
+                    style={{margin: 5}}
                   />
                   <Text>{item.receptor.usuario.nombre}</Text>
                 </View>
@@ -93,7 +93,7 @@ export const TicketListScreen = () => {
                   <Icon
                     name="person-circle-outline"
                     size={24}
-                    style={{marginHorizontal: 8}}
+                    style={{margin: 5}}
                   />
                   <Text>Yo</Text>
                 </View>
@@ -104,7 +104,7 @@ export const TicketListScreen = () => {
                   <Button
                     mode="contained"
                     onPress={() => handleAccept(item.id)}
-                    style={{marginRight: 8}}>
+                    style={{margin: 5}}>
                     Aceptar
                   </Button>
                   <Button mode="outlined" onPress={() => handleReject(item.id)}>
