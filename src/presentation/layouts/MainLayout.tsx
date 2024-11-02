@@ -102,7 +102,7 @@ export const MainLayout = ({
           style={{
             position: 'absolute',
             left: 16,
-            bottom: 100,
+            bottom: 16,
           }}
           icon="arrow-back-outline"
           onPress={() => navigation.goBack()}

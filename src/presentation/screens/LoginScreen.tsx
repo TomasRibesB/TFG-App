@@ -1,14 +1,14 @@
 import React from 'react';
 import {MainLayout} from '../layouts/MainLayout';
 import {Button, Text, TextInput} from 'react-native-paper';
-import { Image } from 'react-native';
+import {Image} from 'react-native';
 import {CardContainer} from '../components/CardContainer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {globalVariables} from '../../config/theme/global-theme';
 import {View} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParams } from '../navigation/StackNavigator';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackParams} from '../navigation/StackNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -44,6 +44,7 @@ export const LoginScreen = () => {
             Iniciar Sesión
           </Text>
           <TextInput
+            outlineStyle={{borderRadius: 50}}
             label="Correo Electrónico"
             mode="outlined"
             keyboardType="email-address"
@@ -52,6 +53,7 @@ export const LoginScreen = () => {
             }}
           />
           <TextInput
+            outlineStyle={{borderRadius: 50}}
             label="Contraseña"
             mode="outlined"
             secureTextEntry

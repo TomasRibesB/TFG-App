@@ -52,7 +52,7 @@ export const TicketListScreen = () => {
   };
 
   return (
-    <MainLayout title="Tickets">
+    <MainLayout title="Tickets" back={true}>
       <ScrollView>
         {Tickets.map(item => (
           <Card key={item.id} style={{margin: 10}}>

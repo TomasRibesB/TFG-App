@@ -143,8 +143,10 @@ export const TicketScreen = ({route}: Props) => {
           left: 0,
           right: 0,
           backgroundColor: 'white',
+          paddingLeft: 63,
         }}>
         <TextInput
+          outlineStyle={{borderRadius: 50}}
           style={{flex: 1}}
           value={mensaje}
           onChangeText={setMensaje}
