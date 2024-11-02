@@ -67,7 +67,7 @@ export const TicketListScreen = () => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  marginBottom: 8,
+                  marginVertical: 10,
                   flexWrap: 'wrap',
                 }}>
                 <Chip icon="information" style={{marginRight: 8}}>

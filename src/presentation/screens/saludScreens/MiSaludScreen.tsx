@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
   },
   attachments: {
     flexDirection: 'row',
+    marginVertical: 10,
     flexWrap: 'wrap',
   },
   attachmentButton: {
@@ -284,8 +285,8 @@ const styles = StyleSheet.create({
   visibility: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginVertical: 10,
     alignItems: 'center',
-    marginVertical: 8,
   },
   profesionalInfo: {
     flexDirection: 'row',
