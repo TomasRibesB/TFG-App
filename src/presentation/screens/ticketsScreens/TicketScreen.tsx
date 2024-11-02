@@ -21,6 +21,8 @@ export const TicketScreen = ({route}: Props) => {
   const [mensaje, setMensaje] = useState('');
   const {colors} = useTheme();
 
+  const theme = useTheme();
+
   // Referencia al ScrollView
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -142,7 +144,7 @@ export const TicketScreen = ({route}: Props) => {
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: 'white',
+          backgroundColor: theme.colors.background,
           paddingLeft: 63,
         }}>
         <TextInput
