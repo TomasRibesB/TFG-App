@@ -103,6 +103,7 @@ export const TicketListScreen = () => {
                   style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                   <Button
                     mode="contained"
+                    style={{marginRight: 10}}
                     onPress={() => handleAccept(item.id)}>
                     Aceptar
                   </Button>
