@@ -26,7 +26,7 @@ interface Mensaje {
   content: string;
 }
 
-interface Ticket {
+export interface Ticket {
   id: number;
   titulo: string;
   estado: string;
@@ -52,7 +52,7 @@ export const TicketListScreen = () => {
   };
 
   return (
-    <MainLayout title="Tickets" icon="chatbox-outline">
+    <MainLayout title="Tickets">
       <ScrollView>
         {Tickets.map(item => (
           <Card key={item.id} style={{margin: 10}}>
@@ -103,8 +103,7 @@ export const TicketListScreen = () => {
                   style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                   <Button
                     mode="contained"
-                    onPress={() => handleAccept(item.id)}
-                    style={{margin: 5}}>
+                    onPress={() => handleAccept(item.id)}>
                     Aceptar
                   </Button>
                   <Button mode="outlined" onPress={() => handleReject(item.id)}>

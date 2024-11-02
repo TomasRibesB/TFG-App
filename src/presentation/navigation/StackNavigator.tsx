@@ -8,6 +8,7 @@ import {RegisterScreen} from '../screens/RegisterScreen';
 import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
+import { Ticket } from '../screens/ticketsScreens/TicketListScreen';
 
 export type RootStackParams = {
   HomeScreen: undefined;
@@ -15,7 +16,7 @@ export type RootStackParams = {
   RegisterScreen: undefined;
   BotTabNavigator: undefined;
   TicketListScreen: undefined;
-  TicketScreen: undefined;
+  TicketScreen: {ticket: Ticket};
 };
 
 const Stack = createStackNavigator<RootStackParams>();
