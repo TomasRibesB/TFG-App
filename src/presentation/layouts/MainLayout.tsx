@@ -6,11 +6,10 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {Text} from 'react-native-paper';
+import {Text, FAB} from 'react-native-paper';
 import {Image} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from 'react-native-paper';
-import { globalVariables } from '../../config/theme/global-theme';
 
 interface Props {
   title?: string;
@@ -19,6 +18,8 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   stylesHeader?: StyleProp<ViewStyle>;
   stylesChild?: StyleProp<ViewStyle>;
+  scrolleable?: boolean;
+  back?: boolean;
 }
 
 export const MainLayout = ({
@@ -28,10 +29,13 @@ export const MainLayout = ({
   styles,
   stylesHeader,
   stylesChild,
+  scrolleable = true,
+  back = false,
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
+  const navigation = useNavigation();
 
   const childrenView = (
     <View
@@ -72,28 +76,39 @@ export const MainLayout = ({
           {title && <Text variant="displaySmall">{title}</Text>}
           {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
         </View>
-        {title &&         <Image
-          source={require('../../assets/logo.png')}
-          style={{
-            width: 48,
-            height: 48,
-          }}
-        />}
+        {title && (
+          <Image
+            source={require('../../assets/logo.png')}
+            style={{
+              width: 48,
+              height: 48,
+            }}
+          />
+        )}
       </View>
-      {title ? (
+      {scrolleable ? (
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           style={{flex: 1}}
+          scrollEnabled={scrolleable}
           showsVerticalScrollIndicator={false}>
           {childrenView}
         </ScrollView>
       ) : (
-        <ScrollView
-          contentContainerStyle={{flexGrow: 1}}
-          style={{flex: 1}}
-          showsVerticalScrollIndicator={false}>
-          {childrenView}
-        </ScrollView>
+        <View style={{flex: 1}}>{childrenView}</View>
+      )}
+      {back && (
+        <FAB
+          style={{
+            position: 'absolute',
+            left: 16,
+            bottom: 100,
+          }}
+          icon="arrow-back-outline"
+          onPress={() => navigation.goBack()}
+          mode="flat"
+          size='small'
+        />
       )}
     </View>
   );
