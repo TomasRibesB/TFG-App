@@ -50,7 +50,7 @@ export const TurnoComponent = () => {
         arrayList={profesionales.map(profesional => ({ _id: profesional, value: profesional }))}
         selectedArrayList={[{ _id: selectedProfesional, value: selectedProfesional }]}
         multiEnable={false}
-        textInputOutlineStyle={{borderRadius: 50}}
+        textInputOutlineStyle={{borderRadius: 8}}
         dialogTitle="Seleccionar Profesional"
         dialogCloseButtonText="Cerrar"
         textInputMode="outlined"

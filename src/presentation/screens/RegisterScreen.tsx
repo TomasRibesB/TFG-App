@@ -43,7 +43,7 @@ export const RegisterScreen = () => {
             Registrarse
           </Text>
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Nombre"
             mode="outlined"
             style={{
@@ -51,7 +51,7 @@ export const RegisterScreen = () => {
             }}
           />
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Apellido"
             mode="outlined"
             style={{
@@ -59,7 +59,7 @@ export const RegisterScreen = () => {
             }}
           />
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Correo Electrónico"
             mode="outlined"
             keyboardType="email-address"
@@ -68,14 +68,14 @@ export const RegisterScreen = () => {
             }}
           />
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Contraseña"
             mode="outlined"
             secureTextEntry
             style={{marginBottom: globalVariables.padding}}
           />
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Confirmar Contraseña"
             mode="outlined"
             secureTextEntry

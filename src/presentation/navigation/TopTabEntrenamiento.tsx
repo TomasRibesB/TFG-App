@@ -33,7 +33,7 @@ export const TopTabEntrenamiento = () => {
         <Tab.Screen
           name="Gym"
           component={GimnasioScreen}
-          options={{tabBarLabel: 'Gimnasio'}}
+          options={{tabBarLabel: 'Entrenador'}}
         />
         <Tab.Screen
           name="Rutina"

@@ -44,7 +44,7 @@ export const LoginScreen = () => {
             Iniciar Sesión
           </Text>
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Correo Electrónico"
             mode="outlined"
             keyboardType="email-address"
@@ -53,7 +53,7 @@ export const LoginScreen = () => {
             }}
           />
           <TextInput
-            outlineStyle={{borderRadius: 50}}
+            outlineStyle={{borderRadius: 8}}
             label="Contraseña"
             mode="outlined"
             secureTextEntry
