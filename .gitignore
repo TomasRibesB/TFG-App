@@ -36,9 +36,12 @@ local.properties
 
 # node.js
 #
+# Ignorar node_modules
 node_modules/
-!node_modules/react-native-tab-view/src/TabBar.tsx
+
+# No ignorar archivos específicos
 !node_modules/react-native-paper/src/components/BottomNavigation/BottomNavigationBar.tsx
+!node_modules/react-native-tab-view/src/TabBar.tsx
 npm-debug.log
 yarn-error.log
 
