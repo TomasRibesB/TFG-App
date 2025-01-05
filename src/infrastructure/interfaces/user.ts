@@ -10,11 +10,11 @@ export interface User {
     id: number;
     firstName: string;
     lastName: string;
-    dni: string;
-    password: string;
-    email: string;
+    dni?: string;
+    password?: string;
+    email?: string;
     role: Role;
-    deletedAt: Date;
+    deletedAt?: Date;
     routines?: Routine[];
     turnosPaciente?: Turno[];
     turnosProfesional?: Turno[];

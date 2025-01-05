@@ -6,6 +6,7 @@ import {
 import {PaperProvider} from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
+import { AuthProvider } from '../providers/AuthProvider';
 
 export const ThemecontextProvider = ({children}: PropsWithChildren) => {
 
@@ -13,7 +14,9 @@ export const ThemecontextProvider = ({children}: PropsWithChildren) => {
     <PaperProvider
       settings={{icon: props => <IonIcon {...props} />}}>
       <NavigationContainer>
+        <AuthProvider>
           {children}
+        </AuthProvider>
       </NavigationContainer>
     </PaperProvider>
   );
