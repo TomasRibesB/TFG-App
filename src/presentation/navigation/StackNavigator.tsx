@@ -9,8 +9,10 @@ import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
 import { Ticket } from '../screens/ticketsScreens/TicketListScreen';
+import { LoadingScreen } from '../screens/LoadingScreen';
 
 export type RootStackParams = {
+  LoadingScreen: undefined;
   HomeScreen: undefined;
   LoginScreen: undefined;
   RegisterScreen: undefined;
@@ -30,10 +32,15 @@ const fadeanimation: StackCardStyleInterpolator = ({current}) => ({
 export const StackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="LoginScreen"
+      initialRouteName="LoadingScreen"
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen
+        options={{cardStyleInterpolator: fadeanimation}}
+        name="LoadingScreen"
+        component={LoadingScreen}
+      />
       <Stack.Screen
         options={{cardStyleInterpolator: fadeanimation}}
         name="HomeScreen"
