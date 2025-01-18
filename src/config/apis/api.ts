@@ -2,7 +2,7 @@ import axios from 'axios';
 import { StorageAdapter } from "../adapters/storage-adapter";
 
 
-const apiEndpoint = axios.create({
+const api = axios.create({
     baseURL: 'http://10.0.2.2:3000/api/v1',
     headers: {
         'Content-Type': 'application/json'
@@ -10,7 +10,7 @@ const apiEndpoint = axios.create({
 });
 
 //TODO interceptors
-apiEndpoint.interceptors.request.use(
+api.interceptors.request.use(
     async (config) => {
 
         const token = await StorageAdapter.getItem('token');
@@ -24,5 +24,5 @@ apiEndpoint.interceptors.request.use(
     });
 
 export {
-    apiEndpoint
+    api
 }

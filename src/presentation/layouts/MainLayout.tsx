@@ -2,14 +2,19 @@ import {useNavigation} from '@react-navigation/native';
 import {
   ScrollView,
   StyleProp,
+  TouchableOpacity,
   useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
-import {Text, FAB} from 'react-native-paper';
+import {Text, FAB, Menu, Divider} from 'react-native-paper';
 import {Image} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from 'react-native-paper';
+import {useState} from 'react';
+import { StorageAdapter } from '../../config/adapters/storage-adapter';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParams } from '../navigation/StackNavigator';
 
 interface Props {
   title?: string;
@@ -35,7 +40,22 @@ export const MainLayout = ({
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const [menuVisible, setMenuVisible] = useState(false);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+  const handleLogout = () => {
+    StorageAdapter.removeItem('token');
+    navigation.navigate('LoginScreen');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'LoginScreen'}],
+    });
+    closeMenu();
+  };
+  const handleProfile = () => {
+    closeMenu();
+  };
 
   const childrenView = (
     <View
@@ -77,13 +97,27 @@ export const MainLayout = ({
           {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
         </View>
         {title && (
-          <Image
-            source={require('../../assets/logo.png')}
-            style={{
-              width: 48,
-              height: 48,
-            }}
-          />
+          <Menu
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={
+              <TouchableOpacity
+                style={{flex: 1, alignItems: 'flex-end'}}
+                onPress={openMenu}>
+                <Image
+                  source={require('../../assets/logo.png')}
+                  style={{
+                    width: 48,
+                    height: 48,
+                  }}
+                />
+              </TouchableOpacity>
+            }
+            anchorPosition="bottom">
+            <Menu.Item onPress={handleProfile} title="Perfil" />
+            <Divider />
+            <Menu.Item onPress={handleLogout} title="Cerrar sesión" />
+          </Menu>
         )}
       </View>
       {scrolleable ? (
@@ -107,7 +141,7 @@ export const MainLayout = ({
           icon="arrow-back-outline"
           onPress={() => navigation.goBack()}
           mode="flat"
-          size='small'
+          size="small"
         />
       )}
     </View>

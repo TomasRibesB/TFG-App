@@ -1,17 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {MainLayout} from '../layouts/MainLayout';
 import {Button, Text, TextInput} from 'react-native-paper';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {CardContainer} from '../components/CardContainer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {globalVariables} from '../../config/theme/global-theme';
-import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParams} from '../navigation/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {StorageAdapter} from '../../config/adapters/storage-adapter';
+import {api} from '../../config/apis/api';
+import {BottomNotification} from '../components/BottomNotification';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const {data} = await api.post('/auth/login', {
+        email,
+        password,
+      });
+      await StorageAdapter.setItem('token', data.token);
+      navigation.navigate('BotTabNavigator');
+    } catch (error) {
+      console.log(error);
+      setError('No se pudo iniciar sesión: ' + error);
+    }
+  };
 
   return (
     <MainLayout>
@@ -51,6 +71,7 @@ export const LoginScreen = () => {
             style={{
               marginBottom: globalVariables.padding,
             }}
+            onChangeText={setEmail}
           />
           <TextInput
             outlineStyle={{borderRadius: 8}}
@@ -58,6 +79,7 @@ export const LoginScreen = () => {
             mode="outlined"
             secureTextEntry
             style={{marginBottom: globalVariables.padding * 2}}
+            onChangeText={setPassword}
           />
           <Button
             mode="contained"
@@ -65,7 +87,7 @@ export const LoginScreen = () => {
               marginBottom: globalVariables.padding,
             }}
             children="Entrar"
-            onPress={() => navigation.navigate('BotTabNavigator')}
+            onPress={() => handleLogin()}
           />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Button
@@ -76,6 +98,14 @@ export const LoginScreen = () => {
             </Button>
           </View>
         </CardContainer>
+        <BottomNotification
+          visible={!!error}
+          onDismiss={() => setError('')}
+          action={{
+            label: 'Cerrar',
+            onPress: () => setError(''),
+          }}
+          message={error}></BottomNotification>
       </ScrollView>
     </MainLayout>
   );

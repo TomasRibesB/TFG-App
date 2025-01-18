@@ -1,6 +1,7 @@
 import {
   createStackNavigator,
   StackCardStyleInterpolator,
+  StackNavigationProp,
 } from '@react-navigation/stack';
 import {HomeScreen} from '../screens/HomeScreen';
 import {LoginScreen} from '../screens/LoginScreen';
@@ -8,8 +9,11 @@ import {RegisterScreen} from '../screens/RegisterScreen';
 import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
-import { Ticket } from '../screens/ticketsScreens/TicketListScreen';
-import { LoadingScreen } from '../screens/LoadingScreen';
+import {Ticket} from '../screens/ticketsScreens/TicketListScreen';
+import {LoadingScreen} from '../screens/LoadingScreen';
+import {useEffect} from 'react';
+import {StorageAdapter} from '../../config/adapters/storage-adapter';
+import {useNavigation} from '@react-navigation/native';
 
 export type RootStackParams = {
   LoadingScreen: undefined;
@@ -30,6 +34,29 @@ const fadeanimation: StackCardStyleInterpolator = ({current}) => ({
 });
 
 export const StackNavigator = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await StorageAdapter.getItem('token');
+      console.log(token);
+      if (token) {
+        navigation.navigate('BotTabNavigator');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'BotTabNavigator'}],
+        });
+      } else {
+        navigation.navigate('LoginScreen');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'LoginScreen'}],
+        });
+      }
+    };
+    checkToken();
+  }, []);
+
   return (
     <Stack.Navigator
       initialRouteName="LoadingScreen"
