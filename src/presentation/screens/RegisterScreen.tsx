@@ -13,6 +13,7 @@ import {api} from '../../config/apis/api';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
 import {useAuthContext} from '../context/AuthContext';
+import {registerRequest} from '../../services/auth';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -28,18 +29,71 @@ export const RegisterScreen = () => {
 
   const handleRegister = async () => {
     try {
+      if (!firstName) {
+        setError('El nombre es obligatorio');
+        return;
+      }
+      if (firstName.length > 50) {
+        setError('El nombre no puede tener más de 50 caracteres');
+        return;
+      }
+      if (!lastName) {
+        setError('El apellido es obligatorio');
+        return;
+      }
+      if (lastName.length > 50) {
+        setError('El apellido no puede tener más de 50 caracteres');
+        return;
+      }
+      if (!dni) {
+        setError('El DNI es obligatorio');
+        return;
+      }
+      if (dni.length > 20) {
+        setError('El DNI no puede tener más de 20 caracteres');
+        return;
+      }
+      if (!email) {
+        setError('El correo electrónico es obligatorio');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('El correo electrónico no es válido');
+        return;
+      }
+      if (email.length > 50) {
+        setError('El correo electrónico no puede tener más de 50 caracteres');
+        return;
+      }
+      if (!password) {
+        setError('La contraseña es obligatoria');
+        return;
+      }
+      if (password.length < 8 || password.length > 50) {
+        setError('La contraseña debe tener entre 8 y 50 caracteres');
+        return;
+      }
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        setError(
+          'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial',
+        );
+        return;
+      }
       if (password !== passwordConfirmation) {
         setError('Las contraseñas no coinciden');
         return;
       }
-      const {data} = await api.post('/auth/register', {
+
+      const data = await registerRequest({
         email,
         password,
-        firstName: firstName,
-        lastName: lastName,
+        firstName,
+        lastName,
         dni,
       });
-      await StorageAdapter.setItem('token', data.token);
       login();
     } catch (error) {
       console.log(error);

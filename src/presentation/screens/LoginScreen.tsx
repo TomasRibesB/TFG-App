@@ -11,7 +11,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {api} from '../../config/apis/api';
 import {BottomNotification} from '../components/BottomNotification';
-import { useAuthContext } from '../context/AuthContext';
+import {useAuthContext} from '../context/AuthContext';
+import {loginRequest} from '../../services/auth';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -23,15 +24,32 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const {data} = await api.post('/auth/login', {
-        email,
-        password,
-      });
-      await StorageAdapter.setItem('token', data.token);
-      login();
-    } catch (error) {
-      console.log(error);
-      setError('No se pudo iniciar sesión: ' + error);
+      if (!email) {
+        setError('El correo electrónico es obligatorio');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('El correo electrónico no es válido');
+        return;
+      }
+      if (email.length > 50) {
+        setError('El correo electrónico no puede tener más de 50 caracteres');
+        return;
+      }
+      if (!password) {
+        setError('La contraseña es obligatoria');
+        return;
+      }
+      if (password.length < 6 || password.length > 50) {
+        setError('La contraseña debe tener entre 6 y 50 caracteres');
+        return;
+      }
+
+      const data = await loginRequest(email, password);
+      login(); // usa el contexto
+    } catch (err) {
+      setError('No se pudo iniciar sesión');
     }
   };
 
