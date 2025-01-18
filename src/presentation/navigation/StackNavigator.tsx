@@ -14,6 +14,8 @@ import {LoadingScreen} from '../screens/LoadingScreen';
 import {useEffect} from 'react';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {useNavigation} from '@react-navigation/native';
+import {useAuthContext} from '../context/AuthContext';
+import React from 'react';
 
 export type RootStackParams = {
   LoadingScreen: undefined;
@@ -36,18 +38,19 @@ const fadeanimation: StackCardStyleInterpolator = ({current}) => ({
 export const StackNavigator = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
 
+  const {isAuthenticated, login, logout} = useAuthContext();
+
   useEffect(() => {
     const checkToken = async () => {
       const token = await StorageAdapter.getItem('token');
-      console.log(token);
       if (token) {
-        navigation.navigate('BotTabNavigator');
+        login();
         navigation.reset({
           index: 0,
           routes: [{name: 'BotTabNavigator'}],
         });
       } else {
-        navigation.navigate('LoginScreen');
+        logout();
         navigation.reset({
           index: 0,
           routes: [{name: 'LoginScreen'}],
@@ -55,7 +58,7 @@ export const StackNavigator = () => {
       }
     };
     checkToken();
-  }, []);
+  }, [login, logout, navigation]);
 
   return (
     <Stack.Navigator
@@ -68,36 +71,43 @@ export const StackNavigator = () => {
         name="LoadingScreen"
         component={LoadingScreen}
       />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="HomeScreen"
-        component={HomeScreen}
-      />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="LoginScreen"
-        component={LoginScreen}
-      />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="RegisterScreen"
-        component={RegisterScreen}
-      />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="BotTabNavigator"
-        component={BotTabNavigator}
-      />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="TicketListScreen"
-        component={TicketListScreen}
-      />
-      <Stack.Screen
-        options={{cardStyleInterpolator: fadeanimation}}
-        name="TicketScreen"
-        component={TicketScreen}
-      />
+      {isAuthenticated ? (
+        <>
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="HomeScreen"
+            component={HomeScreen}
+          />
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="BotTabNavigator"
+            component={BotTabNavigator}
+          />
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="TicketListScreen"
+            component={TicketListScreen}
+          />
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="TicketScreen"
+            component={TicketScreen}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="LoginScreen"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{cardStyleInterpolator: fadeanimation}}
+            name="RegisterScreen"
+            component={RegisterScreen}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };

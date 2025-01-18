@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler';
 
-import React, { useEffect } from 'react';
-import { AppState, AppStateStatus, Text, View } from 'react-native';
-import { ThemecontextProvider } from './presentation/context/ThemeContext';
-import { StackNavigator } from './presentation/navigation/StackNavigator';
-import { socket } from './services/socket';
+import React, {useEffect} from 'react';
+import {AppState, AppStateStatus, Text, View} from 'react-native';
+import {ThemecontextProvider} from './presentation/context/ThemeContext';
+import {StackNavigator} from './presentation/navigation/StackNavigator';
+import {socket} from './services/socket';
+import {AuthProvider} from './presentation/context/AuthContext';
 
 export const App = () => {
   useEffect(() => {
@@ -16,7 +17,10 @@ export const App = () => {
       }
     };
 
-    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
 
     return () => {
       subscription.remove();
@@ -24,7 +28,9 @@ export const App = () => {
   }, []);
   return (
     <ThemecontextProvider>
-      <StackNavigator />
+      <AuthProvider>
+        <StackNavigator />
+      </AuthProvider>
     </ThemecontextProvider>
   );
-}
+};

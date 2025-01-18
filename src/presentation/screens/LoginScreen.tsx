@@ -11,6 +11,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {api} from '../../config/apis/api';
 import {BottomNotification} from '../components/BottomNotification';
+import { useAuthContext } from '../context/AuthContext';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -18,6 +19,7 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const {login} = useAuthContext();
 
   const handleLogin = async () => {
     try {
@@ -26,7 +28,7 @@ export const LoginScreen = () => {
         password,
       });
       await StorageAdapter.setItem('token', data.token);
-      navigation.navigate('BotTabNavigator');
+      login();
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);

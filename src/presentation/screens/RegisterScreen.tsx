@@ -11,7 +11,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParams} from '../navigation/StackNavigator';
 import {api} from '../../config/apis/api';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
-import { BottomNotification } from '../components/BottomNotification';
+import {BottomNotification} from '../components/BottomNotification';
+import {useAuthContext} from '../context/AuthContext';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +24,7 @@ export const RegisterScreen = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const {login} = useAuthContext();
 
   const handleRegister = async () => {
     try {
@@ -37,7 +39,8 @@ export const RegisterScreen = () => {
         lastName: lastName,
         dni,
       });
-      navigation.navigate('LoginScreen');
+      await StorageAdapter.setItem('token', data.token);
+      login();
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);
