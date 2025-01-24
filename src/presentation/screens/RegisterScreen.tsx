@@ -8,11 +8,10 @@ import {globalVariables} from '../../config/theme/global-theme';
 import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParams} from '../navigation/StackNavigator';
+import {AuthStackParams, RootStackParams} from '../navigation/StackNavigator';
 import {api} from '../../config/apis/api';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
-import {useAuthContext} from '../context/AuthContext';
 import {registerRequest} from '../../services/auth';
 
 export const RegisterScreen = () => {
@@ -25,7 +24,7 @@ export const RegisterScreen = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
-  const {login} = useAuthContext();
+  const navigationAuth = useNavigation<StackNavigationProp<AuthStackParams>>();
 
   const handleRegister = async () => {
     try {
@@ -94,7 +93,8 @@ export const RegisterScreen = () => {
         lastName,
         dni,
       });
-      login();
+      await StorageAdapter.setItem('token', data.token);
+      navigation.navigate('MainFlow');
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);
@@ -197,7 +197,7 @@ export const RegisterScreen = () => {
             <Button
               mode="text"
               style={{padding: 0}}
-              onPress={() => navigation.navigate('LoginScreen')}>
+              onPress={() => navigationAuth.navigate('LoginScreen')}>
               ¿Ya tienes una cuenta? Iniciar Sesión
             </Button>
           </View>

@@ -11,9 +11,7 @@ export const ThemecontextProvider = ({children}: PropsWithChildren) => {
   return (
     <PaperProvider
       settings={{icon: props => <IonIcon {...props} />}}>
-      <NavigationContainer>
           {children}
-      </NavigationContainer>
     </PaperProvider>
   );
 };

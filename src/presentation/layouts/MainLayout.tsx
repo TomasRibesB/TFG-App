@@ -15,7 +15,6 @@ import {useState} from 'react';
 import { StorageAdapter } from '../../config/adapters/storage-adapter';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/StackNavigator';
-import { useAuthContext } from '../context/AuthContext';
 
 interface Props {
   title?: string;
@@ -43,12 +42,11 @@ export const MainLayout = ({
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const [menuVisible, setMenuVisible] = useState(false);
-  const {logout} = useAuthContext();
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
   const handleLogout = () => {
     StorageAdapter.removeItem('token');
-    logout();
+    navigation.navigate('AuthFlow');
   };
   const handleProfile = () => {
     closeMenu();

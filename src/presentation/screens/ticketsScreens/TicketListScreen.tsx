@@ -3,7 +3,7 @@ import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Text, Card, Chip, Button} from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {useNavigation} from '@react-navigation/native';
-import {RootStackParams} from '../../navigation/StackNavigator';
+import {MainStackParams, RootStackParams} from '../../navigation/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ticketsData from './Tickets.json';
@@ -41,7 +41,7 @@ export interface Ticket {
 const Tickets: Ticket[] = ticketsData;
 
 export const TicketListScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
 
   const handleAccept = (id: number) => {
     // Lógica para aceptar el ticket

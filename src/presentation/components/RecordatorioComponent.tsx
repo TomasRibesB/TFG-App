@@ -17,20 +17,15 @@ interface Props {
 }
 
 export const RecordatorioComponent = ({recordatorios}: Props) => {
-  const [currentRecordatorio, setCurrentRecordatorio] = useState<
-    Props['recordatorios']
-  >([]);
+  const [currentRecordatorio, setCurrentRecordatorio] = useState<Props['recordatorios']>([]);
   const [visible, setVisible] = useState(false);
-  const [recordatorioSeleccionado, setRecordatorioSeleccionado] = useState<
-    number | null
-  >(null);
+  const [recordatorioSeleccionado, setRecordatorioSeleccionado] = useState<number | null>(null);
+  const screenWidth = Dimensions.get('window').width - 32;
   const theme = useTheme();
 
   useEffect(() => {
     setCurrentRecordatorio(recordatorios);
   }, [recordatorios]);
-
-  const screenWidth = Dimensions.get('window').width - 32;
 
   const showDialog = (id: number) => {
     setRecordatorioSeleccionado(id);

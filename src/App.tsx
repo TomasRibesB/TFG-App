@@ -3,9 +3,9 @@ import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import {AppState, AppStateStatus, Text, View} from 'react-native';
 import {ThemecontextProvider} from './presentation/context/ThemeContext';
-import {StackNavigator} from './presentation/navigation/StackNavigator';
+import { RootNavigator } from './presentation/navigation/StackNavigator';
 import {socket} from './services/socket';
-import {AuthProvider} from './presentation/context/AuthContext';
+import { NavigationContainer } from '@react-navigation/native';
 
 export const App = () => {
   useEffect(() => {
@@ -28,9 +28,7 @@ export const App = () => {
   }, []);
   return (
     <ThemecontextProvider>
-      <AuthProvider>
-        <StackNavigator />
-      </AuthProvider>
+        <RootNavigator />
     </ThemecontextProvider>
   );
 };

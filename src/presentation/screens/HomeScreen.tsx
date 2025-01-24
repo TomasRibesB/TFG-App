@@ -5,7 +5,7 @@ import {CardContainer} from '../components/CardContainer';
 import {MaterialCalendar} from '../components/MaterialCalendar';
 import {View} from 'react-native';
 import {TicketComponent} from '../components/TicketComponent';
-import {RecordatorioComponent} from '../components/RecordatorioComponent';
+import { RecordatorioComponent } from '../components/RecordatorioComponent';
 
 const recordatorios = [
   {
@@ -88,7 +88,7 @@ const recordatorios = [
 export const HomeScreen = () => {
   return (
     <MainLayout title="Inicio">
-      <RecordatorioComponent recordatorios={recordatorios} />
+      {/*<RecordatorioComponent recordatorios={recordatorios} />*/}
       <CardContainer title="Calendario" icon="calendar-outline">
         <MaterialCalendar />
       </CardContainer>

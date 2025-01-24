@@ -1,26 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {MainLayout} from '../layouts/MainLayout';
+// src/presentation/screens/LoginScreen.tsx
+
+import React, {useState} from 'react';
+import {ScrollView, Image, View, StyleSheet} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
-import {Image, View} from 'react-native';
-import {CardContainer} from '../components/CardContainer';
-import {ScrollView} from 'react-native-gesture-handler';
-import {globalVariables} from '../../config/theme/global-theme';
 import {useNavigation} from '@react-navigation/native';
-import {RootStackParams} from '../navigation/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParams} from '../navigation/StackNavigator';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
-import {api} from '../../config/apis/api';
 import {BottomNotification} from '../components/BottomNotification';
-import {useAuthContext} from '../context/AuthContext';
 import {loginRequest} from '../../services/auth';
+import {MainLayout} from '../layouts/MainLayout';
+import {globalVariables} from '../../config/theme/global-theme';
+import {CardContainer} from '../components/CardContainer';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const {login} = useAuthContext();
 
   const handleLogin = async () => {
     try {
@@ -47,7 +44,9 @@ export const LoginScreen = () => {
       }
 
       const data = await loginRequest(email, password);
-      login(); // usa el contexto
+      console.log(data);
+      await StorageAdapter.setItem('token', data.token);
+      navigation.navigate('MainFlow');
     } catch (err) {
       setError('No se pudo iniciar sesión');
     }
@@ -56,31 +55,11 @@ export const LoginScreen = () => {
   return (
     <MainLayout>
       <ScrollView
-        style={{
-          flexDirection: 'column',
-          width: '100%',
-        }}
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          flex: 1,
-        }}>
-        <Image
-          source={require('../../assets/logo.png')}
-          style={{
-            width: 200,
-            height: 200,
-            marginBottom: globalVariables.padding * 2,
-          }}
-        />
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}>
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <CardContainer>
-          <Text
-            variant="displaySmall"
-            style={{
-              width: '100%',
-              textAlign: 'center',
-              marginBottom: globalVariables.padding,
-            }}>
+          <Text variant="displaySmall" style={styles.title}>
             Iniciar Sesión
           </Text>
           <TextInput
@@ -88,9 +67,7 @@ export const LoginScreen = () => {
             label="Correo Electrónico"
             mode="outlined"
             keyboardType="email-address"
-            style={{
-              marginBottom: globalVariables.padding,
-            }}
+            style={styles.input}
             onChangeText={setEmail}
           />
           <TextInput
@@ -98,22 +75,14 @@ export const LoginScreen = () => {
             label="Contraseña"
             mode="outlined"
             secureTextEntry
-            style={{marginBottom: globalVariables.padding * 2}}
+            style={styles.input}
             onChangeText={setPassword}
           />
-          <Button
-            mode="contained"
-            style={{
-              marginBottom: globalVariables.padding,
-            }}
-            children="Entrar"
-            onPress={() => handleLogin()}
-          />
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Button
-              mode="text"
-              style={{padding: 0}}
-              onPress={() => navigation.navigate('RegisterScreen')}>
+          <Button mode="contained" style={styles.button} onPress={handleLogin}>
+            Entrar
+          </Button>
+          <View style={styles.registerContainer}>
+            <Button mode="text" style={styles.registerButton}>
               ¿No tienes una cuenta? Regístrate
             </Button>
           </View>
@@ -125,8 +94,47 @@ export const LoginScreen = () => {
             label: 'Cerrar',
             onPress: () => setError(''),
           }}
-          message={error}></BottomNotification>
+          message={error}
+        />
       </ScrollView>
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flexDirection: 'column',
+    width: '100%',
+  },
+  contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    padding: 16,
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginBottom: globalVariables.padding * 2,
+  },
+  title: {
+    width: '100%',
+    textAlign: 'center',
+    marginBottom: globalVariables.padding,
+  },
+  input: {
+    width: '100%',
+    marginBottom: globalVariables.padding,
+  },
+  button: {
+    width: '100%',
+    marginBottom: globalVariables.padding,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  registerButton: {
+    padding: 0,
+  },
+});

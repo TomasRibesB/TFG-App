@@ -1,31 +1,37 @@
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import {
   createStackNavigator,
   StackCardStyleInterpolator,
-  StackNavigationProp,
 } from '@react-navigation/stack';
-import {HomeScreen} from '../screens/HomeScreen';
+import {AuthLoaderScreen} from '../components/AuthLoaderScreen';
 import {LoginScreen} from '../screens/LoginScreen';
 import {RegisterScreen} from '../screens/RegisterScreen';
 import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
 import {Ticket} from '../screens/ticketsScreens/TicketListScreen';
-import {useEffect} from 'react';
-import {StorageAdapter} from '../../config/adapters/storage-adapter';
-import {useNavigation} from '@react-navigation/native';
-import {useAuthContext} from '../context/AuthContext';
-import React from 'react';
 
-export type RootStackParams = {
-  HomeScreen: undefined;
+export type AuthStackParams = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
+};
+
+export type MainStackParams = {
   BotTabNavigator: undefined;
   TicketListScreen: undefined;
   TicketScreen: {ticket: Ticket};
 };
 
-const Stack = createStackNavigator<RootStackParams>();
+export type RootStackParams = {
+  AuthLoaderScreen: undefined;
+  AuthFlow: undefined;
+  MainFlow: undefined;
+};
+
+const AuthStack = createStackNavigator<AuthStackParams>();
+const MainStack = createStackNavigator<MainStackParams>();
+const RootStack = createStackNavigator<RootStackParams>();
 
 const fadeanimation: StackCardStyleInterpolator = ({current}) => ({
   cardStyle: {
@@ -33,74 +39,64 @@ const fadeanimation: StackCardStyleInterpolator = ({current}) => ({
   },
 });
 
-export const StackNavigator = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+// Stack con Login y Register
+const AuthStackNavigator = () => (
+  <AuthStack.Navigator screenOptions={{headerShown: false}}>
+    <AuthStack.Screen
+      name="LoginScreen"
+      component={LoginScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <AuthStack.Screen
+      name="RegisterScreen"
+      component={RegisterScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+  </AuthStack.Navigator>
+);
 
-  const {isAuthenticated, login, logout} = useAuthContext();
+// Stack principal con Tabs y Tickets
+const MainStackNavigator = () => (
+  <MainStack.Navigator screenOptions={{headerShown: false}}>
+    <MainStack.Screen
+      name="BotTabNavigator"
+      component={BotTabNavigator}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <MainStack.Screen
+      name="TicketListScreen"
+      component={TicketListScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <MainStack.Screen
+      name="TicketScreen"
+      component={TicketScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+  </MainStack.Navigator>
+);
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await StorageAdapter.getItem('token');
-      if (token) {
-        login();
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'BotTabNavigator'}],
-        });
-      } else {
-        logout();
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'LoginScreen'}],
-        });
-      }
-    };
-    checkToken();
-  }, [login, logout, navigation]);
-
+// Root que decide login o app principal
+export const RootNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="LoginScreen"
-      screenOptions={{
-        headerShown: false,
-      }}>
-      {isAuthenticated ? (
-        <>
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="HomeScreen"
-            component={HomeScreen}
-          />
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="BotTabNavigator"
-            component={BotTabNavigator}
-          />
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="TicketListScreen"
-            component={TicketListScreen}
-          />
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="TicketScreen"
-            component={TicketScreen}
-          />
-        </>
-      ) : (
-        <>
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="LoginScreen"
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            options={{cardStyleInterpolator: fadeanimation}}
-            name="RegisterScreen"
-            component={RegisterScreen}
-          />
-        </>
-      )}
-    </Stack.Navigator>
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{headerShown: false}}>
+        <RootStack.Screen
+          name="AuthLoaderScreen"
+          component={AuthLoaderScreen}
+          options={{cardStyleInterpolator: fadeanimation}}
+        />
+        <RootStack.Screen
+          name="AuthFlow"
+          component={AuthStackNavigator}
+          options={{cardStyleInterpolator: fadeanimation}}
+        />
+        <RootStack.Screen
+          name="MainFlow"
+          component={MainStackNavigator}
+          options={{cardStyleInterpolator: fadeanimation}}
+        />
+      </RootStack.Navigator>
+    </NavigationContainer>
   );
 };
