@@ -17,9 +17,10 @@ export const AuthLoaderScreen = () => {
   }, []);
 
   const authRedirection = async () => {
-    const currentUser = await StorageAdapter.getItem('token');
+    const user = await StorageAdapter.getItem('user');
+    console.log("user", user);
 
-    if (currentUser) {
+    if (user && user.token) {
       navigation.navigate('MainFlow');
     } else {
       navigation.navigate('AuthFlow');

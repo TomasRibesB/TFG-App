@@ -93,7 +93,7 @@ export const RegisterScreen = () => {
         lastName,
         dni,
       });
-      await StorageAdapter.setItem('token', data.token);
+      await StorageAdapter.setItem('user', data);
       navigation.navigate('MainFlow');
     } catch (error) {
       console.log(error);

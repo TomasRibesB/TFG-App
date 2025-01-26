@@ -7,7 +7,8 @@ export interface Ejercicio {
     id: number;
     name: string;
     description?: string;
-    image?: string;
+    demostration?: string;
+    explication?: string;
     keywords?: string;
     ejercicioRutina?: RutinaEjercicio[];
     categoriaEjercicio: CategoriaEjercicio;

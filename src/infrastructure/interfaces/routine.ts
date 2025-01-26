@@ -7,4 +7,5 @@ export interface Routine {
     description?: string;
     rutinaEjercicio?: RutinaEjercicio[];
     user: User;
+    trainer: User;
   }

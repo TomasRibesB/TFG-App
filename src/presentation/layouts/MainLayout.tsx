@@ -45,7 +45,7 @@ export const MainLayout = ({
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
   const handleLogout = () => {
-    StorageAdapter.removeItem('token');
+    StorageAdapter.removeItem('user');
     navigation.navigate('AuthFlow');
   };
   const handleProfile = () => {

@@ -11,11 +11,12 @@ import {
 } from 'react-native-paper';
 import {globalTheme} from '../../config/theme/global-theme';
 import {EjercicioElement} from '../screens/entrenamientoScreens/RutinaType';
+import {RutinaEjercicio} from '../../infrastructure/interfaces/rutina-ejercicio';
 
 interface Props {
   visible: boolean;
   onDismiss: () => void;
-  exercise: EjercicioElement | null;
+  exercise: RutinaEjercicio | null;
 }
 
 export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
@@ -24,12 +25,12 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{exercise?.ejercicio.nombre}</Dialog.Title>
+        <Dialog.Title>{exercise?.ejercicio.name}</Dialog.Title>
         <Dialog.Content>
           {exercise && (
             <ScrollView>
               <Text style={globalTheme.modalDescription}>
-                {exercise.ejercicio.descripcion}
+                {exercise.ejercicio.description}
               </Text>
               <Divider style={{marginVertical: 8}} />
               <List.Item
@@ -47,7 +48,7 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                 description={`${exercise.medicion}`}
                 left={() => <List.Icon icon="analytics-outline" />}
               />
-              <List.Item
+              {/*<List.Item
                 title="Grupos musculares"
                 description={exercise.ejercicio.gruposMuscularesId.join(', ')}
                 left={() => <List.Icon icon="accessibility-outline" />}
@@ -56,20 +57,30 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                 title="Categorías"
                 description={exercise.ejercicio.categoriasId.join(', ')}
                 left={() => <List.Icon icon="folder-open-outline" />}
-              />
-              {exercise.ejercicio.video && (
-                <>
-                  <Divider style={{marginVertical: 8}} />
-                  <Button
-                    icon="play-circle-outline"
-                    mode="contained"
-                    onPress={() => {
-                      /* manejar reproducción de video */
-                    }}>
-                    Ver Video
-                  </Button>
-                </>
+              />*/}
+              {exercise.ejercicio.demostration && (
+                <Button
+                  icon="play-circle-outline"
+                  mode="contained"
+                  style={{marginVertical: 8}}
+                  onPress={() => {
+                    /* manejar reproducción de video */
+                  }}>
+                  Ver demostración
+                </Button>
               )}
+              {exercise.ejercicio.explication && (
+                <Button
+                  icon="information-outline"
+                  mode="contained"
+                  style={{marginVertical: 8}}
+                  onPress={() => {
+                    /* manejar reproducción de video */
+                  }}>
+                  Ver explicación
+                </Button>
+              )}
+              <Divider style={{marginVertical: 8}} />
             </ScrollView>
           )}
         </Dialog.Content>

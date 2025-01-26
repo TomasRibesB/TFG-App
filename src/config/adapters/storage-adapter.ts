@@ -2,20 +2,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class StorageAdapter {
 
-    static async getItem(key: string): Promise<string | null> {
+    static async getItem(key: string): Promise<any | null> {
         try {
-            return await AsyncStorage.getItem(key);
-        } catch (error) {
+            const storedValue = await AsyncStorage.getItem(key);
+            return storedValue ? JSON.parse(storedValue) : null;
+        } catch {
             return null;
         }
     }
 
-    static async setItem(key: string, value: string): Promise<void> {
+    static async setItem(key: string, value: any): Promise<void> {
         try {
-            await AsyncStorage.setItem(key, value);
+            const jsonValue = JSON.stringify(value);
+            await AsyncStorage.setItem(key, jsonValue);
         } catch (error) {
             console.log(error);
-            throw new Error(`Error setting item ${key} ${value}`);
+            throw new Error(`Error setting item ${key}`);
         }
     }
 

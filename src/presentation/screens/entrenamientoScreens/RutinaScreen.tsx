@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
 import {
   Checkbox,
@@ -14,15 +14,28 @@ import {View, StyleSheet} from 'react-native';
 import {globalVariables, globalTheme} from '../../../config/theme/global-theme';
 import {EjercicioElement} from './RutinaType';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ExerciseDialog } from '../../components/DialogEjercicio';
+import {ExerciseDialog} from '../../components/DialogEjercicio';
+import {Routine} from '../../../infrastructure/interfaces/routine';
+import {getRoutineRequest} from '../../../services/routines';
+import { RutinaEjercicio } from '../../../infrastructure/interfaces/rutina-ejercicio';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedExercise, setSelectedExercise] =
-    useState<EjercicioElement | null>(null);
-
+    useState<RutinaEjercicio | null>(null);
+  const [routines, setRoutines] = useState<Routine[]>([]);
   const theme = useTheme();
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  const fetch = async () => {
+    const data = await getRoutineRequest();
+    setRoutines(data);
+    console.log(JSON.stringify(data, null, 2));
+  };
 
   const handleCheckboxPress = (id: number) => {
     setChecked(prevState => ({
@@ -31,15 +44,15 @@ export const RutinaScreen = () => {
     }));
   };
 
-  const calculateProgress = (ejercicios: {rutinaEjercicioId: number}[]) => {
-    const total = ejercicios.length;
-    const completed = ejercicios.filter(
-      ejercicio => checked[ejercicio.rutinaEjercicioId],
+  const calculateProgress = (re: RutinaEjercicio[]) => {
+    const total = re.length;
+    const completed = re.filter(
+      ejercicio => checked[ejercicio.id],
     ).length;
     return total === 0 ? 0 : completed / total;
   };
 
-  const handleLongPress = (ejercicio: EjercicioElement) => {
+  const handleLongPress = (ejercicio: RutinaEjercicio) => {
     setSelectedExercise(ejercicio);
     setModalVisible(true);
   };
@@ -52,10 +65,10 @@ export const RutinaScreen = () => {
   return (
     <>
       <MainLayout>
-        {rutinasData.rutinas.map(rutina => (
+        {routines.map(rutina => (
           <DesplegableCard
-            key={rutina.rutinaId}
-            title={rutina.nombre}
+            key={`ru-${rutina.id}`}
+            title={rutina.name}
             icon="barbell-outline">
             <View style={{paddingBottom: globalVariables.padding}}>
               <Text
@@ -63,32 +76,33 @@ export const RutinaScreen = () => {
                   marginBottom: globalVariables.margin,
                   paddingHorizontal: globalVariables.padding,
                 }}>
-                {rutina.descripcion}
+                {rutina.description}
               </Text>
-              {rutina.ejercicios.map(ejercicio => (
-                <List.Item
-                  style={{paddingVertical: 0}}
-                  key={ejercicio.rutinaEjercicioId}
-                  title={ejercicio.ejercicio.nombre}
-                  onLongPress={() => handleLongPress(ejercicio)}
-                  onPress={() =>
-                    handleCheckboxPress(ejercicio.rutinaEjercicioId)
-                  }
-                  description={`${ejercicio.series}x${ejercicio.repeticiones}`}
-                  right={() => (
-                    <Checkbox
-                      status={
-                        checked[ejercicio.rutinaEjercicioId]
-                        ? 'checked'
-                        : 'unchecked'
-                      }
-                      onPress={() =>
-                        handleCheckboxPress(ejercicio.rutinaEjercicioId)
-                      }
-                    />
-                  )}
-                />
-              ))}
+              {rutina.rutinaEjercicio &&
+                rutina.rutinaEjercicio.map(re => (
+                  <List.Item
+                    style={{paddingVertical: 0}}
+                    key={`re-${re.id}`}
+                    title={re.ejercicio.name}
+                    onLongPress={() => handleLongPress(re)}
+                    onPress={() =>
+                      handleCheckboxPress(re.id)
+                    }
+                    description={`${re.series}x${re.repeticiones}`}
+                    right={() => (
+                      <Checkbox
+                        status={
+                          checked[re.id]
+                            ? 'checked'
+                            : 'unchecked'
+                        }
+                        onPress={() =>
+                          handleCheckboxPress(re.id)
+                        }
+                      />
+                    )}
+                  />
+                ))}
               <Text
                 variant="bodySmall"
                 style={{
@@ -99,14 +113,14 @@ export const RutinaScreen = () => {
                 adicional.
               </Text>
               <ProgressBar
-                progress={calculateProgress(rutina.ejercicios)}
+                progress={calculateProgress(rutina.rutinaEjercicio || [])}
                 style={{
                   marginTop: 10,
                   height: 10,
                   borderRadius: globalVariables.innerBorderRadius,
                 }}
               />
-              {rutina?.entrenador && (
+              {rutina?.trainer && (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -120,7 +134,7 @@ export const RutinaScreen = () => {
                     size={24}
                     style={{marginRight: 3}}
                   />
-                  <Text>{rutina?.entrenador?.nombre}</Text>
+                  <Text>{rutina?.trainer?.firstName} {rutina?.trainer?.lastName}</Text>
                 </View>
               )}
             </View>

@@ -45,7 +45,7 @@ export const LoginScreen = () => {
 
       const data = await loginRequest(email, password);
       console.log(data);
-      await StorageAdapter.setItem('token', data.token);
+      await StorageAdapter.setItem('user', data);
       navigation.navigate('MainFlow');
     } catch (err) {
       setError('No se pudo iniciar sesión');
