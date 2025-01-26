@@ -1,5 +1,5 @@
-import React from 'react';
-import {ScrollView} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {ScrollView, ActivityIndicator, View} from 'react-native';
 import {
   Button,
   Dialog,
@@ -12,6 +12,7 @@ import {
 import {globalTheme} from '../../config/theme/global-theme';
 import {EjercicioElement} from '../screens/entrenamientoScreens/RutinaType';
 import {RutinaEjercicio} from '../../infrastructure/interfaces/rutina-ejercicio';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 interface Props {
   visible: boolean;
@@ -21,14 +22,32 @@ interface Props {
 
 export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
   const theme = useTheme();
+  const [playing, setPlaying] = useState(false);
+  const [explicationReady, setExplicationReady] = useState(false);
+  const [demostrationReady, setDemostrationReady] = useState(false);
+
+  const onStateChange = useCallback((state: string) => {
+    if (state === 'ended') {
+      setPlaying(false);
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying(prev => !prev);
+  }, []);
+
+  const cutLinkToId = (link: string) => {
+    const id = link.split('be/')[1].split('?')[0];
+    return id;
+  };
 
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>{exercise?.ejercicio.name}</Dialog.Title>
-        <Dialog.Content>
+        <Dialog.Content style={{height: '87%'}}>
           {exercise && (
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={globalTheme.modalDescription}>
                 {exercise.ejercicio.description}
               </Text>
@@ -59,28 +78,53 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                 left={() => <List.Icon icon="folder-open-outline" />}
               />*/}
               {exercise.ejercicio.demostration && (
-                <Button
-                  icon="play-circle-outline"
-                  mode="contained"
-                  style={{marginVertical: 8}}
-                  onPress={() => {
-                    /* manejar reproducción de video */
-                  }}>
-                  Ver demostración
-                </Button>
+                <>
+                  <Divider style={{marginVertical: 8}} />
+                  <Text style={globalTheme.modalDescription}>Demostración</Text>
+                  {!demostrationReady && (
+                    <>
+                      <ActivityIndicator
+                        size="large"
+                        color={theme.colors.primary}
+                      />
+                      <Text variant="labelSmall" style={{textAlign: 'center'}}>
+                        Cargando...
+                      </Text>
+                    </>
+                  )}
+                  <YoutubePlayer
+                    height={160}
+                    play={playing}
+                    videoId={cutLinkToId(exercise.ejercicio.demostration)}
+                    onChangeState={onStateChange}
+                    onReady={() => setDemostrationReady(true)}
+                  />
+                </>
               )}
               {exercise.ejercicio.explication && (
-                <Button
-                  icon="information-outline"
-                  mode="contained"
-                  style={{marginVertical: 8}}
-                  onPress={() => {
-                    /* manejar reproducción de video */
-                  }}>
-                  Ver explicación
-                </Button>
+                <>
+                  <Divider style={{marginVertical: 8}} />
+                  <Text style={globalTheme.modalDescription}>Explicación</Text>
+                  {!explicationReady && (
+                    <>
+                      <ActivityIndicator
+                        size="large"
+                        color={theme.colors.primary}
+                      />
+                      <Text variant="labelSmall" style={{textAlign: 'center'}}>
+                        Cargando...
+                      </Text>
+                    </>
+                  )}
+                  <YoutubePlayer
+                    height={160}
+                    play={playing}
+                    videoId={cutLinkToId(exercise.ejercicio.explication)}
+                    onReady={() => setExplicationReady(true)}
+                    onChangeState={onStateChange}
+                  />
+                </>
               )}
-              <Divider style={{marginVertical: 8}} />
             </ScrollView>
           )}
         </Dialog.Content>
