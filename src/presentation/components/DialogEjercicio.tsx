@@ -45,7 +45,7 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>{exercise?.ejercicio.name}</Dialog.Title>
-        <Dialog.Content style={{height: '87%'}}>
+        <Dialog.Content style={{height: '85%'}}>
           {exercise && (
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={globalTheme.modalDescription}>
@@ -93,7 +93,7 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                     </>
                   )}
                   <YoutubePlayer
-                    height={160}
+                    height={180}
                     play={playing}
                     videoId={cutLinkToId(exercise.ejercicio.demostration)}
                     onChangeState={onStateChange}
@@ -117,7 +117,7 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                     </>
                   )}
                   <YoutubePlayer
-                    height={160}
+                    height={180}
                     play={playing}
                     videoId={cutLinkToId(exercise.ejercicio.explication)}
                     onReady={() => setExplicationReady(true)}
