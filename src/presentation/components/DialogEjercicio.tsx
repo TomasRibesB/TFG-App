@@ -13,6 +13,7 @@ import {globalTheme} from '../../config/theme/global-theme';
 import {EjercicioElement} from '../screens/entrenamientoScreens/RutinaType';
 import {RutinaEjercicio} from '../../infrastructure/interfaces/rutina-ejercicio';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { UnidadMedida } from '../../infrastructure/enums/unidadMedida';
 
 interface Props {
   visible: boolean;
@@ -63,7 +64,11 @@ export const ExerciseDialog = ({visible, onDismiss, exercise}: Props) => {
                 left={() => <List.Icon icon="timer-outline" />}
               />
               <List.Item
-                title={exercise.ejercicio.unidadMedida}
+                title={
+                  exercise.ejercicio.unidadMedida === UnidadMedida.Ninguna
+                    ? 'Medición'
+                    : exercise.ejercicio.unidadMedida
+                }
                 description={`${exercise.medicion}`}
                 left={() => <List.Icon icon="analytics-outline" />}
               />
