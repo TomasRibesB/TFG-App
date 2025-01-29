@@ -1,14 +1,17 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
 import {Button, Chip, Modal, Text} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalTheme} from '../../../config/theme/global-theme';
+import {getPlanNutricional} from '../../../services/nutricion';
+import {PlanNutricional} from '../../../infrastructure/interfaces/plan-nutricional';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedNote, setSelectedNote] = useState('');
+  const [planNutricional, setPlanNutricional] = useState<PlanNutricional[]>([]);
 
   const handleNotePress = (nota: string) => {
     setSelectedNote(nota);
@@ -20,75 +23,40 @@ export const PlanNutricionalScreen = () => {
     setSelectedNote('');
   };
 
-  const plan = [
-    {
-      id: 1,
-      dateCreated: '2023-05-15',
-      name: 'Balanced Nutrition Plan',
-      description:
-        'Se enfoca en proporcionar las calorías y macronutrientes necesarios para aumentar masa muscular de manera efectiva. Incluye una ingesta elevada de proteínas para la reparación y crecimiento muscular, carbohidratos complejos para energía sostenida durante el entrenamiento, y grasas saludables para el soporte hormonal. Además, se ajusta según la intensidad del entrenamiento, con énfasis en las comidas pre y post-entrenamiento para optimizar el rendimiento y la recuperación.',
-      nutritionist: {
-        name: 'Ignacio Baquero',
-        avatar: '/placeholder.svg?height=40&width=40',
-        rol: 'Nutritionist',
-      },
-      objectives: [
-        'Maintain a balanced diet',
-        'Increase protein intake',
-        'Reduce processed sugar consumption',
-      ],
-      dailyCalories: 2200,
-      macronutrients: ['Carbs: 50%', 'Protein: 30%', 'Fats: 20%'],
-      additionalNotes:
-        'Consumir al menos 3 litros de agua al día. Incluir una comida rica en carbohidratos y proteínas en la ventana post-entrenamiento (dentro de 1 hora después del entrenamiento). Evitar alimentos procesados y priorizar fuentes de proteínas magras, carbohidratos complejos y grasas saludables.',
-    },
-    {
-      id: 2,
-      dateCreated: '2024-07-20',
-      name: 'Weight Loss Plan',
-      description:
-        'A personalized plan to help you achieve your weight loss goals.',
-      nutritionist: {
-        name: 'Dr. John Doe',
-        avatar: '/placeholder.svg?height=40&width=40',
-        rol: 'Nutritionist',
-      },
-      objectives: [
-        'Reduce calorie intake',
-        'Increase physical activity',
-        'Monitor progress regularly',
-      ],
-      dailyCalories: 1800,
-      macronutrients: ['Carbs: 40%', 'Protein: 30%', 'Fats: 30%'],
-      additionalNotes:
-        'Focus on whole foods and avoid sugary beverages and snacks.',
-    },
-  ];
+  useEffect(() => {
+    getPlanNutricional().then(response => {
+      setPlanNutricional(response);
+    });
+  }, []);
 
   return (
     <>
       <MainLayout>
-        {plan.map(item => (
+        {planNutricional.map(item => (
           <DesplegableCard
             key={item.id}
-            title={item.name}
+            title={item.nombre}
             icon="restaurant-outline"
-            subtitle={item.dateCreated}>
-            <Text>{item.description}</Text>
+            subtitle={
+              item.fechaCreacion &&
+              new Date(item.fechaCreacion).toLocaleDateString()
+            }>
+            <Text>{item.descripcion}</Text>
             <View style={{marginTop: 16, flexDirection: 'column'}}>
               <Text variant="titleMedium">Objetivos</Text>
-              {item.objectives.map((objective, index) => (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginVertical: 5,
-                  }}>
-                  <Icon name="chevron-forward-outline" size={20} />
-                  <Text style={{marginLeft: 5}}>{objective}</Text>
-                </View>
-              ))}
+              {item.objetivos &&
+                item.objetivos.split(',').map((objective, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginVertical: 5,
+                    }}>
+                    <Icon name="chevron-forward-outline" size={20} />
+                    <Text style={{marginLeft: 5}}>{objective}</Text>
+                  </View>
+                ))}
             </View>
             <View
               style={{
@@ -100,19 +68,23 @@ export const PlanNutricionalScreen = () => {
                 icon="restaurant-outline"
                 onPress={() => {}}
                 style={{margin: 5}}>
-                {item.dailyCalories} Calorias × Dia
+                {item.caloriasDiarias} Calorias × Dia
               </Chip>
-              {item.macronutrients.map((macro, index) => (
-                <Chip onPress={() => {}} key={index} style={{margin: 5}}>
-                  {item.macronutrients[index]}
-                </Chip>
-              ))}
+              {item.macronutrientes &&
+                Object.keys(item.macronutrientes).map((key, index) => (
+                  <Chip onPress={() => {}} key={index} style={{margin: 5}}>
+                    {item.macronutrientes && item.macronutrientes[key]} {key}
+                  </Chip>
+                ))}
             </View>
             <Button
               icon="document-text-outline"
               mode="outlined"
               onPress={() => {
-                handleNotePress(item.additionalNotes);
+                {
+                  item.notasAdicionales &&
+                    handleNotePress(item.notasAdicionales);
+                }
               }}
               style={{marginVertical: 10}}>
               Notas Adicionales
@@ -130,7 +102,10 @@ export const PlanNutricionalScreen = () => {
                 size={24}
                 style={{marginRight: 3}}
               />
-              <Text>{item.nutritionist.name}</Text>
+              <Text>
+                {item.nutricionista && item.nutricionista.firstName}{' '}
+                {item.nutricionista && item.nutricionista.lastName}
+              </Text>
             </View>
           </DesplegableCard>
         ))}

@@ -1,16 +1,15 @@
-import { User } from "./user";
-
+import {User} from './user';
 export interface PlanNutricional {
+  caloriasDiarias?: number;
+  descripcion?: string;
+  fechaCreacion?: Date;
   id: number;
-  fechaCreacion: Date;
+  macronutrientes?: {
+    [key: string]: number;
+  }
   nombre: string;
-  descripcion: string;
-  nutricionistaId: number;
-  pacienteId: number;
-  objetivos: string;
-  caloriasDiarias: number;
-  macronutrientes: { [key: string]: number };
   notasAdicionales?: string;
-  nutricionista: User;
-  paciente: User;
+  objetivos?: string;
+  paciente?: User;
+  nutricionista?: User;
 }

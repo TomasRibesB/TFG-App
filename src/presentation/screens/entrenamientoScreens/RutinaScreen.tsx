@@ -16,7 +16,7 @@ import {EjercicioElement} from './RutinaType';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {ExerciseDialog} from '../../components/DialogEjercicio';
 import {Routine} from '../../../infrastructure/interfaces/routine';
-import {getRoutineRequest} from '../../../services/routines';
+import {getRoutineRequest} from '../../../services/entrenamiento';
 import { RutinaEjercicio } from '../../../infrastructure/interfaces/rutina-ejercicio';
 
 export const RutinaScreen = () => {
