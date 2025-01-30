@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {ExerciseDialog} from '../../components/DialogEjercicio';
 import {Routine} from '../../../infrastructure/interfaces/routine';
 import {getRoutineRequest} from '../../../services/entrenamiento';
-import { RutinaEjercicio } from '../../../infrastructure/interfaces/rutina-ejercicio';
+import {RutinaEjercicio} from '../../../infrastructure/interfaces/rutina-ejercicio';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -33,7 +33,7 @@ export const RutinaScreen = () => {
 
   const fetch = async () => {
     const data = await getRoutineRequest();
-    setRoutines(data);
+    //setRoutines(data);
     console.log(JSON.stringify(data, null, 2));
   };
 
@@ -46,9 +46,7 @@ export const RutinaScreen = () => {
 
   const calculateProgress = (re: RutinaEjercicio[]) => {
     const total = re.length;
-    const completed = re.filter(
-      ejercicio => checked[ejercicio.id],
-    ).length;
+    const completed = re.filter(ejercicio => checked[ejercicio.id]).length;
     return total === 0 ? 0 : completed / total;
   };
 
@@ -65,81 +63,85 @@ export const RutinaScreen = () => {
   return (
     <>
       <MainLayout>
-        {routines.map(rutina => (
-          <DesplegableCard
-            key={`ru-${rutina.id}`}
-            title={rutina.name}
-            icon="barbell-outline">
-            <View style={{paddingBottom: globalVariables.padding}}>
-              <Text
-                style={{
-                  marginBottom: globalVariables.margin,
-                  paddingHorizontal: globalVariables.padding,
-                }}>
-                {rutina.description}
-              </Text>
-              {rutina.rutinaEjercicio &&
-                rutina.rutinaEjercicio.map(re => (
-                  <List.Item
-                    style={{paddingVertical: 0}}
-                    key={`re-${re.id}`}
-                    title={re.ejercicio.name}
-                    onLongPress={() => handleLongPress(re)}
-                    onPress={() =>
-                      handleCheckboxPress(re.id)
-                    }
-                    description={`${re.series}x${re.repeticiones}`}
-                    right={() => (
-                      <Checkbox
-                        status={
-                          checked[re.id]
-                            ? 'checked'
-                            : 'unchecked'
-                        }
-                        onPress={() =>
-                          handleCheckboxPress(re.id)
-                        }
-                      />
-                    )}
-                  />
-                ))}
-              <Text
-                variant="bodySmall"
-                style={{
-                  marginBottom: globalVariables.margin,
-                  paddingHorizontal: globalVariables.padding,
-                }}>
-                Al mantener precionado un ejercicio se mostrará información
-                adicional.
-              </Text>
-              <ProgressBar
-                progress={calculateProgress(rutina.rutinaEjercicio || [])}
-                style={{
-                  marginTop: 10,
-                  height: 10,
-                  borderRadius: globalVariables.innerBorderRadius,
-                }}
-              />
-              {rutina?.trainer && (
-                <View
+        {routines.length === 0 ? (
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Icon name="barbell" size={70} style={{opacity: 0.5}} />
+            <Text variant="labelLarge" style={{opacity: 0.5}}>
+              No se encontraron rutinas de entrenamiento
+            </Text>
+          </View>
+        ) : (
+          routines.map(rutina => (
+            <DesplegableCard
+              key={`ru-${rutina.id}`}
+              title={rutina.name}
+              icon="barbell-outline">
+              <View style={{paddingBottom: globalVariables.padding}}>
+                <Text
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginVertical: 10,
-                    justifyContent: 'flex-end',
+                    marginBottom: globalVariables.margin,
+                    paddingHorizontal: globalVariables.padding,
                   }}>
-                  <Text style={{marginRight: 3}}>Diseñado por</Text>
-                  <Icon
-                    name="person-circle-outline"
-                    size={24}
-                    style={{marginRight: 3}}
-                  />
-                  <Text>{rutina?.trainer?.firstName} {rutina?.trainer?.lastName}</Text>
-                </View>
-              )}
-            </View>
-          </DesplegableCard>
-        ))}
+                  {rutina.description}
+                </Text>
+                {rutina.rutinaEjercicio &&
+                  rutina.rutinaEjercicio.map(re => (
+                    <List.Item
+                      style={{paddingVertical: 0}}
+                      key={`re-${re.id}`}
+                      title={re.ejercicio.name}
+                      onLongPress={() => handleLongPress(re)}
+                      onPress={() => handleCheckboxPress(re.id)}
+                      description={`${re.series}x${re.repeticiones}`}
+                      right={() => (
+                        <Checkbox
+                          status={checked[re.id] ? 'checked' : 'unchecked'}
+                          onPress={() => handleCheckboxPress(re.id)}
+                        />
+                      )}
+                    />
+                  ))}
+                <Text
+                  variant="bodySmall"
+                  style={{
+                    marginBottom: globalVariables.margin,
+                    paddingHorizontal: globalVariables.padding,
+                  }}>
+                  Al mantener precionado un ejercicio se mostrará información
+                  adicional.
+                </Text>
+                <ProgressBar
+                  progress={calculateProgress(rutina.rutinaEjercicio || [])}
+                  style={{
+                    marginTop: 10,
+                    height: 10,
+                    borderRadius: globalVariables.innerBorderRadius,
+                  }}
+                />
+                {rutina?.trainer && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginVertical: 10,
+                      justifyContent: 'flex-end',
+                    }}>
+                    <Text style={{marginRight: 3}}>Diseñado por</Text>
+                    <Icon
+                      name="person-circle-outline"
+                      size={24}
+                      style={{marginRight: 3}}
+                    />
+                    <Text>
+                      {rutina?.trainer?.firstName} {rutina?.trainer?.lastName}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </DesplegableCard>
+          ))
+        )}
       </MainLayout>
       <ExerciseDialog
         visible={modalVisible}

@@ -132,10 +132,10 @@ export const MiSaludScreen = () => {
   const closeMenu = () => setMenuVisible(false);
 
   useEffect(() => {
-    getDocumentosRequest().then(response => {
-      setDocumentos(response);
-      console.log(response);
-    });
+    //getDocumentosRequest().then(response => {
+    //  setDocumentos(response);
+    //  console.log(response);
+    //});
     getProfesionalesByUserRequest().then(response => {
       setProfesionales(response);
       console.log(response);
@@ -165,83 +165,92 @@ export const MiSaludScreen = () => {
 
   return (
     <MainLayout>
-      {documentos.map((documento, index) => (
-        <DesplegableCard
-          key={index}
-          title={documento.titulo}
-          subtitle={
-            documento.fechaSubida &&
-            new Date(documento.fechaSubida).toLocaleDateString()
-          }
-          icon="folder-open-outline">
-          <View style={styles.cardContent}>
-            <Text variant="bodyMedium" style={styles.description}>
-              {documento.descripcion}
-            </Text>
-            {documento.archivo && (
-              <>
-                <Divider style={{marginVertical: 8}} />
-                <Text variant="bodySmall" style={styles.attachmentsTitle}>
-                  Archivos adjuntos:
-                </Text>
-                <View style={styles.attachments}>
-                  <IconButton
-                    icon="file-pdf"
-                    size={24}
-                    style={styles.attachmentButton}
-                  />
-                </View>
-              </>
-            )}
-            {documento.profesional && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: 10,
-                  justifyContent: 'flex-end',
-                }}>
-                <Text style={{marginRight: 3}}>Subido por</Text>
-                <Icon
-                  name="person-circle-outline"
-                  size={24}
-                  style={{marginRight: 3}}
-                />
-                <Text>
-                  {documento.profesional.firstName}{' '}
-                  {documento.profesional.lastName}
-                </Text>
-              </View>
-            )}
-            <Divider style={{marginVertical: 8}} />
-            <View style={styles.visibilityHeader}>
-              <Text variant="bodySmall" style={styles.visibilityTitle}>
-                Visibilidad:
+      {documentos.length === 0 ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Icon name="medkit" size={70} style={{opacity: 0.5}} />
+          <Text variant="labelLarge" style={{opacity: 0.5}}>
+            No se encontraron documentos
+          </Text>
+        </View>
+      ) : (
+        documentos.map((documento, index) => (
+          <DesplegableCard
+            key={index}
+            title={documento.titulo}
+            subtitle={
+              documento.fechaSubida &&
+              new Date(documento.fechaSubida).toLocaleDateString()
+            }
+            icon="folder-open-outline">
+            <View style={styles.cardContent}>
+              <Text variant="bodyMedium" style={styles.description}>
+                {documento.descripcion}
               </Text>
-              <IconButton
-                icon="menu-outline"
-                size={24}
-                onPress={event => handleIconButtonPress(event, documento)}
-              />
-            </View>
-          </View>
-          <View style={styles.visibility}>
-            {documento.visibilidad &&
-              documento.visibilidad.map((profesional, idx) => (
-                <View key={idx} style={styles.profesionalInfo}>
+              {documento.archivo && (
+                <>
+                  <Divider style={{marginVertical: 8}} />
+                  <Text variant="bodySmall" style={styles.attachmentsTitle}>
+                    Archivo adjunto:
+                  </Text>
+                  <View style={styles.attachments}>
+                    <IconButton
+                      icon="file-pdf"
+                      size={24}
+                      style={styles.attachmentButton}
+                    />
+                  </View>
+                </>
+              )}
+              {documento.profesional && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 10,
+                    justifyContent: 'flex-end',
+                  }}>
+                  <Text style={{marginRight: 3}}>Subido por</Text>
                   <Icon
                     name="person-circle-outline"
                     size={24}
                     style={{marginRight: 3}}
                   />
                   <Text>
-                    {profesional.firstName} {profesional.lastName}
+                    {documento.profesional.firstName}{' '}
+                    {documento.profesional.lastName}
                   </Text>
                 </View>
-              ))}
-          </View>
-        </DesplegableCard>
-      ))}
+              )}
+              <Divider style={{marginVertical: 8}} />
+              <View style={styles.visibilityHeader}>
+                <Text variant="bodySmall" style={styles.visibilityTitle}>
+                  Visibilidad:
+                </Text>
+                <IconButton
+                  icon="menu-outline"
+                  size={24}
+                  onPress={event => handleIconButtonPress(event, documento)}
+                />
+              </View>
+            </View>
+            <View style={styles.visibility}>
+              {documento.visibilidad &&
+                documento.visibilidad.map((profesional, idx) => (
+                  <View key={idx} style={styles.profesionalInfo}>
+                    <Icon
+                      name="person-circle-outline"
+                      size={24}
+                      style={{marginRight: 3}}
+                    />
+                    <Text>
+                      {profesional.firstName} {profesional.lastName}
+                    </Text>
+                  </View>
+                ))}
+            </View>
+          </DesplegableCard>
+        ))
+      )}
       <Portal>
         <Menu
           visible={menuVisible}

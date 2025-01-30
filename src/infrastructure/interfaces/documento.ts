@@ -6,7 +6,8 @@ export interface Documento {
   tipo: TipoDocumento;
   titulo: string;
   descripcion: string;
-  archivo: Buffer;
+  archivo?: string | null;
+  directorio?: string | null;
   fechaSubida: Date;
   nombreProfesional?: string | null;
   apellidoProfesional?: string | null;
