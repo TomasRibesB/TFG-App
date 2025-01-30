@@ -5,7 +5,7 @@ import {DesplegableCard} from '../../components/DesplegableCard';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalTheme} from '../../../config/theme/global-theme';
-import {getPlanNutricional} from '../../../services/nutricion';
+import {getPlanNutricionalRequest} from '../../../services/nutricion';
 import {PlanNutricional} from '../../../infrastructure/interfaces/plan-nutricional';
 
 export const PlanNutricionalScreen = () => {
@@ -24,7 +24,7 @@ export const PlanNutricionalScreen = () => {
   };
 
   useEffect(() => {
-    getPlanNutricional().then(response => {
+    getPlanNutricionalRequest().then(response => {
       setPlanNutricional(response);
     });
   }, []);

@@ -12,4 +12,5 @@ export interface Documento {
   apellidoProfesional?: string | null;
   profesional?: User | null;
   usuario: User;
+  visibilidad: User[];
 }

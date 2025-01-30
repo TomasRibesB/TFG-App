@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
 import {
   Text,
@@ -12,6 +12,12 @@ import {
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Documento} from '../../../infrastructure/interfaces/documento';
+import {
+  getDocumentosRequest,
+  getProfesionalesByUserRequest,
+} from '../../../services/salud';
+import {User} from '../../../infrastructure/interfaces/user';
 
 const Documentos = [
   {
@@ -117,21 +123,30 @@ const Profesionales = [
 
 export const MiSaludScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  const [selectedDocument, setSelectedDocument] = useState<Documento>();
   const [anchorPosition, setAnchorPosition] = useState({x: 0, y: 0});
+  const [documentos, setDocumentos] = useState<Documento[]>([]);
+  const [profesionales, setProfesionales] = useState<User[]>([]);
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-  const toggleProfesional = (profesional: {
-    id: number;
-    name: string;
-    especialidad: string;
-  }) => {
+  useEffect(() => {
+    getDocumentosRequest().then(response => {
+      setDocumentos(response);
+      console.log(response);
+    });
+    getProfesionalesByUserRequest().then(response => {
+      setProfesionales(response);
+      console.log(response);
+    });
+  }, []);
+
+  const toggleProfesional = (profesional: User) => {
     if (selectedDocument) {
+      selectedDocument.visibilidad = selectedDocument.visibilidad || [];
       const index = selectedDocument.visibilidad.findIndex(
-        (p: {id: number; name: string; especialidad: string}) =>
-          p.id === profesional.id,
+        (p: User) => p.id === profesional.id,
       );
       if (index > -1) {
         selectedDocument.visibilidad.splice(index, 1);
@@ -150,35 +165,31 @@ export const MiSaludScreen = () => {
 
   return (
     <MainLayout>
-      {Documentos.map((documento, index) => (
+      {documentos.map((documento, index) => (
         <DesplegableCard
           key={index}
-          title={documento.title}
-          subtitle={`${documento.date} ${documento.time}`}
+          title={documento.titulo}
+          subtitle={
+            documento.fechaSubida &&
+            new Date(documento.fechaSubida).toLocaleDateString()
+          }
           icon="folder-open-outline">
           <View style={styles.cardContent}>
             <Text variant="bodyMedium" style={styles.description}>
-              {documento.description}
+              {documento.descripcion}
             </Text>
-            {documento.archivos && documento.archivos.length > 0 && (
+            {documento.archivo && (
               <>
                 <Divider style={{marginVertical: 8}} />
                 <Text variant="bodySmall" style={styles.attachmentsTitle}>
                   Archivos adjuntos:
                 </Text>
                 <View style={styles.attachments}>
-                  {documento.archivos.map((archivo, idx) => (
-                    <Button
-                      key={idx}
-                      mode="outlined"
-                      icon="cloud-download-outline"
-                      onPress={() => {
-                        // Lógica para descargar el archivo
-                      }}
-                      style={styles.attachmentButton}>
-                      {archivo.name}
-                    </Button>
-                  ))}
+                  <IconButton
+                    icon="file-pdf"
+                    size={24}
+                    style={styles.attachmentButton}
+                  />
                 </View>
               </>
             )}
@@ -196,7 +207,10 @@ export const MiSaludScreen = () => {
                   size={24}
                   style={{marginRight: 3}}
                 />
-                <Text>{documento.profesional.name}</Text>
+                <Text>
+                  {documento.profesional.firstName}{' '}
+                  {documento.profesional.lastName}
+                </Text>
               </View>
             )}
             <Divider style={{marginVertical: 8}} />
@@ -212,16 +226,19 @@ export const MiSaludScreen = () => {
             </View>
           </View>
           <View style={styles.visibility}>
-            {documento.visibilidad.map((profesional, idx) => (
-              <View key={idx} style={styles.profesionalInfo}>
-                <Icon
-                  name="person-circle-outline"
-                  size={24}
-                  style={{marginRight: 3}}
-                />
-                <Text>{profesional.name}</Text>
-              </View>
-            ))}
+            {documento.visibilidad &&
+              documento.visibilidad.map((profesional, idx) => (
+                <View key={idx} style={styles.profesionalInfo}>
+                  <Icon
+                    name="person-circle-outline"
+                    size={24}
+                    style={{marginRight: 3}}
+                  />
+                  <Text>
+                    {profesional.firstName} {profesional.lastName}
+                  </Text>
+                </View>
+              ))}
           </View>
         </DesplegableCard>
       ))}
@@ -230,24 +247,27 @@ export const MiSaludScreen = () => {
           visible={menuVisible}
           onDismiss={closeMenu}
           anchor={{x: anchorPosition.x, y: anchorPosition.y}}>
-          {Profesionales.map(profesional => (
-            <Menu.Item
-              key={profesional.id}
-              onPress={() => toggleProfesional(profesional)}
-              title={profesional.name}
-              trailingIcon={() => (
-                <Checkbox
-                  status={
-                    selectedDocument?.visibilidad.some(
-                      (p: any) => p.id === profesional.id,
-                    )
-                      ? 'checked'
-                      : 'unchecked'
-                  }
-                />
-              )}
-            />
-          ))}
+          {profesionales.length > 0 &&
+            profesionales.map(profesional => (
+              <Menu.Item
+                key={profesional.id}
+                onPress={() => toggleProfesional(profesional)}
+                title={profesional.firstName + ' ' + profesional.lastName}
+                trailingIcon={() => (
+                  <Checkbox
+                    status={
+                      selectedDocument &&
+                      selectedDocument.visibilidad &&
+                      selectedDocument.visibilidad.some(
+                        (p: any) => p.id === profesional.id,
+                      )
+                        ? 'checked'
+                        : 'unchecked'
+                    }
+                  />
+                )}
+              />
+            ))}
         </Menu>
       </Portal>
     </MainLayout>
