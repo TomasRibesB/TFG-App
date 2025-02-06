@@ -55,7 +55,7 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
             key={recordatorio.id}
             onLongPress={() => showDialog(recordatorio.id)}>
             <View
-              style={[styles.card, {backgroundColor: theme.colors.surface}]}>
+              style={[styles.card, {backgroundColor: theme.colors.elevation.level2}]}>
               <Text style={styles.title}>{recordatorio.title}</Text>
               <Text style={styles.description}>{recordatorio.description}</Text>
               {recordatorio.date && (
