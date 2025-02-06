@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
 import {Text, List, Dialog, Portal, Button, Avatar} from 'react-native-paper';
 import {CardContainer} from '../../components/CardContainer';
@@ -6,37 +6,48 @@ import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TicketComponent} from '../../components/TicketComponent';
 import {TurnoComponent} from '../../components/TurnoComponent';
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {Role} from '../../../infrastructure/enums/roles';
+import {User} from '../../../infrastructure/interfaces/user';
 
-const Profesionales = [
+const Profesionales: Partial<User>[] = [
   {
-    id: 1,
-    name: 'Dr. Juan Perez',
-    especialidad: 'Cardiología',
-    telefono: '123456789',
+    firstName: 'Juan',
+    lastName: 'Perez',
+    role: Role.Profesional,
     email: 'example@gmail.com',
-    isUser: true,
   },
   {
-    id: 2,
-    name: 'Dr. Marcos Perez',
-    especialidad: 'Nutriciónista',
-    telefono: '123456789',
+    firstName: 'Maria',
+    lastName: 'Gonzalez',
+    role: Role.Profesional,
     email: 'example2@gmail.com',
-    isUser: false,
   },
   {
-    id: 3,
-    name: 'Dr. Carlos Perez',
-    especialidad: 'Traumatología',
-    telefono: '123456789',
+    firstName: 'Pedro',
+    lastName: 'Gomez',
+    role: Role.Profesional,
     email: 'prueba@gmail.com',
-    isUser: false,
   },
 ];
 
 export const ProfesionalesScreen = () => {
-  const [selectedProfesional, setSelectedProfesional] = useState<any>(null);
+  const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
+    null,
+  );
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [profesionalesUsers, setProfesionalesUsers] = useState<User[]>([]);
+  const [profesionales, setProfesionales] = useState<Partial<User>[]>([]);
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  const fetch = async () => {
+    const data: User[] = (await StorageAdapter.getItem('profesionales')) || [];
+    setProfesionalesUsers(data);
+    const todosProfesionales: Partial<User>[] = [...data, ...Profesionales];
+    setProfesionales(todosProfesionales);
+  };
 
   const handleLongPress = (profesional: any) => {
     setSelectedProfesional(profesional);
@@ -51,27 +62,43 @@ export const ProfesionalesScreen = () => {
   return (
     <MainLayout>
       <CardContainer title="Mis Profesionales" icon="people-outline">
-        {Profesionales.map(profesional => (
+        {profesionales.map((profesional, index) => (
           <List.Item
-            key={profesional.id}
-            title={profesional.name}
-            description={profesional.especialidad}
+            key={index + 'profesional'}
+            title={profesional.firstName + ' ' + profesional.lastName}
+            description={
+              profesional.role === Role.Profesional
+                ? 'Profesional'
+                : (profesional.role?.charAt(0).toUpperCase() ?? '') +
+                  (profesional.role?.slice(1).toLocaleLowerCase() ?? '')
+            }
             onPress={
-              profesional.isUser
-                ? () => handleLongPress(profesional)
-                : undefined
+              profesional.id ? () => handleLongPress(profesional) : undefined
             }
             right={() =>
-              profesional.isUser ? (
+              profesional.id ? (
                 <>
-                  <Icon name="information-outline" size={26} style={{marginRight: -10}} />
-                  <Icon name="person-circle-outline" size={17} style={{top: -7}} />
+                  <Icon
+                    name="information-outline"
+                    size={26}
+                    style={{marginRight: -10}}
+                  />
+                  <Icon
+                    name="person-circle-outline"
+                    size={17}
+                    style={{top: -7}}
+                  />
                 </>
               ) : (
                 <Icon name="remove-circle-outline" size={17} />
               )
             }
-            left={() => <Avatar.Text size={48} label={profesional.name[0]} />}
+            left={() => (
+              <Avatar.Text
+                size={48}
+                label={profesional.firstName ? profesional.firstName[0] : '?'}
+              />
+            )}
           />
         ))}
       </CardContainer>
@@ -86,19 +113,21 @@ export const ProfesionalesScreen = () => {
                 <View style={styles.modalRow}>
                   <Text style={styles.modalLabel}>Nombre:</Text>
                   <Text style={styles.modalText}>
-                    {selectedProfesional.name}
+                    {selectedProfesional.firstName +
+                      ' ' +
+                      selectedProfesional.lastName}
                   </Text>
                 </View>
                 <View style={styles.modalRow}>
                   <Text style={styles.modalLabel}>Especialidad:</Text>
                   <Text style={styles.modalText}>
-                    {selectedProfesional.especialidad}
-                  </Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalLabel}>Teléfono:</Text>
-                  <Text style={styles.modalText}>
-                    {selectedProfesional.telefono}
+                    {selectedProfesional.role === Role.Profesional
+                      ? 'Profesional'
+                      : (selectedProfesional.role?.charAt(0).toUpperCase() ??
+                          '') +
+                        (selectedProfesional.role
+                          ?.slice(1)
+                          .toLocaleLowerCase() ?? '')}
                   </Text>
                 </View>
                 <View style={styles.modalRow}>
