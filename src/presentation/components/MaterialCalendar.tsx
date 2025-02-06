@@ -16,8 +16,8 @@ export const MaterialCalendar = () => {
   return (
     <Calendar
       theme={{
-        backgroundColor: theme.colors.background,
-        calendarBackground: theme.colors.background,
+        backgroundColor: theme.colors.elevation.level1,
+        calendarBackground: theme.colors.elevation.level1,
         textSectionTitleColor: theme.colors.onBackground,
         selectedDayBackgroundColor: theme.colors.primary,
         selectedDayTextColor: theme.colors.onPrimary,

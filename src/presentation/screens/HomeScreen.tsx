@@ -88,7 +88,7 @@ const recordatorios = [
 export const HomeScreen = () => {
   return (
     <MainLayout title="Inicio">
-      {/*<RecordatorioComponent recordatorios={recordatorios} />*/}
+      <RecordatorioComponent recordatorios={recordatorios} />
       <CardContainer title="Calendario" icon="calendar-outline">
         <MaterialCalendar />
       </CardContainer>
