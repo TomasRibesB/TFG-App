@@ -8,6 +8,7 @@ import {
   Menu,
   Checkbox,
   Portal,
+  useTheme,
 } from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet} from 'react-native';
@@ -18,108 +19,7 @@ import {
   getProfesionalesByUserRequest,
 } from '../../../services/salud';
 import {User} from '../../../infrastructure/interfaces/user';
-
-const Documentos = [
-  {
-    title: 'Historial Clínico',
-    date: '12/12/2021',
-    time: '12:00',
-    description:
-      'Historial clínico del paciente, realizado por el Dr. Juan Perez, el dia 12/12/2021 a las 12:00. Se observa una leve arritmia en el paciente cuando este se esfuerza al maximo. Se recomienda realizar un electrocardiograma para mayor detalle y no realizar actividades de tipo fisico de alta intensidad.',
-    profesional: {
-      id: 1,
-      name: 'Dr. Juan Perez',
-      especialidad: 'Cardiología',
-    },
-    archivos: [
-      {
-        name: 'Archivo 1',
-        url: 'https://www.google.com',
-      },
-      {
-        name: 'Archivo 2',
-        url: 'https://www.google.com',
-      },
-    ],
-    visibilidad: [
-      {
-        id: 1,
-        name: 'Dr. Juan Perez',
-        especialidad: 'Cardiología',
-      },
-      {
-        id: 2,
-        name: 'Dr. Marcos Perez',
-        especialidad: 'Nutriciónista',
-      },
-    ],
-  },
-  {
-    title: 'Receta',
-    date: '12/12/2021',
-    time: '12:00',
-    description:
-      'Receta medica del paciente, realizada por el Dr. Juan Perez, el dia 12/12/2021 a las 12:00. Se receta un medicamento para la arritmia que presenta el paciente.',
-    profesional: {
-      id: 1,
-      name: 'Dr. Juan Perez',
-      especialidad: 'Cardiología',
-    },
-    archivos: [
-      {
-        name: 'Archivo 1',
-        url: 'https://www.google.com',
-      },
-      {
-        name: 'Archivo 2',
-        url: 'https://www.google.com',
-      },
-    ],
-    visibilidad: [
-      {
-        id: 1,
-        name: 'Dr. Juan Perez',
-        especialidad: 'Cardiología',
-      },
-      {
-        id: 2,
-        name: 'Dr. Marcos Perez',
-        especialidad: 'Nutriciónista',
-      },
-    ],
-  },
-  {
-    title: 'Estudios',
-    date: '12/12/2021',
-    time: '12:00',
-    description:
-      'Estudios del paciente, realizados por el Dr. Juan Perez, el dia 12/12/2021 a las 12:00. Se observa una leve arritmia en el paciente cuando este se esfuerza al maximo. Se recomienda realizar un electrocardiograma para mayor detalle y no realizar actividades de tipo fisico de alta intensidad.',
-    profesional: {
-      id: 1,
-      name: 'Dr. Juan Perez',
-      especialidad: 'Cardiología',
-    },
-    visibilidad: [
-      {
-        id: 1,
-        name: 'Dr. Juan Perez',
-        especialidad: 'Cardiología',
-      },
-      {
-        id: 2,
-        name: 'Dr. Marcos Perez',
-        especialidad: 'Nutriciónista',
-      },
-    ],
-  },
-];
-
-const Profesionales = [
-  {id: 1, name: 'Dr. Juan Perez', especialidad: 'Cardiología'},
-  {id: 2, name: 'Dr. Marcos Perez', especialidad: 'Nutriciónista'},
-  {id: 3, name: 'Dr. Ana Lopez', especialidad: 'Pediatría'},
-  {id: 4, name: 'Dr. Carlos Ruiz', especialidad: 'Dermatología'},
-];
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 
 export const MiSaludScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -127,20 +27,21 @@ export const MiSaludScreen = () => {
   const [anchorPosition, setAnchorPosition] = useState({x: 0, y: 0});
   const [documentos, setDocumentos] = useState<Documento[]>([]);
   const [profesionales, setProfesionales] = useState<User[]>([]);
+  const theme = useTheme();
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
   useEffect(() => {
-    //getDocumentosRequest().then(response => {
-    //  setDocumentos(response);
-    //  console.log(response);
-    //});
-    getProfesionalesByUserRequest().then(response => {
-      setProfesionales(response);
-      console.log(response);
-    });
+    fetch();
   }, []);
+
+  const fetch = async () => {
+    const documentosData = await StorageAdapter.getItem('documentos');
+    const profesionalesData = await StorageAdapter.getItem('profesionales');
+    setDocumentos(documentosData);
+    setProfesionales(profesionalesData);
+  };
 
   const toggleProfesional = (profesional: User) => {
     if (selectedDocument) {
@@ -161,6 +62,10 @@ export const MiSaludScreen = () => {
     setSelectedDocument(documento);
     setAnchorPosition({x: event.nativeEvent.pageX, y: event.nativeEvent.pageY});
     openMenu();
+  };
+
+  const handleDownload = () => {
+    // Download file
   };
 
   return (
@@ -187,19 +92,18 @@ export const MiSaludScreen = () => {
                 {documento.descripcion}
               </Text>
               {documento.archivo && (
-                <>
-                  <Divider style={{marginVertical: 8}} />
-                  <Text variant="bodySmall" style={styles.attachmentsTitle}>
-                    Archivo adjunto:
-                  </Text>
-                  <View style={styles.attachments}>
-                    <IconButton
-                      icon="file-pdf"
-                      size={24}
-                      style={styles.attachmentButton}
-                    />
-                  </View>
-                </>
+                <View style={styles.attachments}>
+                  <IconButton
+                    icon="cloud-download-outline"
+                    size={24}
+                    style={[
+                      styles.attachmentButton,
+                      {backgroundColor: theme.colors.primaryContainer},
+                    ]}
+                    mode="contained-tonal"
+                    onPress={handleDownload}
+                  />
+                </View>
               )}
               {documento.profesional && (
                 <View
@@ -296,12 +200,13 @@ const styles = StyleSheet.create({
   },
   attachments: {
     flexDirection: 'row',
-    marginVertical: 10,
-    flexWrap: 'wrap',
+    bottom: 0,
   },
   attachmentButton: {
     marginRight: 8,
     marginBottom: 8,
+    position: 'relative',
+    bottom: -25,
   },
   visibilityHeader: {
     flexDirection: 'row',

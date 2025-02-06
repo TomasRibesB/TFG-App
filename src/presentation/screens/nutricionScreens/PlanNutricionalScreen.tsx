@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {globalTheme} from '../../../config/theme/global-theme';
 import {getPlanNutricionalRequest} from '../../../services/nutricion';
 import {PlanNutricional} from '../../../infrastructure/interfaces/plan-nutricional';
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,10 +25,13 @@ export const PlanNutricionalScreen = () => {
   };
 
   useEffect(() => {
-    getPlanNutricionalRequest().then(response => {
-      //setPlanNutricional(response);
-    });
+    fetch();
   }, []);
+
+  const fetch = async () => {
+    const data = await StorageAdapter.getItem('planNutricional');
+    setPlanNutricional(data);
+  };
 
   return (
     <>

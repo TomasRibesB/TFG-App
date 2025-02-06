@@ -7,6 +7,7 @@ import { StorageAdapter } from '../../config/adapters/storage-adapter';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../navigation/StackNavigator';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { initialFetch } from '../../services/fetch';
 
 export const AuthLoaderScreen = () => {
   const theme = useTheme();
@@ -21,6 +22,7 @@ export const AuthLoaderScreen = () => {
     console.log("user", user);
 
     if (user && user.token) {
+      initialFetch();
       navigation.navigate('MainFlow');
     } else {
       navigation.navigate('AuthFlow');

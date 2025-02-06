@@ -18,6 +18,7 @@ import {ExerciseDialog} from '../../components/DialogEjercicio';
 import {Routine} from '../../../infrastructure/interfaces/routine';
 import {getRoutineRequest} from '../../../services/entrenamiento';
 import {RutinaEjercicio} from '../../../infrastructure/interfaces/rutina-ejercicio';
+import { StorageAdapter } from '../../../config/adapters/storage-adapter';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -32,9 +33,8 @@ export const RutinaScreen = () => {
   }, []);
 
   const fetch = async () => {
-    const data = await getRoutineRequest();
-    //setRoutines(data);
-    console.log(JSON.stringify(data, null, 2));
+    const data = await StorageAdapter.getItem('rutinas');
+    setRoutines(data);
   };
 
   const handleCheckboxPress = (id: number) => {
