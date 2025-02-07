@@ -94,7 +94,10 @@ export const RegisterScreen = () => {
         dni,
       });
       await StorageAdapter.setItem('user', data);
-      navigation.navigate('MainFlow');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'MainFlow'}],
+      });
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);

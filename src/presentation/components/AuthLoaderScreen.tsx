@@ -23,9 +23,15 @@ export const AuthLoaderScreen = () => {
 
     if (user && user.token) {
       initialFetch();
-      navigation.navigate('MainFlow');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'MainFlow'}],
+      });
     } else {
-      navigation.navigate('AuthFlow');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'AuthFlow'}],
+      });
     }
   };
 

@@ -46,7 +46,10 @@ export const LoginScreen = () => {
       const data = await loginRequest(email, password);
       console.log(data);
       await StorageAdapter.setItem('user', data);
-      navigation.navigate('MainFlow');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'MainFlow'}],
+      });
     } catch (err) {
       setError('No se pudo iniciar sesión');
     }

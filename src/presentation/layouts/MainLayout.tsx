@@ -45,8 +45,11 @@ export const MainLayout = ({
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
   const handleLogout = () => {
-    StorageAdapter.removeItem('user');
-    navigation.navigate('AuthFlow');
+    StorageAdapter.clear();
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'AuthFlow'}],
+    });
   };
   const handleProfile = () => {
     closeMenu();

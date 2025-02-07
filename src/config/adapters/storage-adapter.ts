@@ -30,4 +30,13 @@ export class StorageAdapter {
         }
     }
 
+    static async clear(): Promise<void> {
+        try {
+            await AsyncStorage.clear();
+        } catch (error) {
+            console.log(error);
+            throw new Error('Error clearing storage');
+        }
+    }
+
 }
