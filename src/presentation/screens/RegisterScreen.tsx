@@ -96,7 +96,7 @@ export const RegisterScreen = () => {
       await StorageAdapter.setItem('user', data);
       navigation.reset({
         index: 0,
-        routes: [{name: 'MainFlow'}],
+        routes: [{name: 'AuthLoaderScreen'}],
       });
     } catch (error) {
       console.log(error);

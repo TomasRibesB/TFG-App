@@ -48,7 +48,7 @@ export const LoginScreen = () => {
       await StorageAdapter.setItem('user', data);
       navigation.reset({
         index: 0,
-        routes: [{name: 'MainFlow'}],
+        routes: [{name: 'AuthLoaderScreen'}],
       });
     } catch (err) {
       setError('No se pudo iniciar sesión');
