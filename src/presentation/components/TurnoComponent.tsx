@@ -6,6 +6,8 @@ import {PaperSelect} from 'react-native-paper-select';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalVariables} from '../../config/theme/global-theme';
 import {User} from '../../infrastructure/interfaces/user';
+import {Turno} from '../../infrastructure/interfaces/turno';
+import {Role} from '../../infrastructure/enums/roles';
 
 interface Props {
   profesionales: User[];
@@ -28,6 +30,11 @@ export const TurnoComponent = ({profesionales}: Props) => {
       (p.turnosProfesional || []).map(turno => ({
         ...turno,
         profesional: `${p.firstName} ${p.lastName}`,
+        role:
+          p.role === Role.Profesional
+            ? 'Profesional'
+            : (p.role?.charAt(0).toUpperCase() ?? '') +
+              (p.role?.slice(1).toLocaleLowerCase() ?? ''),
       })),
     );
     setAllTurnos(turnosDesplegados);
@@ -37,7 +44,7 @@ export const TurnoComponent = ({profesionales}: Props) => {
     // Lógica de reserva
   };
 
-  const filteredTurnos =
+  const filteredTurnos: Turno[] =
     selectedProfesional === 'Todos'
       ? allTurnos
       : allTurnos.filter(turno => turno.profesional === selectedProfesional);
@@ -75,7 +82,7 @@ export const TurnoComponent = ({profesionales}: Props) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 minWidth: '100%',
-                backgroundColor: theme.colors.surface,
+                backgroundColor: theme.colors.elevation.level2,
                 borderRadius: globalVariables.containerBorderRadius,
                 padding: globalVariables.padding / 2,
                 marginBottom: 8,
@@ -84,12 +91,23 @@ export const TurnoComponent = ({profesionales}: Props) => {
                 <Text
                   variant="labelSmall"
                   style={{color: theme.colors.onSurface}}>
-                  {turno.fecha} {turno.hora}
+                  {(() => {
+                    const date = new Date(turno.fechaHora);
+                    let formattedDate = date.toLocaleDateString('es-ES', {
+                      weekday: 'long',
+                      day: '2-digit',
+                      month: 'long',
+                    });
+                    formattedDate = formattedDate.replace(/\b\w/g, char =>
+                      char.toUpperCase(),
+                    );
+                    return formattedDate;
+                  })()}{' '}
                 </Text>
                 <Text
                   variant="titleSmall"
                   style={{color: theme.colors.onSurface}}>
-                  Turno {turno.id}
+                  {(turno as any).role}
                 </Text>
                 {turno.profesional && (
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -102,7 +120,7 @@ export const TurnoComponent = ({profesionales}: Props) => {
                     <Text
                       variant="labelSmall"
                       style={{color: theme.colors.onSurface}}>
-                      {turno.profesional}
+                      {turno.profesional.toString()}
                     </Text>
                   </View>
                 )}
