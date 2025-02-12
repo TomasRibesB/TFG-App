@@ -35,7 +35,7 @@ export const NutricionistaScreen = () => {
           />
         ))}
       <TicketComponent />
-      <TurnoComponent />
+      <TurnoComponent profesionales={nutricionista} />
     </MainLayout>
   );
 };

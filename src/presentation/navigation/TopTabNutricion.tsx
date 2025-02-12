@@ -18,7 +18,7 @@ export const TopTabNutricion = () => {
   return (
     <MainLayout title="Nutrición" stylesChild={{paddingHorizontal: 0}}>
       <Tab.Navigator
-        initialRouteName="Nutricionista"
+        initialRouteName="PlanNutricional"
         screenOptions={{
           tabBarActiveTintColor: theme.colors.primary,
           tabBarLabelStyle: {fontSize: 12},
@@ -31,14 +31,14 @@ export const TopTabNutricion = () => {
           },
         }}>
         <Tab.Screen
-          name="Nutricionista"
-          component={NutricionistaScreen}
-          options={{tabBarLabel: 'Nutricionista'}}
-        />
-        <Tab.Screen
           name="PlanNutricional"
           component={PlanNutricionalScreen}
           options={{tabBarLabel: 'Plan Nutricional'}}
+        />
+        <Tab.Screen
+          name="Nutricionista"
+          component={NutricionistaScreen}
+          options={{tabBarLabel: 'Nutricionista'}}
         />
       </Tab.Navigator>
     </MainLayout>

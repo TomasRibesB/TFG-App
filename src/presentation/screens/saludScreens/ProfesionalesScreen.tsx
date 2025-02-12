@@ -103,7 +103,7 @@ export const ProfesionalesScreen = () => {
         ))}
       </CardContainer>
       <TicketComponent />
-      <TurnoComponent />
+      <TurnoComponent profesionales={profesionalesUsers} />
       <Portal>
         <Dialog visible={dialogVisible} onDismiss={closeDialog}>
           <Dialog.Title>Información del Profesional</Dialog.Title>

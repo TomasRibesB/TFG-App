@@ -5,50 +5,53 @@ import {useTheme, Text, Button, Divider} from 'react-native-paper';
 import {PaperSelect} from 'react-native-paper-select';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalVariables} from '../../config/theme/global-theme';
+import {User} from '../../infrastructure/interfaces/user';
 
-export const TurnoComponent = () => {
+interface Props {
+  profesionales: User[];
+}
+
+export const TurnoComponent = ({profesionales}: Props) => {
   const theme = useTheme();
-  const [turnos, setTurnos] = useState([
-    {
-      id: 1,
-      fecha: '2023-10-20',
-      hora: '10:00',
-      reservado: false,
-      profesional: 'Dr. Pérez',
-    },
-    {
-      id: 2,
-      fecha: '2023-10-21',
-      hora: '11:00',
-      reservado: true,
-      profesional: 'Dra. Gómez',
-    },
-    // Agrega más turnos si es necesario
-  ]);
-  const [profesionales, setProfesionales] = useState([
-    'Todos',
-    'Dr. Pérez',
-    'Dra. Gómez',
-  ]);
+  const [profList, setProfList] = useState<string[]>([]);
+  const [allTurnos, setAllTurnos] = useState<any[]>([]);
   const [selectedProfesional, setSelectedProfesional] = useState('Todos');
 
+  useEffect(() => {
+    const nombresProfesionales = [
+      'Todos',
+      ...profesionales.map(p => `${p.firstName} ${p.lastName}`),
+    ];
+    setProfList(nombresProfesionales);
+
+    const turnosDesplegados = profesionales.flatMap(p =>
+      (p.turnosProfesional || []).map(turno => ({
+        ...turno,
+        profesional: `${p.firstName} ${p.lastName}`,
+      })),
+    );
+    setAllTurnos(turnosDesplegados);
+  }, [profesionales]);
+
   const reservarTurno = (id: number) => {
-    // Lógica para reservar el turno
+    // Lógica de reserva
   };
 
   const filteredTurnos =
     selectedProfesional === 'Todos'
-      ? turnos
-      : turnos.filter(turno => turno.profesional === selectedProfesional);
+      ? allTurnos
+      : allTurnos.filter(turno => turno.profesional === selectedProfesional);
 
   return (
     <CardContainer title="Turnos" icon="calendar-outline">
       <PaperSelect
         label="Seleccionar Profesional"
         value={selectedProfesional}
-        onSelection={(value) => setSelectedProfesional(value.text)}
-        arrayList={profesionales.map(profesional => ({ _id: profesional, value: profesional }))}
-        selectedArrayList={[{ _id: selectedProfesional, value: selectedProfesional }]}
+        onSelection={value => setSelectedProfesional(value.text)}
+        arrayList={profList.map(p => ({_id: p, value: p}))}
+        selectedArrayList={[
+          {_id: selectedProfesional, value: selectedProfesional},
+        ]}
         multiEnable={false}
         textInputOutlineStyle={{borderRadius: 8}}
         dialogTitle="Seleccionar Profesional"

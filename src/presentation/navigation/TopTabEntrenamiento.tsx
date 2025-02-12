@@ -18,7 +18,7 @@ export const TopTabEntrenamiento = () => {
   return (
     <MainLayout title="Entrenamiento" stylesChild={{paddingHorizontal: 0}}>
       <Tab.Navigator
-        initialRouteName="Gym"
+        initialRouteName="Rutina"
         screenOptions={{
           tabBarActiveTintColor: theme.colors.primary,
           tabBarLabelStyle: {fontSize: 12},
@@ -31,14 +31,14 @@ export const TopTabEntrenamiento = () => {
           },
         }}>
         <Tab.Screen
-          name="Gym"
-          component={GimnasioScreen}
-          options={{tabBarLabel: 'Entrenador'}}
-        />
-        <Tab.Screen
           name="Rutina"
           component={RutinaScreen}
           options={{tabBarLabel: 'Rutinas'}}
+        />
+        <Tab.Screen
+          name="Gym"
+          component={GimnasioScreen}
+          options={{tabBarLabel: 'Entrenador'}}
         />
       </Tab.Navigator>
     </MainLayout>
