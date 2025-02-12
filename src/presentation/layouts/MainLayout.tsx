@@ -48,7 +48,7 @@ export const MainLayout = ({
     StorageAdapter.clear();
     navigation.reset({
       index: 0,
-      routes: [{name: 'AuthLoaderScreen'}],
+      routes: [{name: 'AuthFlow'}],
     });
   };
   const handleProfile = () => {
