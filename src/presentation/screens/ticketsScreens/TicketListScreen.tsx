@@ -1,47 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Text, Card, Chip, Button} from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {useNavigation} from '@react-navigation/native';
-import {MainStackParams, RootStackParams} from '../../navigation/StackNavigator';
+import {
+  MainStackParams,
+  RootStackParams,
+} from '../../navigation/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ticketsData from './Tickets.json';
-
-interface Usuario {
-  id: number;
-  nombre: string;
-}
-
-interface Profesional {
-  usuario: Usuario;
-  profesion: string;
-}
-
-interface Mensaje {
-  id: number;
-  usuario: Usuario;
-  date: string;
-  time: string;
-  content: string;
-}
-
-export interface Ticket {
-  id: number;
-  titulo: string;
-  estado: string;
-  fechaAbierto: string;
-  fechaCerrado?: string;
-  solicitante: Profesional;
-  receptor: Profesional;
-  usuario: Usuario;
-  mensajes: Mensaje[];
-}
-
-const Tickets: Ticket[] = ticketsData;
+import {Ticket} from '../../../infrastructure/interfaces/ticket';
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {User} from '../../../infrastructure/interfaces/user';
 
 export const TicketListScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [user, setUser] = useState({} as User);
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  const fetch = async () => {
+    const data: Ticket[] = await StorageAdapter.getItem('tickets');
+    const user = await StorageAdapter.getItem('user');
+    console.log(data);
+    setTickets(data);
+    setUser(user);
+  };
 
   const handleAccept = (id: number) => {
     // Lógica para aceptar el ticket
@@ -54,11 +41,13 @@ export const TicketListScreen = () => {
   return (
     <MainLayout title="Tickets" back={true}>
       <ScrollView>
-        {Tickets.map(item => (
+        {tickets.map(item => (
           <Card key={item.id} style={{margin: 10}}>
             <Card.Title
-              title={item.titulo}
-              subtitle={`Fecha Abierto: ${item.fechaAbierto}`}
+              title={item.asunto}
+              subtitle={`Creado: ${new Date(
+                item.fechaCreacion,
+              ).toLocaleDateString()}`}
               titleStyle={{fontSize: 18}}
               subtitleStyle={{fontSize: 14}}
             />
@@ -71,23 +60,36 @@ export const TicketListScreen = () => {
                   flexWrap: 'wrap',
                 }}>
                 <Chip icon="information" style={{margin: 5}}>
-                  {item.estado}
+                  {item.isAceptado
+                    ? item.isAutorizado
+                      ? item.isActive
+                        ? 'Activo'
+                        : 'Inactivo'
+                      : 'No Autorizado'
+                    : 'Pendiente'}
                 </Chip>
+                {item.solicitante.id !== user.id && (
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Icon
+                      name="person-circle-outline"
+                      size={24}
+                      style={{margin: 5}}
+                    />
+
+                    <Text>
+                      {item.solicitante.firstName} {item.solicitante.lastName}
+                    </Text>
+                  </View>
+                )}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Icon
                     name="person-circle-outline"
                     size={24}
                     style={{margin: 5}}
                   />
-                  <Text>{item.solicitante.usuario.nombre}</Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Icon
-                    name="person-circle-outline"
-                    size={24}
-                    style={{margin: 5}}
-                  />
-                  <Text>{item.receptor.usuario.nombre}</Text>
+                  <Text>
+                    {item.receptor.firstName} {item.receptor.lastName}
+                  </Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Icon
@@ -98,7 +100,7 @@ export const TicketListScreen = () => {
                   <Text>Yo</Text>
                 </View>
               </View>
-              {item.estado === 'Pendiente' ? (
+              {item.isAceptado === false ? (
                 <View
                   style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                   <Button
@@ -112,13 +114,15 @@ export const TicketListScreen = () => {
                   </Button>
                 </View>
               ) : (
-                <Button
-                  mode="outlined"
-                  onPress={() =>
-                    navigation.navigate('TicketScreen', {ticket: item})
-                  }>
-                  Ver Ticket
-                </Button>
+                item.isAutorizado && (
+                  <Button
+                    mode="outlined"
+                    onPress={() =>
+                      navigation.navigate('TicketScreen', {ticket: item})
+                    }>
+                    Ver Ticket
+                  </Button>
+                )
               )}
             </Card.Content>
           </Card>

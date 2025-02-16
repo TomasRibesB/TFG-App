@@ -10,16 +10,28 @@ import {
 } from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {StackScreenProps} from '@react-navigation/stack';
-import {MainStackParams, RootStackParams} from '../../navigation/StackNavigator';
+import {
+  MainStackParams,
+  RootStackParams,
+} from '../../navigation/StackNavigator';
 import {globalVariables} from '../../../config/theme/global-theme';
+import {Ticket} from '../../../infrastructure/interfaces/ticket';
+import { TicketMensaje } from '../../../infrastructure/interfaces/ticket-mensaje';
+import { User } from '../../../infrastructure/interfaces/user';
+import { StorageAdapter } from '../../../config/adapters/storage-adapter';
+import { EstadoMensaje } from '../../../infrastructure/enums/estadoMensaje';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props extends StackScreenProps<MainStackParams, 'TicketScreen'> {}
 
 export const TicketScreen = ({route}: Props) => {
-  const {ticket} = route.params;
-  const [mensajes, setMensajes] = useState(ticket.mensajes);
+  const ticket: Ticket = route.params.ticket;
+  const [mensajes, setMensajes] = useState<TicketMensaje[]>(ticket.mensajes);
+  console.log(ticket);
   const [mensaje, setMensaje] = useState('');
+  const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
+  
 
   const theme = useTheme();
 
@@ -32,7 +44,7 @@ export const TicketScreen = ({route}: Props) => {
   // Agrupar mensajes por fecha
   const groupedMensajes = mensajes.reduce(
     (groups: {[key: string]: any[]}, mensaje) => {
-      const date = mensaje.date;
+      const date = new Date(mensaje.fecha).toISOString().split('T')[0];
       if (!groups[date]) {
         groups[date] = [];
       }
@@ -42,14 +54,24 @@ export const TicketScreen = ({route}: Props) => {
     {},
   );
 
+    useEffect(() => {
+      fetch();
+    }, []);
+  
+    const fetch = async () => {
+      const user = await StorageAdapter.getItem('user');
+      setUser(user);
+    };
+
   const handleSend = () => {
     if (mensaje.trim() === '') return;
-    const newMensaje = {
-      id: mensajes.length + 1,
-      usuario: {id: 1, nombre: 'Yo'},
-      date: new Date().toISOString().split('T')[0],
-      time: new Date().toLocaleTimeString(),
-      content: mensaje,
+    const newMensaje: TicketMensaje = {
+      idRef: uuidv4(),
+      ticket: ticket,
+      fecha: new Date(),
+      emisor: {id: user.id!, firstName: user.firstName!, lastName: user.lastName!, role: user.role!},
+      estado: EstadoMensaje.Enviando,
+      mensaje: mensaje,
     };
     setMensajes([...mensajes, newMensaje]);
     setMensaje('');
@@ -78,7 +100,7 @@ export const TicketScreen = ({route}: Props) => {
   };
 
   return (
-    <MainLayout title={ticket.titulo} scrolleable={false} back={true}>
+    <MainLayout title={ticket.asunto} scrolleable={false} back={true}>
       <ScrollView
         ref={scrollViewRef}
         onScroll={handleScroll}
@@ -91,12 +113,12 @@ export const TicketScreen = ({route}: Props) => {
             <Text style={{textAlign: 'center', marginVertical: 5}}>{date}</Text>
             {groupedMensajes[date].map(mensaje => (
               <View
-                key={mensaje.id}
+                key={mensaje.idRef}
                 style={{
                   alignSelf:
-                    mensaje.usuario.nombre === 'Yo' ? 'flex-end' : 'flex-start',
+                    mensaje.usuario.id === user.id ? 'flex-end' : 'flex-start',
                   backgroundColor:
-                    mensaje.usuario.nombre === 'Yo'
+                    mensaje.usuario.id === user.id
                       ? colors.primaryContainer
                       : colors.secondaryContainer,
                   borderRadius: 10,
@@ -114,8 +136,8 @@ export const TicketScreen = ({route}: Props) => {
                   style={{
                     position: 'absolute',
                     bottom: -10,
-                    left: mensaje.usuario.nombre === 'Yo' ? 'auto' : 10,
-                    right: mensaje.usuario.nombre === 'Yo' ? 10 : 'auto',
+                    left: mensaje.usuario.id === user.id ? 'auto' : 10,
+                    right: mensaje.usuario.id === user.id ? 10 : 'auto',
                     width: 0,
                     height: 0,
                     borderLeftWidth: 10,
@@ -124,7 +146,7 @@ export const TicketScreen = ({route}: Props) => {
                     borderLeftColor: 'transparent',
                     borderRightColor: 'transparent',
                     borderTopColor:
-                      mensaje.usuario.nombre === 'Yo'
+                      mensaje.usuario.id === user.id
                         ? colors.primaryContainer
                         : colors.secondaryContainer,
                   }}

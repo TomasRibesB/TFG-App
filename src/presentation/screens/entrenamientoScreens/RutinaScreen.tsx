@@ -9,7 +9,6 @@ import {
   useTheme,
 } from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
-import rutinasData from './Rutinas.json';
 import {View, StyleSheet} from 'react-native';
 import {globalVariables, globalTheme} from '../../../config/theme/global-theme';
 import {EjercicioElement} from './RutinaType';
