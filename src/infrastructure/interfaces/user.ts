@@ -5,6 +5,7 @@ import { Routine } from "./routine";
 import { Ticket } from "./ticket";
 import { TicketMensaje } from "./ticket-mensaje";
 import { Turno } from "./turno";
+import { UserTipoProfesional } from "./user-tipo-profesional";
 
 export interface User {
     id: number;
@@ -22,4 +23,5 @@ export interface User {
     mensajesEnviados?: TicketMensaje[];
     planesNutricionales?: PlanNutricional[];
     documentos?: Documento[];
+    userTipoProfesionales?: UserTipoProfesional[];
     }

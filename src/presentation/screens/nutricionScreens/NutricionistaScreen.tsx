@@ -7,6 +7,7 @@ import {TurnoComponent} from '../../components/TurnoComponent';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {Role} from '../../../infrastructure/enums/roles';
 import {User} from '../../../infrastructure/interfaces/user';
+import {EmptySection} from '../../components/EmptySection';
 
 export const NutricionistaScreen = () => {
   const [nutricionista, setNutricionista] = useState<User[]>([]);
@@ -25,17 +26,23 @@ export const NutricionistaScreen = () => {
 
   return (
     <MainLayout>
-      {nutricionista.length > 0 &&
-        nutricionista.map(profesional => (
-          <ProfesionalComponent
-            key={profesional.id}
-            title="Nutricionista"
-            name={profesional.firstName}
-            lastName={profesional.lastName}
-          />
-        ))}
-      <TicketComponent />
-      <TurnoComponent profesionales={nutricionista} />
+      {nutricionista.length === 0 ? (
+        <EmptySection label="No hay nutricionistas disponibles" icon="person" />
+      ) : (
+        <>
+          {nutricionista.map(profesional => (
+            <ProfesionalComponent
+              key={profesional.id}
+              title="Nutricionista"
+              name={profesional.firstName}
+              lastName={profesional.lastName}
+            />
+          ))}
+
+          <TicketComponent />
+          <TurnoComponent profesionales={nutricionista} />
+        </>
+      )}
     </MainLayout>
   );
 };

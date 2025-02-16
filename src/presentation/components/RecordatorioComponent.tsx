@@ -49,42 +49,55 @@ export const RecordatorioComponent = ({recordatorios}: Props) => {
 
   return (
     <CardContainer title="Recordatorios" icon="alarm-outline">
-      <ScrollView style={styles.scroll} nestedScrollEnabled>
-        {currentRecordatorio.map(recordatorio => (
-          <TouchableOpacity
-            key={recordatorio.id}
-            onLongPress={() => showDialog(recordatorio.id)}>
-            <View
-              style={[styles.card, {backgroundColor: theme.colors.elevation.level2}]}>
-              <Text style={styles.title}>{recordatorio.title}</Text>
-              <Text style={styles.description}>{recordatorio.description}</Text>
-              {recordatorio.date && (
-                <Text style={styles.meta}>Fecha: {recordatorio.date}</Text>
-              )}
-              {recordatorio.time && (
-                <Text style={styles.meta}>Hora: {recordatorio.time}</Text>
-              )}
-              {recordatorio.profesional && (
-                <Text style={styles.meta}>
-                  Profesional: {recordatorio.profesional}
-                </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Eliminar Recordatorio</Dialog.Title>
-          <Dialog.Content>
-            <Text>¿Deseas eliminar este recordatorio?</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Cancelar</Button>
-            <Button onPress={eliminarRecordatorio}>Eliminar</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      {currentRecordatorio.length === 0 ? (
+        <Text variant="labelSmall" style={{textAlign: 'center'}}>
+          No hay recordatorios
+        </Text>
+      ) : (
+        <>
+          <ScrollView style={styles.scroll} nestedScrollEnabled>
+            {currentRecordatorio.map(recordatorio => (
+              <TouchableOpacity
+                key={recordatorio.id}
+                onLongPress={() => showDialog(recordatorio.id)}>
+                <View
+                  style={[
+                    styles.card,
+                    {backgroundColor: theme.colors.elevation.level2},
+                  ]}>
+                  <Text style={styles.title}>{recordatorio.title}</Text>
+                  <Text style={styles.description}>
+                    {recordatorio.description}
+                  </Text>
+                  {recordatorio.date && (
+                    <Text style={styles.meta}>Fecha: {recordatorio.date}</Text>
+                  )}
+                  {recordatorio.time && (
+                    <Text style={styles.meta}>Hora: {recordatorio.time}</Text>
+                  )}
+                  {recordatorio.profesional && (
+                    <Text style={styles.meta}>
+                      Profesional: {recordatorio.profesional}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Title>Eliminar Recordatorio</Dialog.Title>
+              <Dialog.Content>
+                <Text>¿Deseas eliminar este recordatorio?</Text>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={hideDialog}>Cancelar</Button>
+                <Button onPress={eliminarRecordatorio}>Eliminar</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        </>
+      )}
     </CardContainer>
   );
 };

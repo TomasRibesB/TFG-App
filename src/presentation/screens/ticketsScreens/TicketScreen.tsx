@@ -10,10 +10,10 @@ import {
 } from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {StackScreenProps} from '@react-navigation/stack';
-import {RootStackParams} from '../../navigation/StackNavigator';
+import {MainStackParams, RootStackParams} from '../../navigation/StackNavigator';
 import {globalVariables} from '../../../config/theme/global-theme';
 
-interface Props extends StackScreenProps<RootStackParams, 'TicketScreen'> {}
+interface Props extends StackScreenProps<MainStackParams, 'TicketScreen'> {}
 
 export const TicketScreen = ({route}: Props) => {
   const {ticket} = route.params;

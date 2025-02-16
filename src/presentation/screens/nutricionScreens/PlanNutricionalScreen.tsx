@@ -8,6 +8,7 @@ import {globalTheme} from '../../../config/theme/global-theme';
 import {getPlanNutricionalRequest} from '../../../services/nutricion';
 import {PlanNutricional} from '../../../infrastructure/interfaces/plan-nutricional';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {EmptySection} from '../../components/EmptySection';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,13 +38,10 @@ export const PlanNutricionalScreen = () => {
     <>
       <MainLayout>
         {planNutricional.length === 0 ? (
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Icon name="nutrition" size={70} style={{opacity: 0.5}} />
-            <Text variant="labelLarge" style={{opacity: 0.5}}>
-              No se encontraron planes nutricionales
-            </Text>
-          </View>
+          <EmptySection
+            label="No se encontraron planes nutricionales"
+            icon="nutrition"
+          />
         ) : (
           planNutricional.map(item => (
             <DesplegableCard

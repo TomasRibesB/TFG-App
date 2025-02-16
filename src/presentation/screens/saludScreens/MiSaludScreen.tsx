@@ -20,6 +20,7 @@ import {
 } from '../../../services/salud';
 import {User} from '../../../infrastructure/interfaces/user';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {EmptySection} from '../../components/EmptySection';
 
 export const MiSaludScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -39,6 +40,7 @@ export const MiSaludScreen = () => {
   const fetch = async () => {
     const documentosData = await StorageAdapter.getItem('documentos');
     const profesionalesData = await StorageAdapter.getItem('profesionales');
+    console.log(documentosData);
     setDocumentos(documentosData);
     setProfesionales(profesionalesData);
   };
@@ -71,12 +73,7 @@ export const MiSaludScreen = () => {
   return (
     <MainLayout>
       {documentos.length === 0 ? (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Icon name="medkit" size={70} style={{opacity: 0.5}} />
-          <Text variant="labelLarge" style={{opacity: 0.5}}>
-            No se encontraron documentos
-          </Text>
-        </View>
+        <EmptySection label="No se encontraron documentos" icon="medkit" />
       ) : (
         documentos.map((documento, index) => (
           <DesplegableCard
@@ -105,7 +102,7 @@ export const MiSaludScreen = () => {
                   />
                 </View>
               )}
-              {documento.profesional && (
+              {(documento.profesional || documento.dniProfesional) && (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -120,8 +117,8 @@ export const MiSaludScreen = () => {
                     style={{marginRight: 3}}
                   />
                   <Text>
-                    {documento.profesional.firstName}{' '}
-                    {documento.profesional.lastName}
+                    {documento.profesional?.firstName ?? documento.nombreProfesional}{' '}
+                    {documento.profesional?.lastName ?? documento.apellidoProfesional}
                   </Text>
                 </View>
               )}

@@ -12,9 +12,10 @@ import {Image} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from 'react-native-paper';
 import {useState} from 'react';
-import { StorageAdapter } from '../../config/adapters/storage-adapter';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/StackNavigator';
+import {StorageAdapter} from '../../config/adapters/storage-adapter';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParams} from '../navigation/StackNavigator';
+import {useAuth} from '../hooks/useAuth';
 
 interface Props {
   title?: string;
@@ -42,14 +43,12 @@ export const MainLayout = ({
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const [menuVisible, setMenuVisible] = useState(false);
+  const {logout} = useAuth();
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-  const handleLogout = () => {
-    StorageAdapter.clear();
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'AuthFlow'}],
-    });
+  const handleLogout = async () => {
+    closeMenu();
+    await logout();
   };
   const handleProfile = () => {
     closeMenu();

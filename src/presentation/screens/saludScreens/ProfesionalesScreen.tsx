@@ -9,27 +9,8 @@ import {TurnoComponent} from '../../components/TurnoComponent';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {Role} from '../../../infrastructure/enums/roles';
 import {User} from '../../../infrastructure/interfaces/user';
-
-const Profesionales: Partial<User>[] = [
-  {
-    firstName: 'Juan',
-    lastName: 'Perez',
-    role: Role.Profesional,
-    email: 'example@gmail.com',
-  },
-  {
-    firstName: 'Maria',
-    lastName: 'Gonzalez',
-    role: Role.Profesional,
-    email: 'example2@gmail.com',
-  },
-  {
-    firstName: 'Pedro',
-    lastName: 'Gomez',
-    role: Role.Profesional,
-    email: 'prueba@gmail.com',
-  },
-];
+import {Documento} from '../../../infrastructure/interfaces/documento';
+import {EmptySection} from '../../components/EmptySection';
 
 export const ProfesionalesScreen = () => {
   const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
@@ -44,12 +25,35 @@ export const ProfesionalesScreen = () => {
 
   const fetch = async () => {
     const data: User[] = (await StorageAdapter.getItem('profesionales')) || [];
+    const dataDoc: Documento[] =
+      (await StorageAdapter.getItem('documentos')) || [];
+    //si hay documentos con profesionales no registrados en la lista de profesionales
+    console.log(JSON.stringify(dataDoc, null, 2));
+    const profesionalesNoRegistrados: Partial<User>[] = dataDoc
+      .filter(documento => documento.dniProfesional)
+      .map(documento => ({
+        firstName: documento.nombreProfesional ?? undefined,
+        lastName: documento.apellidoProfesional ?? undefined,
+        dni: documento.dniProfesional ?? undefined,
+        role: Role.Profesional,
+        email: documento.emailProfesional ?? undefined,
+        userTipoProfesionales: [
+          {
+            tipoProfesional: documento.tipoProfesional ?? undefined,
+          },
+        ],
+      }));
+
     setProfesionalesUsers(data);
-    const todosProfesionales: Partial<User>[] = [...data, ...Profesionales];
+    const todosProfesionales: Partial<User>[] = [
+      ...data,
+      ...profesionalesNoRegistrados,
+    ];
+    console.log(JSON.stringify(todosProfesionales, null, 2));
     setProfesionales(todosProfesionales);
   };
 
-  const handleLongPress = (profesional: any) => {
+  const handleProfPress = (profesional: any) => {
     setSelectedProfesional(profesional);
     setDialogVisible(true);
   };
@@ -61,89 +65,105 @@ export const ProfesionalesScreen = () => {
 
   return (
     <MainLayout>
-      <CardContainer title="Mis Profesionales" icon="people-outline">
-        {profesionales.map((profesional, index) => (
-          <List.Item
-            key={index + 'profesional'}
-            title={profesional.firstName + ' ' + profesional.lastName}
-            description={
-              profesional.role === Role.Profesional
-                ? 'Profesional'
-                : (profesional.role?.charAt(0).toUpperCase() ?? '') +
-                  (profesional.role?.slice(1).toLocaleLowerCase() ?? '')
-            }
-            onPress={
-              profesional.id ? () => handleLongPress(profesional) : undefined
-            }
-            right={() =>
-              profesional.id ? (
-                <>
-                  <Icon
-                    name="information-outline"
-                    size={26}
-                    style={{marginRight: -10}}
+      {profesionales && profesionales.length === 0 ? (
+        <EmptySection label="No hay profesionales disponibles" icon="person" />
+      ) : (
+        <>
+          <CardContainer title="Mis Profesionales" icon="people-outline">
+            {profesionales.map((profesional, index) => (
+              <List.Item
+                key={index + 'profesional'}
+                title={profesional.firstName + ' ' + profesional.lastName}
+                description={
+                  profesional.role === Role.Profesional
+                    ? 'Profesional - ' +
+                      (profesional.userTipoProfesionales
+                        ?.map(tipo => tipo.tipoProfesional?.profesion)
+                        .filter(profesion => profesion !== undefined)
+                        .join(', ') || 'No especificado')
+                    : (profesional.role?.charAt(0).toUpperCase() ?? '') +
+                      (profesional.role?.slice(1).toLocaleLowerCase() ?? '')
+                }
+                onPress={() => handleProfPress(profesional)}
+                right={() =>
+                  profesional.id ? (
+                    <>
+                      <Icon name="person-outline" size={17} />
+                    </>
+                  ) : (
+                    <Icon name="person-remove-outline" size={17} />
+                  )
+                }
+                left={() => (
+                  <Avatar.Text
+                    size={48}
+                    label={
+                      profesional.firstName ? profesional.firstName[0] : '?'
+                    }
                   />
-                  <Icon
-                    name="person-circle-outline"
-                    size={17}
-                    style={{top: -7}}
-                  />
-                </>
-              ) : (
-                <Icon name="remove-circle-outline" size={17} />
-              )
-            }
-            left={() => (
-              <Avatar.Text
-                size={48}
-                label={profesional.firstName ? profesional.firstName[0] : '?'}
+                )}
               />
-            )}
-          />
-        ))}
-      </CardContainer>
-      <TicketComponent />
-      <TurnoComponent profesionales={profesionalesUsers} />
-      <Portal>
-        <Dialog visible={dialogVisible} onDismiss={closeDialog}>
-          <Dialog.Title>Información del Profesional</Dialog.Title>
-          <Dialog.Content>
-            {selectedProfesional && (
-              <View style={styles.modalContent}>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalLabel}>Nombre:</Text>
-                  <Text style={styles.modalText}>
-                    {selectedProfesional.firstName +
-                      ' ' +
-                      selectedProfesional.lastName}
-                  </Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalLabel}>Especialidad:</Text>
-                  <Text style={styles.modalText}>
-                    {selectedProfesional.role === Role.Profesional
-                      ? 'Profesional'
-                      : (selectedProfesional.role?.charAt(0).toUpperCase() ??
-                          '') +
-                        (selectedProfesional.role
-                          ?.slice(1)
-                          .toLocaleLowerCase() ?? '')}
-                  </Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalLabel}>Email:</Text>
-                  <Text style={styles.modalText}>
-                    {selectedProfesional.email}
-                  </Text>
-                </View>
-              </View>
-            )}
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={closeDialog}>Cerrar</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+            ))}
+          </CardContainer>
+          <TicketComponent />
+          {profesionalesUsers && profesionalesUsers.length > 0 && (
+            <TurnoComponent profesionales={profesionalesUsers} />
+          )}
+          <Portal>
+            <Dialog visible={dialogVisible} onDismiss={closeDialog}>
+              <Dialog.Title>Información del Profesional</Dialog.Title>
+              <Dialog.Content>
+                {selectedProfesional &&
+                  (() => {
+                    const especialidad =
+                      selectedProfesional.userTipoProfesionales
+                        ?.map(tipo => tipo.tipoProfesional?.profesion)
+                        .filter(profesion => profesion !== undefined)
+                        .join(', ');
+                    const especialidadText =
+                      selectedProfesional.role === Role.Profesional
+                        ? `Profesional - ${especialidad || 'No especificado'}`
+                        : `${
+                            selectedProfesional.role?.charAt(0).toUpperCase() ??
+                            ''
+                          }${
+                            selectedProfesional.role
+                              ?.slice(1)
+                              .toLocaleLowerCase() ?? ''
+                          }`;
+                    return (
+                      <View style={styles.modalContent}>
+                        <View style={styles.modalRow}>
+                          <Text style={styles.modalLabel}>Nombre:</Text>
+                          <Text style={styles.modalText}>
+                            {selectedProfesional.firstName +
+                              ' ' +
+                              selectedProfesional.lastName}
+                          </Text>
+                        </View>
+                        <View style={styles.modalRow}>
+                          <Text style={styles.modalLabel}>Especialidad:</Text>
+                          <Text style={styles.modalText}>
+                            {especialidadText}
+                          </Text>
+                        </View>
+                        <View style={styles.modalRow}>
+                          <Text style={styles.modalLabel}>Email:</Text>
+                          <Text style={styles.modalText}>
+                            {selectedProfesional.email}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })()}
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={closeDialog}>Cerrar</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        </>
+      )}
     </MainLayout>
   );
 };

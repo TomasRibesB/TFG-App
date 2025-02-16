@@ -1,59 +1,34 @@
 // Lenguaje: TypeScript
-import React, { useEffect } from 'react';
-import { MainLayout } from '../layouts/MainLayout';
-import { ActivityIndicator } from 'react-native-paper';
-import { useTheme } from 'react-native-paper';
-import { View } from 'react-native';
-import { StorageAdapter } from '../../config/adapters/storage-adapter';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParams } from '../navigation/StackNavigator';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { initialFetch } from '../../services/fetch';
-import { isTokenExpired } from '../../utils/tokenUtils';
+import React, {useEffect} from 'react';
+import {MainLayout} from '../layouts/MainLayout';
+import {ActivityIndicator} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
+import {View} from 'react-native';
+import {StorageAdapter} from '../../config/adapters/storage-adapter';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackParams} from '../navigation/StackNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {initialFetch} from '../../services/fetch';
+import {isTokenExpired} from '../../utils/tokenUtils';
+import {useAuth} from '../hooks/useAuth';
 
 export const AuthLoaderScreen = () => {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const {authRedirection, logout} = useAuth();
 
-  const authRedirection = async () => {
-    const user = await StorageAdapter.getItem('user');
-    console.log("user", user);
-
-    if (user && user.token) {
-      // Verificamos si el token está expirado
-      if (isTokenExpired(user.token)) {
-        await StorageAdapter.clear();
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AuthFlow' }],
-        });
-        return;
-      }
-      initialFetch();
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'MainFlow' }],
-      });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'AuthFlow' }],
-      });
-    }
+  const redirection = async () => {
+    await authRedirection();
   };
 
   useEffect(() => {
-    authRedirection();
+    redirection();
 
     // Chequeo periódico (cada minuto) para detectar expiración del token
     const interval = setInterval(async () => {
       const user = await StorageAdapter.getItem('user');
       if (user && user.token && isTokenExpired(user.token)) {
-        await StorageAdapter.removeItem('user');
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AuthFlow' }],
-        });
+        await logout();
       }
     }, 60000);
 
@@ -62,7 +37,7 @@ export const AuthLoaderScreen = () => {
 
   return (
     <MainLayout
-      stylesChild={{ justifyContent: 'center', alignItems: 'center' }}
+      stylesChild={{justifyContent: 'center', alignItems: 'center'}}
       styles={{
         flex: 1,
         position: 'absolute',

@@ -19,6 +19,7 @@ import {Routine} from '../../../infrastructure/interfaces/routine';
 import {getRoutineRequest} from '../../../services/entrenamiento';
 import {RutinaEjercicio} from '../../../infrastructure/interfaces/rutina-ejercicio';
 import { StorageAdapter } from '../../../config/adapters/storage-adapter';
+import { EmptySection } from '../../components/EmptySection';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -64,13 +65,7 @@ export const RutinaScreen = () => {
     <>
       <MainLayout>
         {routines.length === 0 ? (
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Icon name="barbell" size={70} style={{opacity: 0.5}} />
-            <Text variant="labelLarge" style={{opacity: 0.5}}>
-              No se encontraron rutinas de entrenamiento
-            </Text>
-          </View>
+          <EmptySection label="No se encontraron rutinas de entrenamiento" icon="barbell" />
         ) : (
           routines.map(rutina => (
             <DesplegableCard

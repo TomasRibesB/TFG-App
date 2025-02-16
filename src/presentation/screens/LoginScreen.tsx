@@ -5,19 +5,22 @@ import {ScrollView, Image, View, StyleSheet} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParams} from '../navigation/StackNavigator';
+import {AuthStackParams, RootStackParams} from '../navigation/StackNavigator';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
 import {loginRequest} from '../../services/auth';
 import {MainLayout} from '../layouts/MainLayout';
 import {globalVariables} from '../../config/theme/global-theme';
 import {CardContainer} from '../components/CardContainer';
+import {useAuth} from '../hooks/useAuth';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const navigationAuth = useNavigation<StackNavigationProp<AuthStackParams>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const {login} = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -43,13 +46,7 @@ export const LoginScreen = () => {
         return;
       }
 
-      const data = await loginRequest(email, password);
-      console.log(data);
-      await StorageAdapter.setItem('user', data);
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'AuthLoaderScreen'}],
-      });
+      await login(email, password);
     } catch (err) {
       setError('No se pudo iniciar sesión');
     }
@@ -85,7 +82,10 @@ export const LoginScreen = () => {
             Entrar
           </Button>
           <View style={styles.registerContainer}>
-            <Button mode="text" style={styles.registerButton}>
+            <Button
+              mode="text"
+              style={styles.registerButton}
+              onPress={() => navigationAuth.navigate('RegisterScreen')}>
               ¿No tienes una cuenta? Regístrate
             </Button>
           </View>

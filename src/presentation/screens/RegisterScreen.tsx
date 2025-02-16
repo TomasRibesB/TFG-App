@@ -13,6 +13,7 @@ import {api} from '../../config/apis/api';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
 import {registerRequest} from '../../services/auth';
+import { useAuth } from '../hooks/useAuth';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -25,6 +26,7 @@ export const RegisterScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const navigationAuth = useNavigation<StackNavigationProp<AuthStackParams>>();
+  const {register} = useAuth();
 
   const handleRegister = async () => {
     try {
@@ -86,18 +88,7 @@ export const RegisterScreen = () => {
         return;
       }
 
-      const data = await registerRequest({
-        email,
-        password,
-        firstName,
-        lastName,
-        dni,
-      });
-      await StorageAdapter.setItem('user', data);
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'AuthLoaderScreen'}],
-      });
+      await register(email, password, firstName, lastName, dni);
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);
