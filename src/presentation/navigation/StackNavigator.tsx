@@ -10,7 +10,6 @@ import {RegisterScreen} from '../screens/RegisterScreen';
 import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
-import {Ticket} from '../screens/ticketsScreens/TicketListScreen';
 
 export type AuthStackParams = {
   LoginScreen: undefined;
@@ -20,7 +19,7 @@ export type AuthStackParams = {
 export type MainStackParams = {
   BotTabNavigator: undefined;
   TicketListScreen: undefined;
-  TicketScreen: {ticket: Ticket};
+  TicketScreen: {ticketId: number;};
 };
 
 export type RootStackParams = {

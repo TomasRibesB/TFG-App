@@ -7,3 +7,8 @@ export const getTicketsRequest = async () => {
   console.log(JSON.stringify(data, null, 2));
   return data;
 };
+
+export const getTicketByIdRequest = async (id: number) => {
+  const {data} = await api.get(`/tickets/${id}`);
+  return data;
+};

@@ -22,18 +22,19 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EstadoMensaje} from '../../../infrastructure/enums/estadoMensaje';
 import {v4 as uuidv4} from 'uuid';
 import {socket} from '../../../services/socket';
+import {getTicketByIdRequest} from '../../../services/tickets';
 
 interface Props extends StackScreenProps<MainStackParams, 'TicketScreen'> {}
 
 export const TicketScreen = ({route}: Props) => {
-  const ticket: Ticket = route.params.ticket;
-  const [mensajes, setMensajes] = useState<Partial<TicketMensaje>[]>(
-    ticket.mensajes!,
-  );
+  const ticketId: number = route.params.ticketId;
+  const [ticket, setTicket] = useState<Ticket>({} as Ticket);
+  const [mensajes, setMensajes] = useState<Partial<TicketMensaje>[]>([]);
   console.log(ticket);
   const [mensaje, setMensaje] = useState('');
   const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
+  const [loading, setLoading] = useState(false);
 
   const theme = useTheme();
 
@@ -57,6 +58,7 @@ export const TicketScreen = ({route}: Props) => {
   );
 
   useEffect(() => {
+    setLoading(true);
     fetch();
     socket.on('message', (data: Partial<TicketMensaje>) => {
       setMensajes(prevMensajes => [...prevMensajes, data]);
@@ -71,10 +73,14 @@ export const TicketScreen = ({route}: Props) => {
   const fetch = async () => {
     const user = await StorageAdapter.getItem('user');
     setUser(user);
-    console.log('User', user);
+    const ticket = await getTicketByIdRequest(ticketId);
+    setTicket(ticket);
+    setMensajes(ticket.mensajes || []);
+    setLoading(false);
   };
 
   useEffect(() => {
+    if (!ticket.id) return;
     socket.emit('joinChat', ticket.id);
     console.log('Joining chat');
   }, [ticket.id]);
@@ -120,6 +126,10 @@ export const TicketScreen = ({route}: Props) => {
     }
   };
 
+  if (loading) {
+    return <MainLayout title="Cargando..." />;
+  }
+
   return (
     <MainLayout title={ticket.asunto} scrolleable={false} back={true}>
       <ScrollView
@@ -151,7 +161,12 @@ export const TicketScreen = ({route}: Props) => {
                 }}>
                 <Text>{mensaje.mensaje}</Text>
                 <Text style={{fontSize: 10, textAlign: 'right'}}>
-                  { mensaje.emisor?.id === user.id ? 'Tú - ' : mensaje.emisor?.firstName + ' ' + mensaje.emisor?.lastName + ' - ' }
+                  {mensaje.emisor?.id === user.id
+                    ? 'Tú - '
+                    : mensaje.emisor?.firstName +
+                      ' ' +
+                      mensaje.emisor?.lastName +
+                      ' - '}
                   {new Date(mensaje.fecha!).toLocaleTimeString()}
                 </Text>
                 <View

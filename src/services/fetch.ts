@@ -10,11 +10,9 @@ export const initialFetch = async () => {
     const planNutricional = await getPlanNutricionalRequest();
     const documentos = await getDocumentosRequest();
     const profesionales = await getProfesionalesRequest();
-    const tickets = await getTicketsRequest();
 
     await StorageAdapter.setItem('rutinas', rutinas);
     await StorageAdapter.setItem('planNutricional', planNutricional);
     await StorageAdapter.setItem('documentos', documentos);
     await StorageAdapter.setItem('profesionales', profesionales);
-    await StorageAdapter.setItem('tickets', tickets);
     }

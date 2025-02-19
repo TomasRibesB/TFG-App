@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Ticket} from '../../../infrastructure/interfaces/ticket';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {User} from '../../../infrastructure/interfaces/user';
+import { getTicketsRequest } from '../../../services/tickets';
 
 export const TicketListScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
@@ -23,7 +24,7 @@ export const TicketListScreen = () => {
   }, []);
 
   const fetch = async () => {
-    const data: Ticket[] = await StorageAdapter.getItem('tickets');
+    const data: Ticket[] = await getTicketsRequest();
     const user = await StorageAdapter.getItem('user');
     console.log(data);
     setTickets(data);
@@ -46,7 +47,7 @@ export const TicketListScreen = () => {
             <Card.Title
               title={item.asunto}
               subtitle={`Creado: ${new Date(
-                item.fechaCreacion,
+                item.fechaCreacion!,
               ).toLocaleDateString()}`}
               titleStyle={{fontSize: 18}}
               subtitleStyle={{fontSize: 14}}
@@ -68,7 +69,7 @@ export const TicketListScreen = () => {
                       : 'No Autorizado'
                     : 'Pendiente'}
                 </Chip>
-                {item.solicitante.id !== user.id && (
+                {item.solicitante?.id !== user.id && (
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Icon
                       name="person-circle-outline"
@@ -77,7 +78,7 @@ export const TicketListScreen = () => {
                     />
 
                     <Text>
-                      {item.solicitante.firstName} {item.solicitante.lastName}
+                      {item.solicitante?.firstName} {item.solicitante?.lastName}
                     </Text>
                   </View>
                 )}
@@ -88,7 +89,7 @@ export const TicketListScreen = () => {
                     style={{margin: 5}}
                   />
                   <Text>
-                    {item.receptor.firstName} {item.receptor.lastName}
+                    {item.receptor?.firstName} {item.receptor?.lastName}
                   </Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -106,10 +107,10 @@ export const TicketListScreen = () => {
                   <Button
                     mode="contained"
                     style={{marginRight: 10}}
-                    onPress={() => handleAccept(item.id)}>
+                    onPress={() => handleAccept(item.id!)}>
                     Aceptar
                   </Button>
-                  <Button mode="outlined" onPress={() => handleReject(item.id)}>
+                  <Button mode="outlined" onPress={() => handleReject(item.id!)}>
                     Rechazar
                   </Button>
                 </View>
@@ -118,7 +119,7 @@ export const TicketListScreen = () => {
                   <Button
                     mode="outlined"
                     onPress={() =>
-                      navigation.navigate('TicketScreen', {ticket: item})
+                      navigation.navigate('TicketScreen', {ticketId: item.id!})
                     }>
                     Ver Ticket
                   </Button>
