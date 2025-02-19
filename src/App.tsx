@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 
+import 'react-native-get-random-values';
 import React, {useEffect} from 'react';
 import {AppState, AppStateStatus, Text, View} from 'react-native';
 import {ThemecontextProvider} from './presentation/context/ThemeContext';

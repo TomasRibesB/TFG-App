@@ -16,22 +16,24 @@ import {
 } from '../../navigation/StackNavigator';
 import {globalVariables} from '../../../config/theme/global-theme';
 import {Ticket} from '../../../infrastructure/interfaces/ticket';
-import { TicketMensaje } from '../../../infrastructure/interfaces/ticket-mensaje';
-import { User } from '../../../infrastructure/interfaces/user';
-import { StorageAdapter } from '../../../config/adapters/storage-adapter';
-import { EstadoMensaje } from '../../../infrastructure/enums/estadoMensaje';
-import { v4 as uuidv4 } from 'uuid';
+import {TicketMensaje} from '../../../infrastructure/interfaces/ticket-mensaje';
+import {User} from '../../../infrastructure/interfaces/user';
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {EstadoMensaje} from '../../../infrastructure/enums/estadoMensaje';
+import {v4 as uuidv4} from 'uuid';
+import {socket} from '../../../services/socket';
 
 interface Props extends StackScreenProps<MainStackParams, 'TicketScreen'> {}
 
 export const TicketScreen = ({route}: Props) => {
   const ticket: Ticket = route.params.ticket;
-  const [mensajes, setMensajes] = useState<TicketMensaje[]>(ticket.mensajes);
+  const [mensajes, setMensajes] = useState<Partial<TicketMensaje>[]>(
+    ticket.mensajes!,
+  );
   console.log(ticket);
   const [mensaje, setMensaje] = useState('');
   const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
-  
 
   const theme = useTheme();
 
@@ -44,7 +46,7 @@ export const TicketScreen = ({route}: Props) => {
   // Agrupar mensajes por fecha
   const groupedMensajes = mensajes.reduce(
     (groups: {[key: string]: any[]}, mensaje) => {
-      const date = new Date(mensaje.fecha).toISOString().split('T')[0];
+      const date = new Date(mensaje.fecha!).toISOString().split('T')[0];
       if (!groups[date]) {
         groups[date] = [];
       }
@@ -54,26 +56,45 @@ export const TicketScreen = ({route}: Props) => {
     {},
   );
 
-    useEffect(() => {
-      fetch();
-    }, []);
-  
-    const fetch = async () => {
-      const user = await StorageAdapter.getItem('user');
-      setUser(user);
+  useEffect(() => {
+    fetch();
+    socket.on('message', (data: Partial<TicketMensaje>) => {
+      setMensajes(prevMensajes => [...prevMensajes, data]);
+    });
+
+    // Limpieza del listener cuando se desmonte el componente
+    return () => {
+      socket.off('message');
     };
+  }, []);
+
+  const fetch = async () => {
+    const user = await StorageAdapter.getItem('user');
+    setUser(user);
+    console.log('User', user);
+  };
+
+  useEffect(() => {
+    socket.emit('joinChat', ticket.id);
+    console.log('Joining chat');
+  }, [ticket.id]);
 
   const handleSend = () => {
     if (mensaje.trim() === '') return;
-    const newMensaje: TicketMensaje = {
+    const newMensaje: Partial<TicketMensaje> = {
       idRef: uuidv4(),
-      ticket: ticket,
+      ticket: {id: ticket.id},
       fecha: new Date(),
-      emisor: {id: user.id!, firstName: user.firstName!, lastName: user.lastName!, role: user.role!},
+      emisor: {id: user.id!},
       estado: EstadoMensaje.Enviando,
       mensaje: mensaje,
     };
+    // Actualiza la UI inmediatamente (optimista)
     setMensajes([...mensajes, newMensaje]);
+
+    // Emitir el mensaje al servidor
+    socket.emit('message', newMensaje);
+
     setMensaje('');
   };
 
@@ -116,9 +137,9 @@ export const TicketScreen = ({route}: Props) => {
                 key={mensaje.idRef}
                 style={{
                   alignSelf:
-                    mensaje.usuario.id === user.id ? 'flex-end' : 'flex-start',
+                    mensaje.emisor?.id === user.id ? 'flex-end' : 'flex-start',
                   backgroundColor:
-                    mensaje.usuario.id === user.id
+                    mensaje.emisor?.id === user.id
                       ? colors.primaryContainer
                       : colors.secondaryContainer,
                   borderRadius: 10,
@@ -128,16 +149,17 @@ export const TicketScreen = ({route}: Props) => {
                   position: 'relative',
                   marginBottom: globalVariables.margin,
                 }}>
-                <Text>{mensaje.content}</Text>
+                <Text>{mensaje.mensaje}</Text>
                 <Text style={{fontSize: 10, textAlign: 'right'}}>
-                  {mensaje.usuario.nombre} - {mensaje.time}
+                  { mensaje.emisor?.id === user.id ? 'Tú - ' : mensaje.emisor?.firstName + ' ' + mensaje.emisor?.lastName + ' - ' }
+                  {new Date(mensaje.fecha!).toLocaleTimeString()}
                 </Text>
                 <View
                   style={{
                     position: 'absolute',
                     bottom: -10,
-                    left: mensaje.usuario.id === user.id ? 'auto' : 10,
-                    right: mensaje.usuario.id === user.id ? 10 : 'auto',
+                    left: mensaje.emisor?.id === user.id ? 'auto' : 10,
+                    right: mensaje.emisor?.id === user.id ? 10 : 'auto',
                     width: 0,
                     height: 0,
                     borderLeftWidth: 10,
@@ -146,7 +168,7 @@ export const TicketScreen = ({route}: Props) => {
                     borderLeftColor: 'transparent',
                     borderRightColor: 'transparent',
                     borderTopColor:
-                      mensaje.usuario.id === user.id
+                      mensaje.emisor?.id === user.id
                         ? colors.primaryContainer
                         : colors.secondaryContainer,
                   }}

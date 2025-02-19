@@ -9,12 +9,12 @@ import { UserTipoProfesional } from "./user-tipo-profesional";
 
 export interface User {
     id: number;
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     dni?: string;
     password?: string;
     email?: string;
-    role: Role;
+    role?: Role;
     deletedAt?: Date;
     routines?: Routine[];
     turnosPaciente?: Turno[];
