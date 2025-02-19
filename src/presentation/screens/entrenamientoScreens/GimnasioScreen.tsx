@@ -31,18 +31,15 @@ export const GimnasioScreen = () => {
         <EmptySection label="No hay entrenadores disponibles" icon="person" />
       ) : (
         entrenador.map(profesional => (
-          <>
-            <ProfesionalComponent
-              key={profesional.id}
-              title="Entrenador"
-              name={profesional.firstName}
-              lastName={profesional.lastName}
-            />
-
-            <TicketComponent />
-          </>
+          <ProfesionalComponent
+            key={`pr-${profesional.id}`}
+            title="Entrenador"
+            name={profesional.firstName}
+            lastName={profesional.lastName}
+          />
         ))
       )}
+      <TicketComponent />
     </MainLayout>
   );
 };
