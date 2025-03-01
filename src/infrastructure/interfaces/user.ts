@@ -19,6 +19,8 @@ export interface User {
     deletedAt?: Date;
     sex?: Sex | null;
     birthdate?: Date | null;
+    image?: File | null;
+    hasImage?: boolean;
     routines?: Routine[];
     turnosPaciente?: Turno[];
     turnosProfesional?: Turno[];
@@ -27,4 +29,5 @@ export interface User {
     planesNutricionales?: PlanNutricional[];
     documentos?: Documento[];
     userTipoProfesionales?: UserTipoProfesional[];
+    token?: string;
     }
