@@ -7,8 +7,7 @@ export interface Documento {
   tipo: TipoDocumento;
   titulo: string;
   descripcion: string;
-  archivo?: string | null;
-  directorio?: string | null;
+  archivo?: File | null;
   fechaSubida: Date;
   nombreProfesional?: string | null;
   emailProfesional?: string | null;
@@ -18,4 +17,5 @@ export interface Documento {
   profesional?: User | null;
   usuario: User;
   visibilidad: User[];
+  fechaBaja?: Date | null;
 }
