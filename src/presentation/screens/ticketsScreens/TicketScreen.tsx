@@ -30,7 +30,6 @@ export const TicketScreen = ({route}: Props) => {
   const ticketId: number = route.params.ticketId;
   const [ticket, setTicket] = useState<Ticket>({} as Ticket);
   const [mensajes, setMensajes] = useState<Partial<TicketMensaje>[]>([]);
-  console.log(ticket);
   const [mensaje, setMensaje] = useState('');
   const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
@@ -61,7 +60,14 @@ export const TicketScreen = ({route}: Props) => {
     setLoading(true);
     fetch();
     socket.on('message', (data: Partial<TicketMensaje>) => {
-      setMensajes(prevMensajes => [...prevMensajes, data]);
+      console.log('New message', data);
+      setMensajes(prevMensajes => {
+        const exists = prevMensajes.some(
+          mensaje => mensaje.idRef === data.idRef,
+        );
+        if (exists) return prevMensajes;
+        return [...prevMensajes, data];
+      });
     });
 
     // Limpieza del listener cuando se desmonte el componente
