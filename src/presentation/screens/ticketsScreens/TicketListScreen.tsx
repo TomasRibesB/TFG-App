@@ -12,7 +12,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Ticket} from '../../../infrastructure/interfaces/ticket';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {User} from '../../../infrastructure/interfaces/user';
-import { getTicketsRequest } from '../../../services/tickets';
+import {
+  getTicketsRequest,
+  updateTicketConsentimientoRequest,
+} from '../../../services/tickets';
+import {EstadoConsentimiento} from '../../../infrastructure/enums/estadoConsentimiento';
 
 export const TicketListScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
@@ -31,12 +35,14 @@ export const TicketListScreen = () => {
     setUser(user);
   };
 
-  const handleAccept = (id: number) => {
-    // Lógica para aceptar el ticket
+  const handleAccept = async (id: number) => {
+    await updateTicketConsentimientoRequest(id, EstadoConsentimiento.Aceptado);
+    fetch();
   };
 
-  const handleReject = (id: number) => {
-    // Lógica para rechazar el ticket
+  const handleReject = async (id: number) => {
+    await updateTicketConsentimientoRequest(id, EstadoConsentimiento.Rechazado);
+    fetch();
   };
 
   return (
@@ -61,12 +67,14 @@ export const TicketListScreen = () => {
                   flexWrap: 'wrap',
                 }}>
                 <Chip icon="information" style={{margin: 5}}>
-                  {item.isAceptado
-                    ? item.isAutorizado
-                      ? item.isActive
+                  {item.consentimientoUsuario === EstadoConsentimiento.Aceptado
+                    ? item.consentimientoReceptor ===
+                      EstadoConsentimiento.Aceptado
+                      ? item.consentimientoSolicitante ===
+                        EstadoConsentimiento.Aceptado
                         ? 'Activo'
-                        : 'Inactivo'
-                      : 'No Autorizado'
+                        : 'Pendiente de aceptación de los demás'
+                      : 'Pendiente de aceptación de los demás'
                     : 'Pendiente'}
                 </Chip>
                 {item.solicitante?.id !== user.id && (
@@ -101,7 +109,9 @@ export const TicketListScreen = () => {
                   <Text>Yo</Text>
                 </View>
               </View>
-              {item.isAceptado === false ? (
+              {item.solicitante?.id !== user?.id &&
+              item.usuario?.id === user?.id &&
+              item.consentimientoUsuario === EstadoConsentimiento.Pendiente ? (
                 <View
                   style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                   <Button
@@ -110,12 +120,17 @@ export const TicketListScreen = () => {
                     onPress={() => handleAccept(item.id!)}>
                     Aceptar
                   </Button>
-                  <Button mode="outlined" onPress={() => handleReject(item.id!)}>
+                  <Button
+                    mode="outlined"
+                    onPress={() => handleReject(item.id!)}>
                     Rechazar
                   </Button>
                 </View>
               ) : (
-                item.isAutorizado && (
+                item.consentimientoUsuario === EstadoConsentimiento.Aceptado &&
+                item.consentimientoReceptor === EstadoConsentimiento.Aceptado &&
+                item.consentimientoSolicitante ===
+                  EstadoConsentimiento.Aceptado && (
                   <Button
                     mode="outlined"
                     onPress={() =>
