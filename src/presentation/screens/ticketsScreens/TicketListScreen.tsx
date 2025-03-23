@@ -30,7 +30,6 @@ export const TicketListScreen = () => {
   const fetch = async () => {
     const data: Ticket[] = await getTicketsRequest();
     const user = await StorageAdapter.getItem('user');
-    console.log(data);
     setTickets(data);
     setUser(user);
   };

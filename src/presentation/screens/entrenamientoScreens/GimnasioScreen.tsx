@@ -18,7 +18,6 @@ export const GimnasioScreen = () => {
 
   const fetch = async () => {
     const data: User[] = await StorageAdapter.getItem('profesionales');
-    console.log(data);
     const entrenador = data.filter(
       profesional => profesional.role === Role.Entrenador,
     );
@@ -30,16 +29,18 @@ export const GimnasioScreen = () => {
       {entrenador.length === 0 ? (
         <EmptySection label="No hay entrenadores disponibles" icon="person" />
       ) : (
-        entrenador.map(profesional => (
-          <ProfesionalComponent
-            key={`pr-${profesional.id}`}
-            title="Entrenador"
-            name={profesional.firstName}
-            lastName={profesional.lastName}
-          />
-        ))
+        <>
+          {entrenador.map(profesional => (
+            <ProfesionalComponent
+              key={`pr-${profesional.id}`}
+              title="Entrenador"
+              name={profesional.firstName ?? ''}
+              lastName={profesional.lastName ?? ''}
+            />
+          ))}
+          <TicketComponent />
+        </>
       )}
-      <TicketComponent />
     </MainLayout>
   );
 };

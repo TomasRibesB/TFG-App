@@ -11,6 +11,7 @@ import {Role} from '../../../infrastructure/enums/roles';
 import {User} from '../../../infrastructure/interfaces/user';
 import {Documento} from '../../../infrastructure/interfaces/documento';
 import {EmptySection} from '../../components/EmptySection';
+import {PermisoComponent} from '../../components/PermisoComponent';
 
 export const ProfesionalesScreen = () => {
   const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
@@ -27,8 +28,6 @@ export const ProfesionalesScreen = () => {
     const data: User[] = (await StorageAdapter.getItem('profesionales')) || [];
     const dataDoc: Documento[] =
       (await StorageAdapter.getItem('documentos')) || [];
-    //si hay documentos con profesionales no registrados en la lista de profesionales
-    console.log(JSON.stringify(dataDoc, null, 2));
     const profesionalesNoRegistrados: Partial<User>[] = dataDoc
       .filter(documento => documento.dniProfesional)
       .map(documento => ({
@@ -49,7 +48,6 @@ export const ProfesionalesScreen = () => {
       ...data,
       ...profesionalesNoRegistrados,
     ];
-    console.log(JSON.stringify(todosProfesionales, null, 2));
     setProfesionales(todosProfesionales);
   };
 
@@ -164,6 +162,7 @@ export const ProfesionalesScreen = () => {
           </Portal>
         </>
       )}
+      <PermisoComponent />
     </MainLayout>
   );
 };

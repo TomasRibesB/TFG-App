@@ -40,7 +40,6 @@ export const MiSaludScreen = () => {
   const fetch = async () => {
     const documentosData = await StorageAdapter.getItem('documentos');
     const profesionalesData = await StorageAdapter.getItem('profesionales');
-    console.log(documentosData);
     setDocumentos(documentosData);
     setProfesionales(profesionalesData);
   };

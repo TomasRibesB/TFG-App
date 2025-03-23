@@ -17,7 +17,6 @@ export const NutricionistaScreen = () => {
 
   const fetch = async () => {
     const data: User[] = await StorageAdapter.getItem('profesionales');
-    console.log(data);
     const nutricionista = data.filter(
       profesional => profesional.role === Role.Nutricionista,
     );
@@ -34,8 +33,8 @@ export const NutricionistaScreen = () => {
             <ProfesionalComponent
               key={profesional.id}
               title="Nutricionista"
-              name={profesional.firstName}
-              lastName={profesional.lastName}
+              name={profesional.firstName!}
+              lastName={profesional.lastName!}
             />
           ))}
 

@@ -5,7 +5,6 @@ import {EstadoConsentimiento} from '../infrastructure/enums/estadoConsentimiento
 
 export const getTicketsRequest = async () => {
   const {data} = await api.get(`/tickets`);
-  console.log(JSON.stringify(data, null, 2));
   return data;
 };
 
