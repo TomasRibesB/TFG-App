@@ -6,3 +6,13 @@ export const getPlanNutricionalRequest = async () => {
   const {data} = await api.get(`/plan-nutricional`);
   return data;
 };
+
+export const setAsignarVisivilidadPlanNutricionalRequest = async (
+  planNutricionalId: number,
+  profesionalesIds: number[],
+) => {
+  await api.post(`/plan-nutricional/visibilidad/${planNutricionalId}`, {
+    profesionalesIds,
+  });
+  return;
+};

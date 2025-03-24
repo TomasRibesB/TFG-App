@@ -1,72 +1,51 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {
-  Text,
-  Button,
-  Divider,
-  IconButton,
-  Menu,
-  Checkbox,
-  Portal,
-  useTheme,
-} from 'react-native-paper';
+import {Text, IconButton, useTheme} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Documento} from '../../../infrastructure/interfaces/documento';
-import {
-  getDocumentosRequest,
-  getProfesionalesByUserRequest,
-} from '../../../services/salud';
-import {User} from '../../../infrastructure/interfaces/user';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EmptySection} from '../../components/EmptySection';
+import {User} from '../../../infrastructure/interfaces/user';
+import {VisibilityComponent} from '../../components/VisibilidadComponent';
+import {setAsignarVisivilidadDocumentoRequest} from '../../../services/salud';
 
 export const MiSaludScreen = () => {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<Documento>();
-  const [anchorPosition, setAnchorPosition] = useState({x: 0, y: 0});
   const [documentos, setDocumentos] = useState<Documento[]>([]);
   const [profesionales, setProfesionales] = useState<User[]>([]);
   const theme = useTheme();
 
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
   useEffect(() => {
-    fetch();
+    fetchData();
   }, []);
 
-  const fetch = async () => {
+  const fetchData = async () => {
     const documentosData = await StorageAdapter.getItem('documentos');
     const profesionalesData = await StorageAdapter.getItem('profesionales');
     setDocumentos(documentosData);
     setProfesionales(profesionalesData);
   };
 
-  const toggleProfesional = (profesional: User) => {
-    if (selectedDocument) {
-      selectedDocument.visibilidad = selectedDocument.visibilidad || [];
-      const index = selectedDocument.visibilidad.findIndex(
-        (p: User) => p.id === profesional.id,
+  const updateDocumento = async (updatedDocumento: Documento) => {
+    const profesionalesIds = updatedDocumento.visibilidad.map(prof => prof.id);
+    try {
+      await setAsignarVisivilidadDocumentoRequest(
+        updatedDocumento.id,
+        profesionalesIds,
       );
-      if (index > -1) {
-        selectedDocument.visibilidad.splice(index, 1);
-      } else {
-        selectedDocument.visibilidad.push(profesional);
-      }
-      setSelectedDocument({...selectedDocument});
+      setDocumentos(prevDocs =>
+        prevDocs.map(doc =>
+          doc.id === updatedDocumento.id ? updatedDocumento : doc,
+        ),
+      );
+    } catch (error) {
+      console.error('Error al asignar visibilidad:', error);
     }
   };
 
-  const handleIconButtonPress = (event: any, documento: any) => {
-    setSelectedDocument(documento);
-    setAnchorPosition({x: event.nativeEvent.pageX, y: event.nativeEvent.pageY});
-    openMenu();
-  };
-
   const handleDownload = () => {
-    // Download file
+    // Lógica para descargar archivo
   };
 
   return (
@@ -116,69 +95,22 @@ export const MiSaludScreen = () => {
                     style={{marginRight: 3}}
                   />
                   <Text>
-                    {documento.profesional?.firstName ?? documento.nombreProfesional}{' '}
-                    {documento.profesional?.lastName ?? documento.apellidoProfesional}
+                    {documento.profesional?.firstName ??
+                      documento.nombreProfesional}{' '}
+                    {documento.profesional?.lastName ??
+                      documento.apellidoProfesional}
                   </Text>
                 </View>
               )}
-              <Divider style={{marginVertical: 8}} />
-              <View style={styles.visibilityHeader}>
-                <Text variant="bodySmall" style={styles.visibilityTitle}>
-                  Visibilidad:
-                </Text>
-                <IconButton
-                  icon="menu-outline"
-                  size={24}
-                  onPress={event => handleIconButtonPress(event, documento)}
-                />
-              </View>
-            </View>
-            <View style={styles.visibility}>
-              {documento.visibilidad &&
-                documento.visibilidad.map((profesional, idx) => (
-                  <View key={idx} style={styles.profesionalInfo}>
-                    <Icon
-                      name="person-circle-outline"
-                      size={24}
-                      style={{marginRight: 3}}
-                    />
-                    <Text>
-                      {profesional.firstName} {profesional.lastName}
-                    </Text>
-                  </View>
-                ))}
+              <VisibilityComponent
+                item={documento}
+                profesionales={profesionales}
+                onUpdate={updateDocumento}
+              />
             </View>
           </DesplegableCard>
         ))
       )}
-      <Portal>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={{x: anchorPosition.x, y: anchorPosition.y}}>
-          {profesionales.length > 0 &&
-            profesionales.map(profesional => (
-              <Menu.Item
-                key={profesional.id}
-                onPress={() => toggleProfesional(profesional)}
-                title={profesional.firstName + ' ' + profesional.lastName}
-                trailingIcon={() => (
-                  <Checkbox
-                    status={
-                      selectedDocument &&
-                      selectedDocument.visibilidad &&
-                      selectedDocument.visibilidad.some(
-                        (p: any) => p.id === profesional.id,
-                      )
-                        ? 'checked'
-                        : 'unchecked'
-                    }
-                  />
-                )}
-              />
-            ))}
-        </Menu>
-      </Portal>
     </MainLayout>
   );
 };
@@ -190,10 +122,6 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 12,
   },
-  attachmentsTitle: {
-    marginBottom: 8,
-    fontWeight: 'bold',
-  },
   attachments: {
     flexDirection: 'row',
     bottom: 0,
@@ -203,25 +131,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     position: 'relative',
     bottom: -25,
-  },
-  visibilityHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  visibilityTitle: {
-    fontWeight: 'bold',
-  },
-  visibility: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-  profesionalInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 8,
-    marginBottom: 8,
   },
 });

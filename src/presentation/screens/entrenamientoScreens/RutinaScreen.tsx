@@ -11,14 +11,15 @@ import {
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet} from 'react-native';
 import {globalVariables, globalTheme} from '../../../config/theme/global-theme';
-import {EjercicioElement} from './RutinaType';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {ExerciseDialog} from '../../components/DialogEjercicio';
 import {Routine} from '../../../infrastructure/interfaces/routine';
-import {getRoutineRequest} from '../../../services/entrenamiento';
 import {RutinaEjercicio} from '../../../infrastructure/interfaces/rutina-ejercicio';
-import { StorageAdapter } from '../../../config/adapters/storage-adapter';
-import { EmptySection } from '../../components/EmptySection';
+import {StorageAdapter} from '../../../config/adapters/storage-adapter';
+import {EmptySection} from '../../components/EmptySection';
+import {User} from '../../../infrastructure/interfaces/user';
+import {VisibilityComponent} from '../../components/VisibilidadComponent';
+import {setAsignarVisivilidadRoutineRequest} from '../../../services/entrenamiento';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -26,15 +27,40 @@ export const RutinaScreen = () => {
   const [selectedExercise, setSelectedExercise] =
     useState<RutinaEjercicio | null>(null);
   const [routines, setRoutines] = useState<Routine[]>([]);
+  // Se asume que también se obtiene una lista de profesionales para la visibilidad.
+  const [profesionales, setProfesionales] = useState<User[]>([]);
   const theme = useTheme();
 
   useEffect(() => {
     fetch();
+    fetchProfesionales();
   }, []);
 
   const fetch = async () => {
     const data = await StorageAdapter.getItem('rutinas');
     setRoutines(data);
+  };
+
+  const fetchProfesionales = async () => {
+    const data = await StorageAdapter.getItem('profesionales');
+    setProfesionales(data);
+  };
+
+  const updateRoutine = async (updatedRoutine: Routine) => {
+    const profesionalesIds = updatedRoutine.visibilidad.map(prof => prof.id);
+    try {
+      await setAsignarVisivilidadRoutineRequest(
+        updatedRoutine.id,
+        profesionalesIds,
+      );
+      setRoutines(prevRoutines =>
+        prevRoutines.map(r =>
+          r.id === updatedRoutine.id ? updatedRoutine : r,
+        ),
+      );
+    } catch (error) {
+      console.error('Error al asignar visibilidad a la rutina:', error);
+    }
   };
 
   const handleCheckboxPress = (id: number) => {
@@ -64,7 +90,10 @@ export const RutinaScreen = () => {
     <>
       <MainLayout>
         {routines.length === 0 ? (
-          <EmptySection label="No se encontraron rutinas de entrenamiento" icon="barbell" />
+          <EmptySection
+            label="No se encontraron rutinas de entrenamiento"
+            icon="barbell"
+          />
         ) : (
           routines.map(rutina => (
             <DesplegableCard
@@ -132,6 +161,12 @@ export const RutinaScreen = () => {
                     </Text>
                   </View>
                 )}
+                {/* Integración del componente de visibilidad */}
+                <VisibilityComponent
+                  item={rutina}
+                  profesionales={profesionales}
+                  onUpdate={updateRoutine}
+                />
               </View>
             </DesplegableCard>
           ))
@@ -145,3 +180,7 @@ export const RutinaScreen = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  // ... puedes agregar estilos adicionales si es necesario
+});

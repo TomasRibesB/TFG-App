@@ -29,3 +29,11 @@ export const deletePermisoDocumentoRequest = async () => {
   await StorageAdapter.removeItem('permisos');
   return;
 };
+
+export const setAsignarVisivilidadDocumentoRequest = async (
+  documentoId: number,
+  profesionalesIds: number[],
+) => {
+  await api.post(`/documentos/visibilidad/${documentoId}`, {profesionalesIds});
+  return;
+};
