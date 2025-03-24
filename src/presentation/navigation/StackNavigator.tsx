@@ -10,6 +10,7 @@ import {RegisterScreen} from '../screens/RegisterScreen';
 import {BotTabNavigator} from './BotTabNavigator';
 import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
+import { EntrenamientoRegistroScreen } from '../screens/entrenamientoScreens/EntrenamientoRegistroScreen';
 
 export type AuthStackParams = {
   LoginScreen: undefined;
@@ -20,6 +21,7 @@ export type MainStackParams = {
   BotTabNavigator: undefined;
   TicketListScreen: undefined;
   TicketScreen: {ticketId: number;};
+  EntrenamientoRegistroScreen: undefined;
 };
 
 export type RootStackParams = {
@@ -70,6 +72,11 @@ const MainStackNavigator = () => (
     <MainStack.Screen
       name="TicketScreen"
       component={TicketScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <MainStack.Screen
+      name="EntrenamientoRegistroScreen"
+      component={EntrenamientoRegistroScreen}
       options={{cardStyleInterpolator: fadeanimation}}
     />
   </MainStack.Navigator>

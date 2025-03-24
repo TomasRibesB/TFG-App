@@ -1,5 +1,6 @@
 import { UnidadMedida } from "../enums/unidadMedida";
 import { Ejercicio } from "./ejercicio";
+import { Registro } from "./registro";
 import { Routine } from "./routine";
 
 export interface RutinaEjercicio {
@@ -11,4 +12,5 @@ export interface RutinaEjercicio {
     repeticiones: number;
     medicion?: string;
     unidadMedida?: UnidadMedida;
+    registros?: Registro[];
   }

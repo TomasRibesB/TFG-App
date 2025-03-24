@@ -222,7 +222,3 @@ export const RutinaScreen = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  // ... puedes agregar estilos adicionales si es necesario
-});

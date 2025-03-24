@@ -2,10 +2,10 @@ import {View} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {CardContainer} from './CardContainer';
 import {useNavigation} from '@react-navigation/native';
-import {RootStackParams} from '../navigation/StackNavigator';
+import {MainStackParams} from '../navigation/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 export const TicketComponent = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
   return (
     <CardContainer title="Tickets" icon="chatbox-outline">
       <View

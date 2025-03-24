@@ -19,3 +19,8 @@ export const setRegistroEjerciciosRequest = async (RuExIds: number[]) => {
   await api.post(`/ejercicio-rutina/registro`, {RuExIds});
   return;
 };
+
+export const getRegistroEjerciciosByUserRequest = async () => {
+  const {data} = await api.get(`/ejercicio-rutina`);
+  return data;
+};
