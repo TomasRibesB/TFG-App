@@ -14,3 +14,8 @@ export const setAsignarVisivilidadRoutineRequest = async (
   await api.post(`/routines/visibilidad/${routineId}`, {profesionalesIds});
   return;
 };
+
+export const setRegistroEjerciciosRequest = async (RuExIds: number[]) => {
+  await api.post(`/ejercicio-rutina/registro`, {RuExIds});
+  return;
+};

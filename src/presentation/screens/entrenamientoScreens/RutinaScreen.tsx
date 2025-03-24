@@ -19,7 +19,11 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EmptySection} from '../../components/EmptySection';
 import {User} from '../../../infrastructure/interfaces/user';
 import {VisibilityComponent} from '../../components/VisibilidadComponent';
-import {setAsignarVisivilidadRoutineRequest} from '../../../services/entrenamiento';
+import {
+  setAsignarVisivilidadRoutineRequest,
+  setRegistroEjerciciosRequest,
+} from '../../../services/entrenamiento';
+import {UnidadMedida} from '../../../infrastructure/enums/unidadMedida';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -86,6 +90,21 @@ export const RutinaScreen = () => {
     setSelectedExercise(null);
   };
 
+  const handleRegisterRoutine = async (routine: Routine) => {
+    //obtengo los ejercicios seleccionados
+    const selectedExercises = routine?.rutinaEjercicio?.filter(
+      re => checked[re.id],
+    );
+
+    if (!selectedExercises || selectedExercises.length === 0) {
+      return;
+    }
+
+    await setRegistroEjerciciosRequest(
+      selectedExercises.map(ejercicio => ejercicio.id),
+    );
+    setChecked({});
+  };
   return (
     <>
       <MainLayout>
@@ -116,7 +135,15 @@ export const RutinaScreen = () => {
                       title={re.ejercicio.name}
                       onLongPress={() => handleLongPress(re)}
                       onPress={() => handleCheckboxPress(re.id)}
-                      description={`${re.series}x${re.repeticiones}`}
+                      description={`${re.series}x${re.repeticiones}${
+                        re.medicion ? ' - ' + re.medicion : ''
+                      } ${
+                        re.unidadMedida !== UnidadMedida.Ninguna && re.medicion
+                          ? re.unidadMedida
+                          : re.medicion
+                          ? 'unidades'
+                          : ''
+                      }`}
                       right={() => (
                         <Checkbox
                           status={checked[re.id] ? 'checked' : 'unchecked'}
@@ -134,14 +161,27 @@ export const RutinaScreen = () => {
                   Al mantener precionado un ejercicio se mostrará información
                   adicional.
                 </Text>
-                <ProgressBar
-                  progress={calculateProgress(rutina.rutinaEjercicio || [])}
-                  style={{
-                    marginTop: 10,
-                    height: 10,
-                    borderRadius: globalVariables.innerBorderRadius,
-                  }}
-                />
+                {rutina.rutinaEjercicio &&
+                  rutina.rutinaEjercicio.length > 0 && (
+                    <>
+                      <ProgressBar
+                        progress={calculateProgress(
+                          rutina.rutinaEjercicio || [],
+                        )}
+                        style={{
+                          marginTop: 10,
+                          height: 10,
+                          borderRadius: globalVariables.innerBorderRadius,
+                          marginBottom: globalVariables.margin,
+                        }}
+                      />
+                      <Button
+                        mode="outlined"
+                        onPress={() => handleRegisterRoutine(rutina)}>
+                        Registrar
+                      </Button>
+                    </>
+                  )}
                 {rutina?.trainer && (
                   <View
                     style={{
