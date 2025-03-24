@@ -104,7 +104,9 @@ export const MiSaludScreen = () => {
               )}
               <VisibilityComponent
                 item={documento}
-                profesionales={profesionales}
+                profesionales={profesionales.filter(
+                  prof => prof.id !== documento.profesional?.id,
+                )}
                 onUpdate={updateDocumento}
               />
             </View>

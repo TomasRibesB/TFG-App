@@ -10,7 +10,7 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EmptySection} from '../../components/EmptySection';
 import {User} from '../../../infrastructure/interfaces/user';
 import {VisibilityComponent} from '../../components/VisibilidadComponent';
-import { setAsignarVisivilidadPlanNutricionalRequest } from '../../../services/nutricion';
+import {setAsignarVisivilidadPlanNutricionalRequest} from '../../../services/nutricion';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -143,7 +143,9 @@ export const PlanNutricionalScreen = () => {
                 {/* Integración del componente de visibilidad */}
                 <VisibilityComponent
                   item={item}
-                  profesionales={profesionales}
+                  profesionales={profesionales.filter(
+                    prof => prof.id !== item?.nutricionista?.id,
+                  )}
                   onUpdate={updatePlanNutricional}
                 />
               </View>

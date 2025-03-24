@@ -164,7 +164,9 @@ export const RutinaScreen = () => {
                 {/* Integración del componente de visibilidad */}
                 <VisibilityComponent
                   item={rutina}
-                  profesionales={profesionales}
+                  profesionales={profesionales.filter(
+                    prof => prof.id !== rutina?.trainer?.id,
+                  )}
                   onUpdate={updateRoutine}
                 />
               </View>
