@@ -16,3 +16,8 @@ export const setAsignarVisivilidadPlanNutricionalRequest = async (
   });
   return;
 };
+
+export const getPlanesAnterioresRequest = async () => {
+  const {data} = await api.get(`/plan-nutricional/baja`);
+  return data;
+};
