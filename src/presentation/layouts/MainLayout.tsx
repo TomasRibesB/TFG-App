@@ -14,7 +14,7 @@ import {useTheme} from 'react-native-paper';
 import {useState} from 'react';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParams} from '../navigation/StackNavigator';
+import {MainStackParams, RootStackParams} from '../navigation/StackNavigator';
 import {useAuth} from '../hooks/useAuth';
 
 interface Props {
@@ -26,6 +26,7 @@ interface Props {
   stylesChild?: StyleProp<ViewStyle>;
   scrolleable?: boolean;
   back?: boolean;
+  blockProfile?: boolean;
 }
 
 export const MainLayout = ({
@@ -37,11 +38,13 @@ export const MainLayout = ({
   stylesChild,
   scrolleable = true,
   back = false,
+  blockProfile = false,
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+  const navigation2 = useNavigation<StackNavigationProp<MainStackParams>>();
   const [menuVisible, setMenuVisible] = useState(false);
   const {logout} = useAuth();
   const openMenu = () => setMenuVisible(true);
@@ -49,9 +52,6 @@ export const MainLayout = ({
   const handleLogout = async () => {
     closeMenu();
     await logout();
-  };
-  const handleProfile = () => {
-    closeMenu();
   };
 
   const childrenView = (
@@ -111,9 +111,25 @@ export const MainLayout = ({
               </TouchableOpacity>
             }
             anchorPosition="bottom">
-            <Menu.Item onPress={handleProfile} title="Perfil" />
-            <Divider />
-            <Menu.Item onPress={handleLogout} title="Cerrar sesión" />
+            {!blockProfile && (
+              <>
+                <Menu.Item
+                  onPress={() => {
+                    navigation2.navigate('ProfileScreen');
+                    closeMenu();
+                  }}
+                  title="Perfil"
+                  leadingIcon="person-outline"
+                />
+                <Divider />
+              </>
+            )}
+
+            <Menu.Item
+              onPress={handleLogout}
+              title="Cerrar sesión"
+              leadingIcon="log-out-outline"
+            />
           </Menu>
         )}
       </View>

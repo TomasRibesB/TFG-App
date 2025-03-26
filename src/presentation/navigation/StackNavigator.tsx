@@ -12,6 +12,7 @@ import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
 import {EntrenamientoRegistroScreen} from '../screens/entrenamientoScreens/EntrenamientoRegistroScreen';
 import {PlanesNutricionalesRegistroScreen} from '../screens/nutricionScreens/PlanesNutricionalesRegistroScreen';
+import {ProfileScreen} from '../screens/ProfileScreen';
 
 export type AuthStackParams = {
   LoginScreen: undefined;
@@ -24,6 +25,7 @@ export type MainStackParams = {
   TicketScreen: {ticketId: number};
   EntrenamientoRegistroScreen: undefined;
   PlanesNutricionalesRegistroScreen: undefined;
+  ProfileScreen: undefined;
 };
 
 export type RootStackParams = {
@@ -84,6 +86,11 @@ const MainStackNavigator = () => (
     <MainStack.Screen
       name="PlanesNutricionalesRegistroScreen"
       component={PlanesNutricionalesRegistroScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <MainStack.Screen
+      name="ProfileScreen"
+      component={ProfileScreen}
       options={{cardStyleInterpolator: fadeanimation}}
     />
   </MainStack.Navigator>

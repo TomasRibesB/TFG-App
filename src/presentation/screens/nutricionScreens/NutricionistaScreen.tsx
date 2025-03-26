@@ -33,8 +33,7 @@ export const NutricionistaScreen = () => {
             <ProfesionalComponent
               key={profesional.id}
               title="Nutricionista"
-              name={profesional.firstName!}
-              lastName={profesional.lastName!}
+              profesional={profesional}
             />
           ))}
 

@@ -1,25 +1,36 @@
 import {StyleSheet, View} from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
 import {CardContainer} from './CardContainer';
+import {getUserImageRequest} from '../../services/user';
+import {User} from '../../infrastructure/interfaces/user';
 
 interface Props {
   title: string;
-  name: string;
-  lastName: string;
+  profesional: Partial<User>;
 }
 
-export const ProfesionalComponent = ({title, name, lastName}: Props) => {
+export const ProfesionalComponent = ({title, profesional}: Props) => {
   return (
     <CardContainer title={title}>
       <View style={styles.container}>
         <Text variant="headlineMedium">
-          {name} {lastName}
+          {profesional?.firstName} {profesional?.lastName}
         </Text>
-        <Avatar.Icon
-          size={70}
-          icon="accessibility-outline"
-          style={styles.avatar}
-        />
+        {profesional.hasImage ? (
+          <Avatar.Image
+            size={70}
+            source={{
+              uri: getUserImageRequest(profesional.id!, new Date()),
+            }}
+            style={styles.avatar}
+          />
+        ) : (
+          <Avatar.Icon
+            size={70}
+            icon="accessibility-outline"
+            style={styles.avatar}
+          />
+        )}
       </View>
     </CardContainer>
   );

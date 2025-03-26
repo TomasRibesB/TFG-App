@@ -34,8 +34,7 @@ export const GimnasioScreen = () => {
             <ProfesionalComponent
               key={`pr-${profesional.id}`}
               title="Entrenador"
-              name={profesional.firstName ?? ''}
-              lastName={profesional.lastName ?? ''}
+              profesional={profesional}
             />
           ))}
           <TicketComponent />

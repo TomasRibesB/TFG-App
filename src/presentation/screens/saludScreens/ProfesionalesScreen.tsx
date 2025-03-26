@@ -12,6 +12,7 @@ import {User} from '../../../infrastructure/interfaces/user';
 import {Documento} from '../../../infrastructure/interfaces/documento';
 import {EmptySection} from '../../components/EmptySection';
 import {PermisoComponent} from '../../components/PermisoComponent';
+import {getUserImageRequest} from '../../../services/user';
 
 export const ProfesionalesScreen = () => {
   const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
@@ -49,6 +50,7 @@ export const ProfesionalesScreen = () => {
       ...profesionalesNoRegistrados,
     ];
     setProfesionales(todosProfesionales);
+    console.log('Profesionales', JSON.stringify(todosProfesionales, null, 2));
   };
 
   const handleProfPress = (profesional: any) => {
@@ -92,14 +94,23 @@ export const ProfesionalesScreen = () => {
                     <Icon name="person-remove-outline" size={17} />
                   )
                 }
-                left={() => (
-                  <Avatar.Text
-                    size={48}
-                    label={
-                      profesional.firstName ? profesional.firstName[0] : '?'
-                    }
-                  />
-                )}
+                left={() => {
+                  return profesional?.hasImage ? (
+                    <Avatar.Image
+                      size={48}
+                      source={{
+                        uri: getUserImageRequest(profesional.id!, new Date()),
+                      }}
+                    />
+                  ) : (
+                    <Avatar.Text
+                      size={48}
+                      label={
+                        profesional.firstName ? profesional.firstName[0] : '?'
+                      }
+                    />
+                  );
+                }}
               />
             ))}
           </CardContainer>
