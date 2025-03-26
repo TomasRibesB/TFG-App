@@ -50,7 +50,6 @@ export const ProfesionalesScreen = () => {
       ...profesionalesNoRegistrados,
     ];
     setProfesionales(todosProfesionales);
-    console.log('Profesionales', JSON.stringify(todosProfesionales, null, 2));
   };
 
   const handleProfPress = (profesional: any) => {
