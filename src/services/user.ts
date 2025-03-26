@@ -47,3 +47,8 @@ export const getUserImageRequest = (id: number, flag?: Date): string => {
   const timestamp = flag ? flag.getTime() : new Date().getTime();
   return `${api.defaults.baseURL}/users/image/${id}?t=${timestamp}`;
 };
+
+export const getRecordatoriosRequest = async () => {
+  const {data} = await api.get(`/users/recordatorios`);
+  return data;
+}
