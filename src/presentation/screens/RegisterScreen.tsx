@@ -9,11 +9,8 @@ import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParams, RootStackParams} from '../navigation/StackNavigator';
-import {api} from '../../config/apis/api';
-import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
-import {registerRequest} from '../../services/auth';
-import { useAuth } from '../hooks/useAuth';
+import {useAuth} from '../hooks/useAuth';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -23,10 +20,10 @@ export const RegisterScreen = () => {
   const [lastName, setLastName] = useState('');
   const [dni, setDni] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const navigationAuth = useNavigation<StackNavigationProp<AuthStackParams>>();
   const {register} = useAuth();
+  const [showNew, setShowNew] = useState(false);
+  const [showRepeat, setShowRepeat] = useState(false);
 
   const handleRegister = async () => {
     try {
@@ -167,17 +164,29 @@ export const RegisterScreen = () => {
             outlineStyle={{borderRadius: 8}}
             label="Contraseña"
             mode="outlined"
-            secureTextEntry
             style={{marginBottom: globalVariables.padding}}
             onChangeText={setPassword}
+            secureTextEntry={!showNew}
+            right={
+              <TextInput.Icon
+                icon={showNew ? 'eye-off-outline' : 'eye-outline'}
+                onPress={() => setShowNew(!showNew)}
+              />
+            }
           />
           <TextInput
             outlineStyle={{borderRadius: 8}}
             label="Confirmar Contraseña"
             mode="outlined"
-            secureTextEntry
             style={{marginBottom: globalVariables.padding * 2}}
             onChangeText={setPasswordConfirmation}
+            secureTextEntry={!showRepeat}
+            right={
+              <TextInput.Icon
+                icon={showRepeat ? 'eye-off-outline' : 'eye-outline'}
+                onPress={() => setShowRepeat(!showRepeat)}
+              />
+            }
           />
           <Button
             mode="contained"

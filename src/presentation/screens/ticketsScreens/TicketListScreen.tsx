@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {Text, Card, Chip, Button} from 'react-native-paper';
+import {Text, Card, Chip, Button, FAB} from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -45,7 +45,7 @@ export const TicketListScreen = () => {
   };
 
   return (
-    <MainLayout title="Tickets" back={true}>
+    <MainLayout title="Tickets" back={true} blockTickets>
       <ScrollView>
         {tickets.map(item => (
           <Card key={item.id} style={{margin: 10}}>
@@ -143,6 +143,17 @@ export const TicketListScreen = () => {
           </Card>
         ))}
       </ScrollView>
+      <FAB
+        style={{
+          position: 'absolute',
+          right: 16,
+          bottom: 16,
+        }}
+        icon="add-outline"
+        onPress={() => navigation.goBack()}
+        mode="flat"
+        size="small"
+      />
     </MainLayout>
   );
 };

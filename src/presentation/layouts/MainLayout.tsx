@@ -27,6 +27,7 @@ interface Props {
   scrolleable?: boolean;
   back?: boolean;
   blockProfile?: boolean;
+  blockTickets?: boolean;
 }
 
 export const MainLayout = ({
@@ -39,6 +40,7 @@ export const MainLayout = ({
   scrolleable = true,
   back = false,
   blockProfile = false,
+  blockTickets = false,
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const isDarkMode = useColorScheme() === 'dark';
@@ -120,6 +122,19 @@ export const MainLayout = ({
                   }}
                   title="Perfil"
                   leadingIcon="person-outline"
+                />
+                <Divider />
+              </>
+            )}
+            {!blockTickets && (
+              <>
+                <Menu.Item
+                  onPress={() => {
+                    navigation2.navigate('TicketListScreen');
+                    closeMenu();
+                  }}
+                  title="Tickets"
+                  leadingIcon="ticket-outline"
                 />
                 <Divider />
               </>

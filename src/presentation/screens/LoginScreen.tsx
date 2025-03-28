@@ -21,6 +21,7 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const {login} = useAuth();
+  const [showNew, setShowNew] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -46,7 +47,8 @@ export const LoginScreen = () => {
         return;
       }
 
-      await login(email, password);
+      const response : string = await login(email, password) as string;
+      setError(response);
     } catch (err) {
       setError('No se pudo iniciar sesión');
     }
@@ -74,9 +76,15 @@ export const LoginScreen = () => {
             outlineStyle={{borderRadius: 8}}
             label="Contraseña"
             mode="outlined"
-            secureTextEntry
             style={styles.input}
             onChangeText={setPassword}
+            secureTextEntry={!showNew}
+            right={
+              <TextInput.Icon
+                icon={showNew ? 'eye-off-outline' : 'eye-outline'}
+                onPress={() => setShowNew(!showNew)}
+              />
+            }
           />
           <Button mode="contained" style={styles.button} onPress={handleLogin}>
             Entrar

@@ -12,11 +12,16 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     try {
       const data = await loginRequest(email, password);
-      await StorageAdapter.setItem('user', data);
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'AuthLoaderScreen'}],
-      });
+      if (data.id) {
+        await StorageAdapter.setItem('user', data);
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AuthLoaderScreen'}],
+        });
+        return 'Inicio de sesión exitoso';
+      } else {
+        return 'Email o contraseña incorrectos';
+      }
     } catch (err) {
       console.log(err);
     }

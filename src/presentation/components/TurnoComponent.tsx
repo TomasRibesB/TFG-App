@@ -264,6 +264,11 @@ export const TurnoComponent = ({
               </Button>
             </View>
           ))}
+          {filteredTurnos.length === 0 && (
+            <Text variant="labelSmall" style={{color: theme.colors.onSurface}}>
+              No hay turnos disponibles
+            </Text>
+          )}
         </View>
       </ScrollView>
     </CardContainer>

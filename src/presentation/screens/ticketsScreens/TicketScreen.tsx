@@ -137,7 +137,7 @@ export const TicketScreen = ({route}: Props) => {
   }
 
   return (
-    <MainLayout title={ticket.asunto} scrolleable={false} back={true}>
+    <MainLayout title={ticket.asunto} scrolleable={false} back={true} blockTickets>
       <ScrollView
         ref={scrollViewRef}
         onScroll={handleScroll}
