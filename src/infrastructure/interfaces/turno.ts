@@ -8,4 +8,5 @@ export interface Turno {
     notificado: Date | null;
     paciente: User;
     profesional: User;
+    error?: any; // es custom para controlar errores
   }

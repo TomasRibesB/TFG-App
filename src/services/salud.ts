@@ -37,3 +37,13 @@ export const setAsignarVisivilidadDocumentoRequest = async (
   await api.post(`/documentos/visibilidad/${documentoId}`, {profesionalesIds});
   return;
 };
+
+export const putReservarTurnoRequest = async (turnoId: number) => {
+  const {data} = await api.put(`/turnos/asignar/${turnoId}`);
+  return data;
+};
+
+export const putCancelarTurnoRequest = async (turnoId: number) => {
+  const {data} = await api.put(`/turnos/cancelar/${turnoId}`);
+  return data;
+};

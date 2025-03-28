@@ -12,7 +12,10 @@ import {User} from '../../../infrastructure/interfaces/user';
 import {Documento} from '../../../infrastructure/interfaces/documento';
 import {EmptySection} from '../../components/EmptySection';
 import {PermisoComponent} from '../../components/PermisoComponent';
-import {getUserImageRequest} from '../../../services/user';
+import {
+  getProfesionalsAndUpdateStorage,
+  getUserImageRequest,
+} from '../../../services/user';
 
 export const ProfesionalesScreen = () => {
   const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
@@ -21,6 +24,7 @@ export const ProfesionalesScreen = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [profesionalesUsers, setProfesionalesUsers] = useState<User[]>([]);
   const [profesionales, setProfesionales] = useState<Partial<User>[]>([]);
+  const [isLoadingAction, setIsLoadingAction] = useState(false);
   useEffect(() => {
     fetch();
   }, []);
@@ -60,6 +64,13 @@ export const ProfesionalesScreen = () => {
   const closeDialog = () => {
     setDialogVisible(false);
     setSelectedProfesional(null);
+  };
+
+  const handleActualizarProfesionales = async () => {
+    setIsLoadingAction(true);
+    const updatedProfesionales = await getProfesionalsAndUpdateStorage();
+    await fetch();
+    setIsLoadingAction(false);
   };
 
   return (
@@ -115,7 +126,11 @@ export const ProfesionalesScreen = () => {
           </CardContainer>
           <TicketComponent />
           {profesionalesUsers && profesionalesUsers.length > 0 && (
-            <TurnoComponent profesionales={profesionalesUsers} />
+            <TurnoComponent
+              profesionales={profesionalesUsers}
+              onUpdateProfesionales={handleActualizarProfesionales}
+              isLoading={isLoadingAction}
+            />
           )}
           <Portal>
             <Dialog visible={dialogVisible} onDismiss={closeDialog}>

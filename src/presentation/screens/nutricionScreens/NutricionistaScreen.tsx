@@ -3,7 +3,6 @@ import {MainLayout} from '../../layouts/MainLayout';
 import {Text} from 'react-native-paper';
 import {ProfesionalComponent} from '../../components/ProfesionalComponent';
 import {TicketComponent} from '../../components/TicketComponent';
-import {TurnoComponent} from '../../components/TurnoComponent';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {Role} from '../../../infrastructure/enums/roles';
 import {User} from '../../../infrastructure/interfaces/user';
@@ -38,7 +37,6 @@ export const NutricionistaScreen = () => {
           ))}
 
           <TicketComponent />
-          <TurnoComponent profesionales={nutricionista} />
         </>
       )}
     </MainLayout>

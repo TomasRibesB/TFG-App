@@ -24,6 +24,7 @@ export const HomeScreen = () => {
 
   const fetch = async () => {
     const result = await getRecordatoriosRequest();
+    console.log(result);
     setRecordatorios(result);
   };
 
@@ -39,6 +40,9 @@ export const HomeScreen = () => {
         recordatorio.fecha &&
         new Date(recordatorio.fecha).toDateString() === date.toDateString(),
     );
+    if (selectedDayRecordatorios.length === 0) {
+      return;
+    }
     setSelectedDayRecordatorios(selectedDayRecordatorios);
     showDialog();
   };
@@ -72,8 +76,17 @@ export const HomeScreen = () => {
       )}
       <TicketComponent />
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor: 'transparent', elevation: 0, shadowColor: 'transparent'}}>
-          <RecordatorioComponent recordatorios={selectedDayRecordatorios} />
+        <Dialog
+          visible={visible}
+          onDismiss={hideDialog}
+          style={{
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowColor: 'transparent',
+          }}>
+          {selectedDayRecordatorios.length > 0 && (
+            <RecordatorioComponent recordatorios={selectedDayRecordatorios} />
+          )}
         </Dialog>
       </Portal>
     </MainLayout>

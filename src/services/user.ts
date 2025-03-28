@@ -7,6 +7,12 @@ export const getProfesionalesRequest = async () => {
   return data;
 };
 
+export const getProfesionalsAndUpdateStorage = async () => {
+  const {data} = await api.get(`/users/profesionales`);
+  await StorageAdapter.setItem('profesionales', data);
+  return data;
+};
+
 export const updateEmailRequest = async (email: string) => {
   const {data} = await api.patch(`/users/email`, {email});
   return data;
@@ -51,4 +57,4 @@ export const getUserImageRequest = (id: number, flag?: Date): string => {
 export const getRecordatoriosRequest = async () => {
   const {data} = await api.get(`/users/recordatorios`);
   return data;
-}
+};
