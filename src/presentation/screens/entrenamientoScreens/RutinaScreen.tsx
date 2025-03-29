@@ -133,6 +133,7 @@ export const RutinaScreen = () => {
                       style={{paddingVertical: 0}}
                       key={`re-${re.id}`}
                       title={re.ejercicio.name}
+                      titleNumberOfLines={5}
                       onLongPress={() => handleLongPress(re)}
                       onPress={() => handleCheckboxPress(re.id)}
                       description={`${re.series}x${re.repeticiones}${

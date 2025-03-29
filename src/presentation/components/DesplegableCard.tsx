@@ -83,6 +83,7 @@ export const DesplegableCard = ({
       <TouchableOpacity onPress={toggleExpand}>
         <Card.Title
           title={title}
+          titleNumberOfLines={3}
           subtitle={subtitle}
           right={props =>
             icon && (
