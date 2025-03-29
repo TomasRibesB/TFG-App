@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Text, Card, Chip, Button, FAB} from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
 import {useNavigation} from '@react-navigation/native';
@@ -14,14 +14,18 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {User} from '../../../infrastructure/interfaces/user';
 import {
   getTicketsRequest,
+  postTicketRequest,
   updateTicketConsentimientoRequest,
 } from '../../../services/tickets';
 import {EstadoConsentimiento} from '../../../infrastructure/enums/estadoConsentimiento';
+import {NewTicketModal} from './NewTicketModal';
 
 export const TicketListScreen = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [user, setUser] = useState({} as User);
+  const [openModal, setOpenModal] = useState(false);
+  const [profesionales, setProfesionales] = useState<Partial<User>[]>([]);
 
   useEffect(() => {
     fetch();
@@ -30,8 +34,10 @@ export const TicketListScreen = () => {
   const fetch = async () => {
     const data: Ticket[] = await getTicketsRequest();
     const user = await StorageAdapter.getItem('user');
+    const profesionales = await StorageAdapter.getItem('profesionales');
     setTickets(data);
     setUser(user);
+    setProfesionales(profesionales);
   };
 
   const handleAccept = async (id: number) => {
@@ -41,6 +47,17 @@ export const TicketListScreen = () => {
 
   const handleReject = async (id: number) => {
     await updateTicketConsentimientoRequest(id, EstadoConsentimiento.Rechazado);
+    fetch();
+  };
+
+  const handleCreate = async (ticket: Partial<Ticket>) => {
+    console.log('Ticket: ', ticket);
+    ticket.usuario = {id: user.id};
+    ticket.solicitante = {id: user.id};
+    ticket.fechaCreacion = new Date();
+    const data = await postTicketRequest(ticket);
+    console.log('Ticket creado: ', data);
+    setOpenModal(false);
     fetch();
   };
 
@@ -150,9 +167,19 @@ export const TicketListScreen = () => {
           bottom: 16,
         }}
         icon="add-outline"
-        onPress={() => navigation.goBack()}
+        onPress={() => setOpenModal(true)}
         mode="flat"
         size="small"
+      />
+      <NewTicketModal
+        visible={openModal}
+        onDismiss={() => {
+          setOpenModal(false);
+        }}
+        onCreate={handleCreate}
+        profesionales={profesionales}
+        tickets={tickets}
+        user={user}
       />
     </MainLayout>
   );

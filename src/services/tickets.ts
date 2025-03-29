@@ -2,6 +2,7 @@
 import {api} from '../config/apis/api';
 import {StorageAdapter} from '../config/adapters/storage-adapter';
 import {EstadoConsentimiento} from '../infrastructure/enums/estadoConsentimiento';
+import { Ticket } from '../infrastructure/interfaces/ticket';
 
 export const getTicketsRequest = async () => {
   const {data} = await api.get(`/tickets`);
@@ -21,5 +22,11 @@ export const updateTicketConsentimientoRequest = async (
     ticketId,
     estadoConsentimiento,
   });
+  return data;
+};
+
+export const postTicketRequest = async (ticket: Ticket) => {
+  const payload = {ticket};
+  const {data} = await api.post(`/tickets`, payload);
   return data;
 };
