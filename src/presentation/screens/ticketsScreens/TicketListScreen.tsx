@@ -28,8 +28,11 @@ export const TicketListScreen = () => {
   const [profesionales, setProfesionales] = useState<Partial<User>[]>([]);
 
   useEffect(() => {
-    fetch();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const fetch = async () => {
     const data: Ticket[] = await getTicketsRequest();
@@ -51,12 +54,10 @@ export const TicketListScreen = () => {
   };
 
   const handleCreate = async (ticket: Partial<Ticket>) => {
-    console.log('Ticket: ', ticket);
     ticket.usuario = {id: user.id};
     ticket.solicitante = {id: user.id};
     ticket.fechaCreacion = new Date();
     const data = await postTicketRequest(ticket);
-    console.log('Ticket creado: ', data);
     setOpenModal(false);
     fetch();
   };
@@ -150,7 +151,9 @@ export const TicketListScreen = () => {
                   <Button
                     mode="outlined"
                     onPress={() =>
-                      navigation.navigate('TicketScreen', {ticketId: item.id!})
+                      navigation.navigate('TicketScreen', {
+                        ticketId: item.id!,
+                      })
                     }>
                     Ver Ticket
                   </Button>

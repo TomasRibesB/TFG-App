@@ -7,9 +7,10 @@ import {
   useTheme,
   IconButton,
   FAB,
+  Button,
 } from 'react-native-paper';
 import {MainLayout} from '../../layouts/MainLayout';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {
   MainStackParams,
   RootStackParams,
@@ -22,7 +23,12 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EstadoMensaje} from '../../../infrastructure/enums/estadoMensaje';
 import {v4 as uuidv4} from 'uuid';
 import {socket} from '../../../services/socket';
-import {getTicketByIdRequest} from '../../../services/tickets';
+import {
+  getTicketByIdRequest,
+  deleteTicketRequest,
+} from '../../../services/tickets';
+import {DesplegableCard} from '../../components/DesplegableCard';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props extends StackScreenProps<MainStackParams, 'TicketScreen'> {}
 
@@ -34,6 +40,8 @@ export const TicketScreen = ({route}: Props) => {
   const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
 
   const theme = useTheme();
 
@@ -132,12 +140,36 @@ export const TicketScreen = ({route}: Props) => {
     }
   };
 
+  const handleDeleteTicket = async (id: number) => {
+    await deleteTicketRequest(id);
+    navigation.goBack();
+  };
+
   if (loading) {
     return <MainLayout title="Cargando..." />;
   }
 
   return (
-    <MainLayout title={ticket.asunto} scrolleable={false} back={true} blockTickets>
+    <MainLayout title={'Ticket'} scrolleable={false} back={true} blockTickets>
+      <DesplegableCard
+        title={ticket?.asunto}
+        icon="information-circle-outline"
+        isExpanded={false}>
+        <View style={{paddingBottom: globalVariables.padding}}>
+          <Text variant="titleMedium" style={{fontSize: 14}}>
+            Descripción: {ticket?.descripcion}
+          </Text>
+        </View>
+        {ticket?.solicitante?.id === user.id && (
+          <Button
+            mode="contained-tonal"
+            icon="archive-outline"
+            style={{marginBottom: 10, backgroundColor: colors.errorContainer}}
+            onPress={() => handleDeleteTicket(ticket.id!)}>
+            Archivar ticket
+          </Button>
+        )}
+      </DesplegableCard>
       <ScrollView
         ref={scrollViewRef}
         onScroll={handleScroll}

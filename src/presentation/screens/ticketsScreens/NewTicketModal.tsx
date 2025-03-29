@@ -24,10 +24,7 @@ export const NewTicketModal = ({
   user,
 }: Props) => {
   // Estado para el nuevo ticket, preestableciendo usuario y solicitante como user
-  const [newTicket, setNewTicket] = useState<Partial<Ticket>>({
-    usuario: {id: user.id} as User,
-    solicitante: {id: user.id} as User,
-  });
+  const [newTicket, setNewTicket] = useState<Partial<Ticket>>({});
   // Estado para el profesional seleccionado: id y texto de display
   const [selectedProfesionalId, setSelectedProfesionalId] =
     useState<string>('');
@@ -35,6 +32,13 @@ export const NewTicketModal = ({
     useState<string>('');
   const [profList, setProfList] = useState<{_id: string; value: string}[]>([]);
   const [error, setError] = useState<string>('');
+
+  const clearDismiss = () => {
+    setNewTicket({});
+    setSelectedProfesionalId('');
+    setSelectedProfesionalText('');
+    onDismiss();
+  };
 
   useEffect(() => {
     const list = profesionales.map(p => ({
@@ -85,7 +89,7 @@ export const NewTicketModal = ({
 
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss}>
+      <Dialog visible={visible} onDismiss={clearDismiss}>
         <Dialog.Title>Nuevo Ticket</Dialog.Title>
         <Dialog.Content>
           <TextInput
@@ -144,7 +148,7 @@ export const NewTicketModal = ({
           ) : null}
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={onDismiss}>Cancelar</Button>
+          <Button onPress={clearDismiss}>Cancelar</Button>
           <Button
             onPress={() => {
               if (
@@ -154,7 +158,7 @@ export const NewTicketModal = ({
               ) {
                 if (!handleVerificarTicket(newTicket)) {
                   onCreate(newTicket);
-                  onDismiss();
+                  clearDismiss();
                 }
               } else {
                 setError('Por favor, completa todos los campos.');
