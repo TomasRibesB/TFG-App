@@ -40,6 +40,7 @@ export const TicketScreen = ({route}: Props) => {
   const [user, setUser] = useState({} as Partial<User>);
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
+  const [loadingBaja, setLoadingBaja] = useState(false);
 
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
 
@@ -141,8 +142,10 @@ export const TicketScreen = ({route}: Props) => {
   };
 
   const handleDeleteTicket = async (id: number) => {
+    setLoadingBaja(true);
     await deleteTicketRequest(id);
     navigation.goBack();
+    setLoadingBaja(false);
   };
 
   if (loading) {
@@ -164,6 +167,8 @@ export const TicketScreen = ({route}: Props) => {
           <Button
             mode="contained-tonal"
             icon="archive-outline"
+            loading={loadingBaja}
+            disabled={loadingBaja}
             style={{marginBottom: 10, backgroundColor: colors.errorContainer}}
             onPress={() => handleDeleteTicket(ticket.id!)}>
             Archivar ticket
