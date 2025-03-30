@@ -1,4 +1,4 @@
-package com.tfg
+package com.nexohealth.app
 
 import android.app.Application
 import com.facebook.react.PackageList
