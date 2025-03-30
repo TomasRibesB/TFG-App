@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {Text, IconButton, useTheme} from 'react-native-paper';
+import {Text, useTheme, Button} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Documento} from '../../../infrastructure/interfaces/documento';
 import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {EmptySection} from '../../components/EmptySection';
 import {User} from '../../../infrastructure/interfaces/user';
 import {VisibilityComponent} from '../../components/VisibilidadComponent';
-import {setAsignarVisivilidadDocumentoRequest} from '../../../services/salud';
+import {
+  downloadDocumentoRequest,
+  setAsignarVisivilidadDocumentoRequest,
+} from '../../../services/salud';
 
 export const MiSaludScreen = () => {
   const [documentos, setDocumentos] = useState<Documento[]>([]);
@@ -44,8 +47,8 @@ export const MiSaludScreen = () => {
     }
   };
 
-  const handleDownload = () => {
-    // Lógica para descargar archivo
+  const handleDownload = async (documentoId: number) => {
+    await downloadDocumentoRequest(documentoId);
   };
 
   return (
@@ -66,19 +69,14 @@ export const MiSaludScreen = () => {
               <Text variant="bodyMedium" style={styles.description}>
                 {documento.descripcion}
               </Text>
-              {documento.archivo && (
-                <View style={styles.attachments}>
-                  <IconButton
-                    icon="cloud-download-outline"
-                    size={24}
-                    style={[
-                      styles.attachmentButton,
-                      {backgroundColor: theme.colors.primaryContainer},
-                    ]}
-                    mode="contained-tonal"
-                    onPress={handleDownload}
-                  />
-                </View>
+              {documento.hasArchivo && (
+                <Button
+                  icon="document-attach-outline"
+                  style={[{backgroundColor: theme.colors.primaryContainer}]}
+                  mode="contained-tonal"
+                  onPress={() => handleDownload(documento.id)}>
+                  Abrir archivo adjunto
+                </Button>
               )}
               {(documento.profesional || documento.dniProfesional) && (
                 <View
@@ -123,15 +121,5 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 12,
-  },
-  attachments: {
-    flexDirection: 'row',
-    bottom: 0,
-  },
-  attachmentButton: {
-    marginRight: 8,
-    marginBottom: 8,
-    position: 'relative',
-    bottom: -25,
   },
 });

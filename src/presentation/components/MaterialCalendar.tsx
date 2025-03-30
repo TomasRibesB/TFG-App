@@ -1,8 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {useColorScheme} from 'react-native';
-import {Calendar, DateData} from 'react-native-calendars';
+import {Calendar, DateData, LocaleConfig} from 'react-native-calendars';
 import {useTheme} from 'react-native-paper';
 import {globalVariables} from '../../config/theme/global-theme';
+
+// Configuración de localización para español
+LocaleConfig.locales['es'] = {
+  monthNames: [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ],
+  monthNamesShort: [
+    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  ],
+  dayNames: [
+    'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
+  ],
+  dayNamesShort: [
+    'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'
+  ],
+  today: 'Hoy'
+};
+
+// Establece el idioma predeterminado en español
+LocaleConfig.defaultLocale = 'es';
 
 interface Props {
   onTouchDay?: (day: string) => void;
@@ -47,7 +69,7 @@ export const MaterialCalendar = (props: Props) => {
           selectedColor: theme.colors.primary,
         };
         return acc;
-      }, {} as {[key: string]: any})}
+      }, {} as { [key: string]: any })}
     />
   );
 };
