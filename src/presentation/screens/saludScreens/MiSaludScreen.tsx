@@ -73,7 +73,6 @@ export const MiSaludScreen = () => {
                 <Button
                   icon="document-attach-outline"
                   style={[{backgroundColor: theme.colors.primaryContainer}]}
-                  mode="contained-tonal"
                   onPress={() => handleDownload(documento.id)}>
                   Abrir archivo adjunto
                 </Button>
