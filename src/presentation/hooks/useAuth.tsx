@@ -5,6 +5,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParams} from '../navigation/StackNavigator';
 import {isTokenExpired} from '../../utils/tokenUtils';
 import {initialFetch} from '../../services/fetch';
+import { Role } from '../../infrastructure/enums/roles';
 
 export const useAuth = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -13,6 +14,9 @@ export const useAuth = () => {
     try {
       const data = await loginRequest(email, password);
       if (data.id) {
+        if (data.role !== Role.Usuario) {
+        return 'No tienes permisos para acceder a la aplicación';
+        }
         await StorageAdapter.setItem('user', data);
         navigation.reset({
           index: 0,

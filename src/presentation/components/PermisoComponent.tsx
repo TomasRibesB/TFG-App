@@ -31,7 +31,7 @@ export const PermisoComponent = () => {
 
   const handleCopyLink = () => {
     if (permiso?.code) {
-      const link = `example.com/auth/upload/${permiso.code}`;
+      const link = `http://localhost:5173/auth/upload/${permiso.code}`;
       Clipboard.setString(link);
     }
   };

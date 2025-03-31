@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {MainLayout} from '../layouts/MainLayout';
-import {Button, Text, TextInput} from 'react-native-paper';
-import {Image} from 'react-native';
+import {Button, Checkbox, Text, TextInput, useTheme} from 'react-native-paper';
+import {Image, Linking} from 'react-native';
 import {CardContainer} from '../components/CardContainer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {globalVariables} from '../../config/theme/global-theme';
 import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthStackParams, RootStackParams} from '../navigation/StackNavigator';
+import {AuthStackParams} from '../navigation/StackNavigator';
 import {BottomNotification} from '../components/BottomNotification';
 import {useAuth} from '../hooks/useAuth';
 
@@ -24,6 +24,8 @@ export const RegisterScreen = () => {
   const {register} = useAuth();
   const [showNew, setShowNew] = useState(false);
   const [showRepeat, setShowRepeat] = useState(false);
+  const [terms, setTerms] = useState(false);
+  const theme = useTheme();
 
   const handleRegister = async () => {
     try {
@@ -82,6 +84,10 @@ export const RegisterScreen = () => {
       }
       if (password !== passwordConfirmation) {
         setError('Las contraseñas no coinciden');
+        return;
+      }
+      if (!terms) {
+        setError('Debes leer y aceptar los términos y condiciones');
         return;
       }
 
@@ -178,7 +184,7 @@ export const RegisterScreen = () => {
             outlineStyle={{borderRadius: 8}}
             label="Confirmar Contraseña"
             mode="outlined"
-            style={{marginBottom: globalVariables.padding * 2}}
+            style={{marginBottom: globalVariables.padding}}
             onChangeText={setPasswordConfirmation}
             secureTextEntry={!showRepeat}
             right={
@@ -188,10 +194,36 @@ export const RegisterScreen = () => {
               />
             }
           />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Checkbox
+              status={terms ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setTerms(!terms);
+              }}
+            />
+            <Text variant="bodyMedium" onPress={() => setTerms(!terms)}>
+              He leído y acepto los{' '}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: theme.colors.primary,
+                fontWeight: 'bold',
+              }}
+              variant="bodyMedium"
+              onPress={() =>
+                Linking.openURL(
+                  'http://localhost:5173/auth/terms/privacy',
+                )
+              }>
+              términos y condiciones
+            </Text>
+          </View>
           <Button
             mode="contained"
             style={{
               marginBottom: globalVariables.padding,
+              marginTop: globalVariables.padding * 2,
             }}
             onPress={handleRegister}
             children="Enviar"
