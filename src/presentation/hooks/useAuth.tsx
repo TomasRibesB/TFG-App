@@ -1,11 +1,15 @@
 import {useNavigation} from '@react-navigation/native';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
-import {loginRequest, registerRequest} from '../../services/auth';
+import {
+  loginRequest,
+  registerRequest,
+  deleteUserRequest,
+} from '../../services/auth';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParams} from '../navigation/StackNavigator';
 import {isTokenExpired} from '../../utils/tokenUtils';
 import {initialFetch} from '../../services/fetch';
-import { Role } from '../../infrastructure/enums/roles';
+import {Role} from '../../infrastructure/enums/roles';
 
 export const useAuth = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -15,7 +19,7 @@ export const useAuth = () => {
       const data = await loginRequest(email, password);
       if (data.id) {
         if (data.role !== Role.Usuario) {
-        return 'No tienes permisos para acceder a la aplicación';
+          return 'No tienes permisos para acceder a la aplicación';
         }
         await StorageAdapter.setItem('user', data);
         navigation.reset({
@@ -96,5 +100,20 @@ export const useAuth = () => {
     }
   };
 
-  return {login, logout, register, authRedirection};
+  const deleteUser = async () => {
+    try {
+      const response = await deleteUserRequest();
+      if (response) {
+        await StorageAdapter.clear();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AuthFlow'}],
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return {login, logout, register, authRedirection, deleteUser};
 };

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import {ScrollView, View, Image, StyleSheet} from 'react-native';
+import {ScrollView, View, Image, StyleSheet, Alert} from 'react-native';
 import {
   Text,
   TextInput,
@@ -22,6 +22,7 @@ import {
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {MainLayout} from '../layouts/MainLayout';
 import {User} from '../../infrastructure/interfaces/user';
+import {useAuth} from '../hooks/useAuth';
 
 export const ProfileScreen = () => {
   const theme = useTheme();
@@ -42,6 +43,7 @@ export const ProfileScreen = () => {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showRepeat, setShowRepeat] = useState(false);
+  const {deleteUser} = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -148,6 +150,30 @@ export const ProfileScreen = () => {
     setLoading(false);
   };
 
+  const handleDeleteUser = async () => {
+    setLoading(true);
+    Alert.alert(
+      'Eliminar cuenta',
+      '¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            await deleteUser();
+            setLoading(false);
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <MainLayout title="Mi Perfil" blockProfile back>
       <ScrollView contentContainerStyle={styles.container}>
@@ -157,20 +183,46 @@ export const ProfileScreen = () => {
             <Avatar.Image
               size={120}
               source={{
-                uri: getUserImageRequest(user.id!, flagUpdateImage || new Date()),
+                uri: getUserImageRequest(
+                  user.id!,
+                  flagUpdateImage || new Date(),
+                ),
               }}
             />
           ) : (
-            <Avatar.Text
-              size={120}
-              label={firstName.charAt(0).toUpperCase()}
-            />
+            <Avatar.Text size={120} label={firstName.charAt(0).toUpperCase()} />
           )}
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>
               {firstName} {lastName}
             </Text>
+            <IconButton
+              mode="outlined"
+              onPress={handleSelectImage}
+              icon="camera"
+              style={styles.button}
+            />
           </View>
+        </View>
+
+        <View style={styles.imageUploadContainer}>
+          {image && image.uri ? (
+            <Fragment>
+              <Image source={{uri: image.uri}} style={styles.previewImage} />
+              <Button
+                mode="contained"
+                onPress={handleUploadImage}
+                style={[styles.button, {marginTop: 8}]}
+                loading={loading}>
+                Confirmar
+              </Button>
+            </Fragment>
+          ) : null}
+          {errorImage ? (
+            <Text style={[styles.errorText, {color: theme.colors.error}]}>
+              {errorImage}
+            </Text>
+          ) : null}
         </View>
 
         {/* Formulario de datos personales */}
@@ -267,33 +319,17 @@ export const ProfileScreen = () => {
           Cambiar Contraseña
         </Button>
 
-        {/* Sección de subir imagen */}
+        {/* Botón para eliminar cuenta */}
         <Divider style={styles.divider} />
-        <View style={styles.imageUploadContainer}>
-          <Button
-            mode="outlined"
-            onPress={handleSelectImage}
-            style={styles.button}>
-            Seleccionar Imagen
-          </Button>
-          {image && image.uri ? (
-            <Fragment>
-              <Image source={{uri: image.uri}} style={styles.previewImage} />
-              <Button
-                mode="contained"
-                onPress={handleUploadImage}
-                style={[styles.button, {marginTop: 8}]}
-                loading={loading}>
-                Subir Imagen
-              </Button>
-            </Fragment>
-          ) : null}
-          {errorImage ? (
-            <Text style={[styles.errorText, {color: theme.colors.error}]}>
-              {errorImage}
-            </Text>
-          ) : null}
-        </View>
+        <Button
+          mode="text"
+          onPress={handleDeleteUser}
+          style={[styles.button]}
+          textColor={theme.colors.error}
+          loading={loading}
+          icon="trash">
+          Eliminar Cuenta
+        </Button>
       </ScrollView>
     </MainLayout>
   );
@@ -309,6 +345,9 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     marginTop: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   nameText: {
     fontSize: 22,

@@ -19,3 +19,8 @@ export const registerRequest = async (body: {
   await StorageAdapter.setItem('user', data);
   return data;
 };
+
+export const deleteUserRequest = async () => {
+  const {data} = await api.delete(`/users`);
+  return data;
+};
