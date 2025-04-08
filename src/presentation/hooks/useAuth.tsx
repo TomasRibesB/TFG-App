@@ -28,7 +28,7 @@ export const useAuth = () => {
         });
         return 'Inicio de sesión exitoso';
       } else {
-        return 'Email o contraseña incorrectos';
+        return 'Email no verificado o contraseña incorrecta';
       }
     } catch (err) {
       console.log(err);
@@ -63,11 +63,7 @@ export const useAuth = () => {
         lastName,
         dni,
       });
-      await StorageAdapter.setItem('user', data);
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'AuthLoaderScreen'}],
-      });
+      return data;
     } catch (err) {
       console.log(err);
     }

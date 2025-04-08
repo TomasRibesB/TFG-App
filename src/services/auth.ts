@@ -24,3 +24,8 @@ export const deleteUserRequest = async () => {
   const {data} = await api.delete(`/users`);
   return data;
 };
+
+export const sendPasswordResetEmailRequest = async (email: string) => {
+  const { data } = await api.put(`/auth/sendPasswordResetEmail`, { email });
+  return data;
+};

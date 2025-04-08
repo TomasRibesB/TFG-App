@@ -8,7 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParams, RootStackParams} from '../navigation/StackNavigator';
 import {StorageAdapter} from '../../config/adapters/storage-adapter';
 import {BottomNotification} from '../components/BottomNotification';
-import {loginRequest} from '../../services/auth';
+import {loginRequest, sendPasswordResetEmailRequest} from '../../services/auth';
 import {MainLayout} from '../layouts/MainLayout';
 import {globalVariables} from '../../config/theme/global-theme';
 import {CardContainer} from '../components/CardContainer';
@@ -22,36 +22,74 @@ export const LoginScreen = () => {
   const [error, setError] = useState('');
   const {login} = useAuth();
   const [showNew, setShowNew] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
       if (!email) {
         setError('El correo electrónico es obligatorio');
+        setLoading(false);
         return;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         setError('El correo electrónico no es válido');
+        setLoading(false);
         return;
       }
       if (email.length > 50) {
         setError('El correo electrónico no puede tener más de 50 caracteres');
+        setLoading(false);
         return;
       }
       if (!password) {
         setError('La contraseña es obligatoria');
+        setLoading(false);
         return;
       }
       if (password.length < 6 || password.length > 50) {
         setError('La contraseña debe tener entre 6 y 50 caracteres');
+        setLoading(false);
         return;
       }
 
-      const response : string = await login(email, password) as string;
+      const response: string = (await login(email, password)) as string;
       setError(response);
+      setLoading(false);
     } catch (err) {
       setError('No se pudo iniciar sesión');
+      setLoading(false);
     }
+  };
+
+  const handleForgotPassword = async () => {
+    setLoading(true);
+    if (!email) {
+      setError('Escribe tu correo electrónico en su campo correspondiente');
+      setLoading(false);
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('El correo electrónico no es válido');
+      setLoading(false);
+      return;
+    }
+    if (email.length > 50) {
+      setError('El correo electrónico no puede tener más de 50 caracteres');
+      setLoading(false);
+      return;
+    }
+    const data = await sendPasswordResetEmailRequest(email);
+    if (data) {
+      setError(
+        'Se ha enviado un correo electrónico para restablecer la contraseña',
+      );
+    } else {
+      setError('No se pudo enviar el correo electrónico');
+    }
+    setLoading(false);
   };
 
   return (
@@ -86,15 +124,28 @@ export const LoginScreen = () => {
               />
             }
           />
-          <Button mode="contained" style={styles.button} onPress={handleLogin}>
+          <Button
+            mode="contained"
+            style={styles.button}
+            onPress={handleLogin}
+            loading={loading}
+            disabled={loading}>
             Entrar
           </Button>
           <View style={styles.registerContainer}>
             <Button
               mode="text"
               style={styles.registerButton}
+              disabled={loading}
               onPress={() => navigationAuth.navigate('RegisterScreen')}>
               ¿No tienes una cuenta? Regístrate
+            </Button>
+            <Button
+              mode="text"
+              style={styles.registerButton}
+              disabled={loading}
+              onPress={handleForgotPassword}>
+              ¿Olvidaste tu contraseña?
             </Button>
           </View>
         </CardContainer>
@@ -142,7 +193,7 @@ const styles = StyleSheet.create({
     marginBottom: globalVariables.padding,
   },
   registerContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   registerButton: {

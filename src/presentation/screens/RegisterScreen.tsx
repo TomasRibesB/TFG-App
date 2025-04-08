@@ -25,53 +25,77 @@ export const RegisterScreen = () => {
   const [showNew, setShowNew] = useState(false);
   const [showRepeat, setShowRepeat] = useState(false);
   const [terms, setTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
   const theme = useTheme();
+
+  const handleClear = () => {
+    setEmail('');
+    setPassword('');
+    setPasswordConfirmation('');
+    setFirstName('');
+    setLastName('');
+    setDni('');
+    setTerms(false);
+    setShowNew(false);
+    setShowRepeat(false);
+  };
 
   const handleRegister = async () => {
     try {
+      setLoading(true);
       if (!firstName) {
         setError('El nombre es obligatorio');
         return;
       }
       if (firstName.length > 50) {
         setError('El nombre no puede tener más de 50 caracteres');
+        setLoading(false);
         return;
       }
       if (!lastName) {
         setError('El apellido es obligatorio');
+        setLoading(false);
         return;
       }
       if (lastName.length > 50) {
         setError('El apellido no puede tener más de 50 caracteres');
+        setLoading(false);
         return;
       }
       if (!dni) {
         setError('El DNI es obligatorio');
+        setLoading(false);
         return;
       }
       if (dni.length > 20) {
         setError('El DNI no puede tener más de 20 caracteres');
+        setLoading(false);
         return;
       }
       if (!email) {
         setError('El correo electrónico es obligatorio');
+        setLoading(false);
         return;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         setError('El correo electrónico no es válido');
+        setLoading(false);
         return;
       }
       if (email.length > 50) {
         setError('El correo electrónico no puede tener más de 50 caracteres');
+        setLoading(false);
         return;
       }
       if (!password) {
         setError('La contraseña es obligatoria');
+        setLoading(false);
         return;
       }
       if (password.length < 8 || password.length > 50) {
         setError('La contraseña debe tener entre 8 y 50 caracteres');
+        setLoading(false);
         return;
       }
       const passwordRegex =
@@ -80,21 +104,33 @@ export const RegisterScreen = () => {
         setError(
           'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial',
         );
+        setLoading(false);
         return;
       }
       if (password !== passwordConfirmation) {
         setError('Las contraseñas no coinciden');
+        setLoading(false);
         return;
       }
       if (!terms) {
         setError('Debes leer y aceptar los términos y condiciones');
+        setLoading(false);
         return;
       }
 
-      await register(email, password, firstName, lastName, dni);
+      const result = await register(email, password, firstName, lastName, dni);
+      if (result) {
+        setLoading(false);
+        setError('Registro exitoso, verifica tu correo electrónico');
+        handleClear();
+      } else {
+        setLoading(false);
+        setError('El email o dni ya están en uso');
+      }
     } catch (error) {
       console.log(error);
       setError('No se pudo iniciar sesión: ' + error);
+      setLoading(false);
     }
   };
 
@@ -135,6 +171,7 @@ export const RegisterScreen = () => {
             style={{
               marginBottom: globalVariables.padding,
             }}
+            value={firstName}
             onChangeText={setFirstName}
           />
           <TextInput
@@ -145,6 +182,7 @@ export const RegisterScreen = () => {
               marginBottom: globalVariables.padding,
             }}
             onChangeText={setLastName}
+            value={lastName}
           />
           <TextInput
             outlineStyle={{borderRadius: 8}}
@@ -155,6 +193,7 @@ export const RegisterScreen = () => {
               marginBottom: globalVariables.padding,
             }}
             onChangeText={setDni}
+            value={dni}
           />
           <TextInput
             outlineStyle={{borderRadius: 8}}
@@ -165,6 +204,7 @@ export const RegisterScreen = () => {
               marginBottom: globalVariables.padding,
             }}
             onChangeText={setEmail}
+            value={email}
           />
           <TextInput
             outlineStyle={{borderRadius: 8}}
@@ -172,6 +212,7 @@ export const RegisterScreen = () => {
             mode="outlined"
             style={{marginBottom: globalVariables.padding}}
             onChangeText={setPassword}
+            value={password}
             secureTextEntry={!showNew}
             right={
               <TextInput.Icon
@@ -186,6 +227,7 @@ export const RegisterScreen = () => {
             mode="outlined"
             style={{marginBottom: globalVariables.padding}}
             onChangeText={setPasswordConfirmation}
+            value={passwordConfirmation}
             secureTextEntry={!showRepeat}
             right={
               <TextInput.Icon
@@ -212,9 +254,7 @@ export const RegisterScreen = () => {
               }}
               variant="bodyMedium"
               onPress={() =>
-                Linking.openURL(
-                  'http://localhost:5173/auth/terms/privacy',
-                )
+                Linking.openURL('http://localhost:5173/auth/terms/privacy')
               }>
               términos y condiciones
             </Text>
@@ -227,6 +267,8 @@ export const RegisterScreen = () => {
             }}
             onPress={handleRegister}
             children="Enviar"
+            loading={loading}
+            disabled={loading}
           />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Button

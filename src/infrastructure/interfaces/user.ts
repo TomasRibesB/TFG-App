@@ -30,4 +30,8 @@ export interface User {
     documentos?: Documento[];
     userTipoProfesionales?: UserTipoProfesional[];
     token?: string;
+    isVerified?: boolean;
+    emailVerificationToken?: string;
+    registerVerificationToken?: string;
+    resetPasswordToken?: string;
     }
