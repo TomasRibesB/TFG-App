@@ -106,3 +106,13 @@ export const downloadDocumentoRequest = async (documentoId: number) => {
     );
   }
 };
+
+export const deleteDocumentoHardRequest = async (documentoId: number) => {
+  try {
+    const { data } = await api.delete(`/documentos/hard/${documentoId}`);
+    return data;
+  } catch (error) {
+    console.error('Error al eliminar el documento de forma hard:', error);
+    throw error;
+  }
+};

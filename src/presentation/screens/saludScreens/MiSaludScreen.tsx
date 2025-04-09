@@ -12,6 +12,7 @@ import {VisibilityComponent} from '../../components/VisibilidadComponent';
 import {
   downloadDocumentoRequest,
   setAsignarVisivilidadDocumentoRequest,
+  deleteDocumentoHardRequest,
 } from '../../../services/salud';
 
 export const MiSaludScreen = () => {
@@ -51,6 +52,15 @@ export const MiSaludScreen = () => {
     await downloadDocumentoRequest(documentoId);
   };
 
+  const handleHardDelete = async (documentoId: number) => {
+    try {
+      await deleteDocumentoHardRequest(documentoId);
+      setDocumentos(prevDocs => prevDocs.filter(doc => doc.id !== documentoId));
+    } catch (error) {
+      console.error('Error al eliminar el documento:', error);
+    }
+  };
+
   return (
     <MainLayout>
       {documentos.length === 0 ? (
@@ -72,11 +82,38 @@ export const MiSaludScreen = () => {
               {documento.hasArchivo && (
                 <Button
                   icon="document-attach-outline"
-                  style={[{backgroundColor: theme.colors.primaryContainer}]}
+                  style={[
+                    {backgroundColor: theme.colors.primaryContainer},
+                    {marginBottom: 20},
+                  ]}
                   onPress={() => handleDownload(documento.id)}>
                   Abrir archivo adjunto
                 </Button>
               )}
+              <Button //eliminar documento
+                icon="trash-outline"
+                mode="contained-tonal"
+                style={[{backgroundColor: theme.colors.error}]}
+                labelStyle={{color: theme.colors.onError}}
+                onPress={() =>
+                  Alert.alert(
+                    'Eliminar documento',
+                    '¿Estás seguro de que deseas eliminar este documento?',
+                    [
+                      {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Eliminar',
+                        onPress: () => handleHardDelete(documento.id),
+                      },
+                    ],
+                    {cancelable: false},
+                  )
+                }>
+                Eliminar documento
+              </Button>
               {(documento.profesional || documento.dniProfesional) && (
                 <View
                   style={{
