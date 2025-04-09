@@ -43,7 +43,7 @@ export const RegisterScreen = () => {
   const handleRegister = async () => {
     try {
       setLoading(true);
-      if (!firstName) {
+      if (!firstName.trim()) {
         setError('El nombre es obligatorio');
         return;
       }
@@ -52,7 +52,7 @@ export const RegisterScreen = () => {
         setLoading(false);
         return;
       }
-      if (!lastName) {
+      if (!lastName.trim()) {
         setError('El apellido es obligatorio');
         setLoading(false);
         return;
@@ -62,7 +62,7 @@ export const RegisterScreen = () => {
         setLoading(false);
         return;
       }
-      if (!dni) {
+      if (!dni.trim()) {
         setError('El DNI es obligatorio');
         setLoading(false);
         return;
