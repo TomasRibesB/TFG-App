@@ -1,5 +1,4 @@
 import { Role } from "../enums/roles";
-import { Sex } from "../enums/sex";
 import { Documento } from "./documento";
 import { PlanNutricional } from "./plan-nutricional";
 import { Routine } from "./routine";
@@ -17,8 +16,6 @@ export interface User {
     email?: string;
     role?: Role;
     deletedAt?: Date;
-    sex?: Sex | null;
-    birthdate?: Date | null;
     image?: File | null;
     hasImage?: boolean;
     routines?: Routine[];
