@@ -10,6 +10,7 @@ import {RootStackParams} from '../navigation/StackNavigator';
 import {isTokenExpired} from '../../utils/tokenUtils';
 import {initialFetch} from '../../services/fetch';
 import {Role} from '../../infrastructure/enums/roles';
+import axios from 'axios';
 
 export const useAuth = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
@@ -17,21 +18,21 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     try {
       const data = await loginRequest(email, password);
-      if (data.id) {
-        if (data.role !== Role.Usuario) {
-          return 'No tienes permisos para acceder a la aplicación';
-        }
-        await StorageAdapter.setItem('user', data);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'AuthLoaderScreen'}],
-        });
-        return 'Inicio de sesión exitoso';
-      } else {
-        return 'Email no verificado o contraseña incorrecta';
+
+      if (data.role !== Role.Usuario) {
+        return data.message;
       }
-    } catch (err) {
-      console.log(err);
+      await StorageAdapter.setItem('user', data);
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'AuthLoaderScreen'}],
+      });
+      return 'Inicio de sesión exitoso';
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return err.response?.data?.message || 'Error de autenticación';
+      }
+      return 'Error de autenticación';
     }
   };
 
