@@ -11,6 +11,7 @@ import {EmptySection} from '../../components/EmptySection';
 import {User} from '../../../infrastructure/interfaces/user';
 import {VisibilityComponent} from '../../components/VisibilidadComponent';
 import {setAsignarVisivilidadPlanNutricionalRequest} from '../../../services/nutricion';
+import {useRefreshNutricion} from '../../hooks/useRefreshNutricion';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,10 +30,10 @@ export const PlanNutricionalScreen = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetch();
   }, []);
 
-  const fetchData = async () => {
+  const fetch = async () => {
     const planData = await StorageAdapter.getItem('planNutricional');
     const profesionalesData = await StorageAdapter.getItem('profesionales');
     setPlanNutricional(planData);
@@ -55,6 +56,8 @@ export const PlanNutricionalScreen = () => {
       console.error('Error al asignar visibilidad al plan nutricional:', error);
     }
   };
+
+  useRefreshNutricion(fetch);
 
   return (
     <>

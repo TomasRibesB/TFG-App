@@ -24,6 +24,7 @@ import {
   setRegistroEjerciciosRequest,
 } from '../../../services/entrenamiento';
 import {UnidadMedida} from '../../../infrastructure/enums/unidadMedida';
+import {useRefreshEntrenamiento} from '../../hooks/useRefreshEntrenamiento';
 
 export const RutinaScreen = () => {
   const [checked, setChecked] = useState<{[key: number]: boolean}>({});
@@ -31,24 +32,20 @@ export const RutinaScreen = () => {
   const [selectedExercise, setSelectedExercise] =
     useState<RutinaEjercicio | null>(null);
   const [routines, setRoutines] = useState<Routine[]>([]);
-  // Se asume que también se obtiene una lista de profesionales para la visibilidad.
   const [profesionales, setProfesionales] = useState<User[]>([]);
-  const theme = useTheme();
 
   useEffect(() => {
     fetch();
-    fetchProfesionales();
   }, []);
 
   const fetch = async () => {
-    const data = await StorageAdapter.getItem('rutinas');
-    setRoutines(data);
+    const rutinas = await StorageAdapter.getItem('rutinas');
+    setRoutines(rutinas);
+    const profesionales = await StorageAdapter.getItem('profesionales');
+    setProfesionales(profesionales);
   };
 
-  const fetchProfesionales = async () => {
-    const data = await StorageAdapter.getItem('profesionales');
-    setProfesionales(data);
-  };
+  useRefreshEntrenamiento(fetch);
 
   const updateRoutine = async (updatedRoutine: Routine) => {
     const profesionalesIds = updatedRoutine.visibilidad.map(prof => prof.id);

@@ -16,6 +16,7 @@ import {
   getProfesionalsAndUpdateStorage,
   getUserImageRequest,
 } from '../../../services/user';
+import {useRefreshSalud} from '../../hooks/useRefreshSalud';
 
 export const ProfesionalesScreen = () => {
   const [selectedProfesional, setSelectedProfesional] = useState<User | null>(
@@ -68,10 +69,12 @@ export const ProfesionalesScreen = () => {
 
   const handleActualizarProfesionales = async () => {
     setIsLoadingAction(true);
-    const updatedProfesionales = await getProfesionalsAndUpdateStorage();
+    await getProfesionalsAndUpdateStorage();
     await fetch();
     setIsLoadingAction(false);
   };
+
+  useRefreshSalud(fetch);
 
   return (
     <MainLayout>

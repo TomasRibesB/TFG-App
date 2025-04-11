@@ -7,6 +7,8 @@ import {useColorScheme} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParams} from './StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {DeviceEventEmitter} from 'react-native';
+import {useEffect, useState} from 'react';
 
 export type RootTabParams = {
   Gym: undefined;
@@ -19,6 +21,18 @@ export const TopTabEntrenamiento = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const completeSubscription = DeviceEventEmitter.addListener(
+      'refreshCompleteEntrenamiento',
+      () => {
+        setRefreshing(false);
+      },
+    );
+    return () => completeSubscription.remove();
+  }, []);
+
   return (
     <MainLayout title="Entrenamiento" stylesChild={{paddingHorizontal: 0}}>
       <Tab.Navigator
@@ -56,6 +70,23 @@ export const TopTabEntrenamiento = () => {
         size="small"
         icon="bar-chart-outline"
         onPress={() => navigation.navigate('EntrenamientoRegistroScreen')}
+      />
+      <FAB
+        style={{
+          position: 'absolute',
+          margin: 16,
+          left: 0,
+          bottom: 0,
+        }}
+        mode="flat"
+        size="small"
+        loading={refreshing}
+        disabled={refreshing}
+        icon="refresh-outline"
+        onPress={() => {
+          setRefreshing(true);
+          DeviceEventEmitter.emit('refreshDataEntrenamiento');
+        }}
       />
     </MainLayout>
   );

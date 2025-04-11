@@ -14,6 +14,7 @@ import {
   setAsignarVisivilidadDocumentoRequest,
   deleteDocumentoHardRequest,
 } from '../../../services/salud';
+import { useRefreshSalud } from '../../hooks/useRefreshSalud';
 
 export const MiSaludScreen = () => {
   const [documentos, setDocumentos] = useState<Documento[]>([]);
@@ -21,10 +22,10 @@ export const MiSaludScreen = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    fetchData();
+    fetch();
   }, []);
 
-  const fetchData = async () => {
+  const fetch = async () => {
     const documentosData = await StorageAdapter.getItem('documentos');
     const profesionalesData = await StorageAdapter.getItem('profesionales');
     setDocumentos(documentosData);
@@ -60,6 +61,8 @@ export const MiSaludScreen = () => {
       console.error('Error al eliminar el documento:', error);
     }
   };
+
+  useRefreshSalud(fetch);
 
   return (
     <MainLayout>

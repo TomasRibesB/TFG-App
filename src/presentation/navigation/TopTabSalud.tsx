@@ -2,8 +2,9 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {MiSaludScreen} from '../screens/saludScreens/MiSaludScreen';
 import {ProfesionalesScreen} from '../screens/saludScreens/ProfesionalesScreen';
 import {MainLayout} from '../layouts/MainLayout';
-import {useTheme} from 'react-native-paper';
-import {useColorScheme} from 'react-native';
+import {FAB, useTheme} from 'react-native-paper';
+import {DeviceEventEmitter} from 'react-native';
+import {useEffect, useState} from 'react';
 
 export type RootTabParams = {
   MiSalud: undefined;
@@ -13,8 +14,19 @@ export type RootTabParams = {
 const Tab = createMaterialTopTabNavigator<RootTabParams>();
 
 export const TopTabSalud = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
+  const [refreshing, setRefreshing] = useState(false);
+
+    useEffect(() => {
+      const completeSubscription = DeviceEventEmitter.addListener(
+        'refreshCompleteSalud',
+        () => {
+          setRefreshing(false);
+        },
+      );
+      return () => completeSubscription.remove();
+    }, []);
+
   return (
     <MainLayout title="Salud" stylesChild={{paddingHorizontal: 0}}>
       <Tab.Navigator
@@ -41,6 +53,23 @@ export const TopTabSalud = () => {
           options={{tabBarLabel: 'Profesionales'}}
         />
       </Tab.Navigator>
+      <FAB
+        style={{
+          position: 'absolute',
+          margin: 16,
+          left: 0,
+          bottom: 0,
+        }}
+        mode="flat"
+        size="small"
+        loading={refreshing}
+        disabled={refreshing}
+        icon="refresh-outline"
+        onPress={() => {
+          setRefreshing(true);
+          DeviceEventEmitter.emit('refreshDataSalud');
+        }}
+      />
     </MainLayout>
   );
 };

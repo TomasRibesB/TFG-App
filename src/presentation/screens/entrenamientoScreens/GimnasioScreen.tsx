@@ -9,6 +9,7 @@ import {Role} from '../../../infrastructure/enums/roles';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {EmptySection} from '../../components/EmptySection';
+import {useRefreshEntrenamiento} from '../../hooks/useRefreshEntrenamiento';
 
 export const GimnasioScreen = () => {
   const [entrenador, setEntrenador] = useState<User[]>([]);
@@ -23,6 +24,8 @@ export const GimnasioScreen = () => {
     );
     setEntrenador(entrenador);
   };
+
+  useRefreshEntrenamiento(fetch);
 
   return (
     <MainLayout>

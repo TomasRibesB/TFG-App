@@ -7,6 +7,7 @@ import {StorageAdapter} from '../../../config/adapters/storage-adapter';
 import {Role} from '../../../infrastructure/enums/roles';
 import {User} from '../../../infrastructure/interfaces/user';
 import {EmptySection} from '../../components/EmptySection';
+import {useRefreshNutricion} from '../../hooks/useRefreshNutricion';
 
 export const NutricionistaScreen = () => {
   const [nutricionista, setNutricionista] = useState<User[]>([]);
@@ -21,6 +22,8 @@ export const NutricionistaScreen = () => {
     );
     setNutricionista(nutricionista);
   };
+
+  useRefreshNutricion(fetch);
 
   return (
     <MainLayout>
