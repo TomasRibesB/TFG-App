@@ -8,6 +8,7 @@ import {MaterialCalendar} from '../../components/MaterialCalendar';
 import {RadarChart} from 'react-native-gifted-charts';
 import {GruposMusculares} from '../../../infrastructure/interfaces/grupos-musculares';
 import {CardContainer} from '../../components/CardContainer';
+import {UnidadMedida} from '../../../infrastructure/enums/unidadMedida';
 
 export const EntrenamientoRegistroScreen = () => {
   const [rutinaEjercicios, setRutinaEjercicios] = useState<
@@ -114,7 +115,7 @@ export const EntrenamientoRegistroScreen = () => {
   }, [rutinaEjercicios, selectedDay]);
 
   return (
-    <MainLayout title='Registro de entrenamiento' back={true}>
+    <MainLayout title="Registro de entrenamiento" back={true}>
       <ScrollView contentContainerStyle={{padding: 16}}>
         {/* Calendario para seleccionar el día */}
         {rutinaEjercicios.length > 0 && (
@@ -229,9 +230,18 @@ export const EntrenamientoRegistroScreen = () => {
                 <List.Item
                   key={item.id?.toString()}
                   title={item.ejercicio?.name || 'Ejercicio'}
-                  description={`Medición: ${item.medicion || '-'} ${
-                    item.unidadMedida || ''
-                  } | Reps: ${item.repeticiones} | Series: ${item.series}`}
+                  description={[
+                    item.medicion &&
+                      `Medición: ${item.medicion}${
+                        item.unidadMedida === UnidadMedida.Ninguna
+                          ? ''
+                          : ' ' + item.unidadMedida
+                      }`,
+                    item.repeticiones && `Reps: ${item.repeticiones}`,
+                    item.series && `Series: ${item.series}`,
+                  ]
+                    .filter(Boolean)
+                    .join(' | ')}
                   left={props => (
                     <List.Icon {...props} icon="checkbox-outline" />
                   )}

@@ -13,8 +13,8 @@ export const ProfesionalComponent = ({title, profesional}: Props) => {
   return (
     <CardContainer title={title}>
       <View style={styles.container}>
-        <Text variant="headlineMedium">
-          {profesional?.firstName} {profesional?.lastName}
+        <Text variant="headlineMedium" style={{maxWidth: '80%'}}>
+          {profesional.firstName} {profesional.lastName}
         </Text>
         {profesional.hasImage ? (
           <Avatar.Image

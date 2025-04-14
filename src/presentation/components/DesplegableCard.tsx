@@ -115,7 +115,8 @@ export const DesplegableCard = ({
             if (height > 0 && height !== contentHeight) {
               setContentHeight(height);
             }
-          }}>
+          }}
+          pointerEvents={expanded ? 'auto' : 'none'}>
           <Card.Content>{children}</Card.Content>
         </View>
       </View>
@@ -123,6 +124,7 @@ export const DesplegableCard = ({
       {/* Contenido animado */}
       {contentHeight > 0 && (
         <Animated.View
+          pointerEvents={expanded ? 'auto' : 'none'}
           style={[{height: animatedHeight, overflow: 'hidden'}, contentStyle]}>
           <Card.Content>{children}</Card.Content>
         </Animated.View>
