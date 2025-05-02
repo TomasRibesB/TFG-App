@@ -35,13 +35,14 @@ export const CardContainer = ({
       {title && (
         <Card.Title
           title={title}
+          titleNumberOfLines={5}
           right={props => (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               {onAction && actionLabel && (
                 <Button
                   onPress={onAction}
                   labelStyle={{fontSize: 12}}
-                  mode='contained-tonal'
+                  mode="contained-tonal"
                   icon={actionIcon ? actionIcon : ''}
                   loading={isLoadingAction}
                   style={{marginRight: 16}}>
