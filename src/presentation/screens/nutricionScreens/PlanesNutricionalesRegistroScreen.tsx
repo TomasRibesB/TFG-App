@@ -44,13 +44,13 @@ export const PlanesNutricionalesRegistroScreen = () => {
             // Mapeo de colores para cada macronutriente
             const colorMapping: {[key: string]: string} = {
               proteinas: 'rgb(206, 235, 235)',
-              carbohidratos: theme.colors.primaryContainer,
-              grasas: theme.colors.tertiaryContainer,
+              carbohidratos: 'rgb(255, 224, 178)',
+              grasas: 'rgb(255, 178, 178)',
             };
             const pieData = Object.keys(plan.macronutrientes).map(key => ({
               value: plan.macronutrientes ? plan.macronutrientes[key] : 0,
               color: colorMapping[key] || '#000',
-              text: key,
+              text: plan.macronutrientes![key] + '%',
             }));
             return (
               <CardContainer
@@ -61,7 +61,7 @@ export const PlanesNutricionalesRegistroScreen = () => {
                 }
                 icon="pie-chart-outline">
                 <Text style={{marginBottom: 16}} variant="titleMedium">
-                  Volumen de macronutrientes
+                  Porcentaje de Macronutrientes
                 </Text>
                 <View style={{alignItems: 'center'}}>
                   <PieChart
@@ -74,6 +74,31 @@ export const PlanesNutricionalesRegistroScreen = () => {
                   />
                 </View>
                 <View style={{marginTop: 16, flexDirection: 'column'}}>
+                  <View>
+                    {plan.macronutrientes &&
+                      Object.keys(plan.macronutrientes).map(key => (
+                        <View
+                          key={key}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginVertical: 5,
+                          }}>
+                          <View
+                            style={{
+                              height: 15,
+                              width: 15,
+                              borderRadius: 100,
+                              backgroundColor: colorMapping[key] || '#000',
+                            }}
+                          />
+                          <Text style={{marginLeft: 5}} variant="labelMedium">
+                            {plan.macronutrientes![key]}%{' '}
+                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -85,7 +110,7 @@ export const PlanesNutricionalesRegistroScreen = () => {
                       icon="restaurant-outline"
                       onPress={() => {}}
                       style={{margin: 5}}>
-                      {plan.caloriasDiarias} Calorias × Dia
+                      {plan.caloriasDiarias} Calorias diarias
                     </Chip>
                   </View>
                   {plan.objetivos &&

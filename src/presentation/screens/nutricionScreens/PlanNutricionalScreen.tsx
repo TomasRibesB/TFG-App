@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {Button, Chip, Modal, Text} from 'react-native-paper';
+import {Button, Chip, Modal, Text, useTheme} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,12 +12,14 @@ import {User} from '../../../infrastructure/interfaces/user';
 import {VisibilityComponent} from '../../components/VisibilidadComponent';
 import {setAsignarVisivilidadPlanNutricionalRequest} from '../../../services/nutricion';
 import {useRefreshNutricion} from '../../hooks/useRefreshNutricion';
+import {PieChart} from 'react-native-gifted-charts';
 
 export const PlanNutricionalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedNote, setSelectedNote] = useState('');
   const [planNutricional, setPlanNutricional] = useState<PlanNutricional[]>([]);
   const [profesionales, setProfesionales] = useState<User[]>([]);
+  const theme = useTheme();
 
   const handleNotePress = (nota: string) => {
     setSelectedNote(nota);
@@ -58,6 +60,12 @@ export const PlanNutricionalScreen = () => {
   };
 
   useRefreshNutricion(fetch);
+
+  const colorMapping: {[key: string]: string} = {
+    proteinas: 'rgb(206, 235, 235)',
+    carbohidratos: 'rgb(255, 224, 178)',
+    grasas: 'rgb(255, 178, 178)',
+  };
 
   return (
     <>
@@ -104,16 +112,47 @@ export const PlanNutricionalScreen = () => {
                   <Chip
                     icon="restaurant-outline"
                     onPress={() => {}}
-                    style={{margin: 5}}>
-                    {item.caloriasDiarias} Calorias × Dia
+                    style={{
+                      margin: 5,
+                    }}>
+                    {item.caloriasDiarias} Calorias diarias
                   </Chip>
                   {item.macronutrientes &&
                     Object.keys(item.macronutrientes).map((key, index) => (
-                      <Chip onPress={() => {}} key={index} style={{margin: 5}}>
-                        {item.macronutrientes && item.macronutrientes[key]}{' '}
-                        {key}
+                      <Chip
+                        onPress={() => {}}
+                        key={index}
+                        style={{
+                          margin: 5,
+                          backgroundColor: colorMapping[key] || '#000',
+                        }}>
+                        {item.macronutrientes && item.macronutrientes[key]}
+                        {'% '}
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
                       </Chip>
                     ))}
+                </View>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <PieChart
+                    data={Object.keys(item.macronutrientes ?? {}).map(key => ({
+                      value: item.macronutrientes
+                        ? item.macronutrientes[key]
+                        : 0,
+                      color: colorMapping[key] || '#000',
+                      text: item.macronutrientes
+                        ? item.macronutrientes[key] + '%'
+                        : '0%',
+                    }))}
+                    radius={100}
+                    showText
+                    textColor="black"
+                    textSize={14}
+                    showTextBackground={false}
+                  />
                 </View>
                 <Button
                   icon="document-text-outline"
