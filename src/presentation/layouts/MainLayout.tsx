@@ -1,21 +1,15 @@
-import {useNavigation} from '@react-navigation/native';
-import {
-  ScrollView,
-  StyleProp,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-  ViewStyle,
-} from 'react-native';
-import {Text, FAB, Menu, Divider} from 'react-native-paper';
-import {Image} from 'react-native';
+import React, {useRef} from 'react';
+import {ScrollView, StyleProp, View, ViewStyle, Image} from 'react-native';
+import {Text, FAB, IconButton, Drawer, useTheme} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useTheme} from 'react-native-paper';
-import {useState} from 'react';
-import {StorageAdapter} from '../../config/adapters/storage-adapter';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {MainStackParams, RootStackParams} from '../navigation/StackNavigator';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {
+  MainStackParams,
+  RootStackParams,
+} from '../navigation/StackNavigator';
 import {useAuth} from '../hooks/useAuth';
+import {DrawerLayout} from 'react-native-gesture-handler';
 
 interface Props {
   title?: string;
@@ -43,27 +37,109 @@ export const MainLayout = ({
   blockTickets = false,
 }: Props) => {
   const {top} = useSafeAreaInsets();
-  const isDarkMode = useColorScheme() === 'dark';
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const navigation2 = useNavigation<StackNavigationProp<MainStackParams>>();
-  const [menuVisible, setMenuVisible] = useState(false);
   const {logout} = useAuth();
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+  const drawerRef = useRef<DrawerLayout>(null);
+  // Colores inactive / active
+  const unselectedBg = theme.colors.onPrimary;
+  const selectedBg = theme.colors.primaryContainer;
+
   const handleLogout = async () => {
-    closeMenu();
+    drawerRef.current?.closeDrawer();
     await logout();
   };
+
+  const renderDrawer = () => (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        paddingTop: top + 16,
+        paddingBottom: 16,
+      }}>
+      {/* Sección de Perfil y Tickets */}
+
+      <Drawer.Item
+        label="Inicio"
+        icon="home-outline"
+        active={false}
+        onPress={() => {
+          console.log('blockProfile', blockProfile);
+          console.log('blockTickets', blockTickets);
+          if (blockProfile || blockTickets) {
+            // Se cambia && por ||
+            console.log('blockProfile || blockTickets');
+            navigation2.navigate('BotTabNavigator');
+            drawerRef.current?.closeDrawer();
+          }
+        }}
+        style={{
+          backgroundColor:
+            !blockProfile && !blockTickets ? selectedBg : unselectedBg,
+          borderColor:
+            blockProfile || blockTickets ? 'rgba(0, 0, 0, 0.2)' : 'transparent',
+          borderWidth: blockProfile || blockTickets ? 1 : 0,
+          marginBottom: 8,
+        }}
+      />
+
+      <Drawer.Item
+        label="Tickets"
+        icon="ticket-outline"
+        active={blockTickets}
+        onPress={() => {
+          if (!blockTickets) {
+            navigation2.navigate('TicketListScreen');
+            drawerRef.current?.closeDrawer();
+          }
+        }}
+        style={{
+          backgroundColor: blockTickets ? selectedBg : unselectedBg,
+          borderColor: !blockTickets ? 'rgba(0, 0, 0, 0.2)' : 'transparent',
+          borderWidth: !blockTickets ? 1 : 0,
+          marginBottom: 8,
+        }}
+      />
+
+      <Drawer.Item
+        label="Perfil"
+        icon="person-outline"
+        active={blockProfile}
+        onPress={() => {
+          if (!blockProfile) {
+            navigation2.navigate('ProfileScreen');
+            drawerRef.current?.closeDrawer();
+          }
+        }}
+        style={{
+          backgroundColor: blockProfile ? selectedBg : unselectedBg,
+          borderColor: !blockProfile ? 'rgba(0, 0, 0, 0.2)' : 'transparent',
+          borderWidth: !blockProfile ? 1 : 0,
+          marginBottom: 8,
+        }}
+      />
+
+      {/* Espaciador */}
+      <View style={{flex: 1}} />
+
+      {/* Cerrar sesión abajo */}
+      <Drawer.Item
+        label="Cerrar sesión"
+        icon="log-out-outline"
+        onPress={handleLogout}
+        style={{
+          backgroundColor: theme.colors.errorContainer,
+        }}
+      />
+    </View>
+  );
 
   const childrenView = (
     <View
       style={[
-        {
-          flex: 1,
-          flexDirection: 'column',
-          paddingHorizontal: 14,
-        },
+        {flex: 1, flexDirection: 'column', paddingHorizontal: 14, paddingTop: 16},
         stylesChild,
       ]}>
       {children}
@@ -71,107 +147,67 @@ export const MainLayout = ({
   );
 
   return (
-    <View
-      style={[
-        {
-          flex: 1,
-          backgroundColor: theme.colors.background,
-        },
-        styles,
-      ]}>
+    <DrawerLayout
+      ref={drawerRef}
+      drawerWidth={280}
+      drawerPosition="left"
+      renderNavigationView={renderDrawer}>
       <View
-        style={[
-          {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 16,
-            paddingTop: title ? top + 16 : 0,
-            paddingHorizontal: 14,
-          },
-          stylesHeader,
-        ]}>
-        <View style={{flex: 1}}>
-          {title && <Text variant="displaySmall">{title}</Text>}
-          {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
-        </View>
+        style={[{flex: 1, backgroundColor: theme.colors.background}, styles]}>
+        {/* HEADER */}
         {title && (
-          <Menu
-            visible={menuVisible}
-            onDismiss={closeMenu}
-            anchor={
-              <TouchableOpacity
-                style={{flex: 1, alignItems: 'flex-end'}}
-                onPress={openMenu}>
-                <Image
-                  source={require('../../assets/logo.png')}
-                  style={{
-                    width: 48,
-                    height: 48,
-                  }}
-                />
-              </TouchableOpacity>
-            }
-            anchorPosition="bottom">
-            {!blockProfile && (
-              <>
-                <Menu.Item
-                  onPress={() => {
-                    navigation2.navigate('ProfileScreen');
-                    closeMenu();
-                  }}
-                  title="Perfil"
-                  leadingIcon="person-outline"
-                />
-                <Divider />
-              </>
-            )}
-            {!blockTickets && (
-              <>
-                <Menu.Item
-                  onPress={() => {
-                    navigation2.navigate('TicketListScreen');
-                    closeMenu();
-                  }}
-                  title="Tickets"
-                  leadingIcon="ticket-outline"
-                />
-                <Divider />
-              </>
-            )}
-
-            <Menu.Item
-              onPress={handleLogout}
-              title="Cerrar sesión"
-              leadingIcon="log-out-outline"
+          <View
+            style={[
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 16,
+                paddingTop: title ? top + 16 : 0,
+                paddingHorizontal: 14,
+              },
+              stylesHeader,
+            ]}>
+            <Image
+              source={require('../../assets/logo.png')}
+              style={{width: 48, height: 48, marginRight: 12}}
             />
-          </Menu>
+            <View style={{flex: 1}}>
+              {title && <Text variant="displaySmall">{title}</Text>}
+              {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
+            </View>
+            {title && (
+              <IconButton
+                icon="menu"
+                size={28}
+                onPress={() => drawerRef.current?.openDrawer()}
+              />
+            )}
+          </View>
+        )}
+
+        {/* CONTENIDO */}
+        {scrolleable ? (
+          <ScrollView
+            contentContainerStyle={{flexGrow: 1}}
+            style={{flex: 1}}
+            showsVerticalScrollIndicator={false}>
+            {childrenView}
+          </ScrollView>
+        ) : (
+          <View style={{flex: 1}}>{childrenView}</View>
+        )}
+
+        {/* BOTÓN BACK */}
+        {back && (
+          <FAB
+            style={{position: 'absolute', left: 16, bottom: 16}}
+            icon="arrow-back-outline"
+            onPress={() => navigation.goBack()}
+            mode="flat"
+            size="small"
+          />
         )}
       </View>
-      {scrolleable ? (
-        <ScrollView
-          contentContainerStyle={{flexGrow: 1}}
-          style={{flex: 1}}
-          scrollEnabled={scrolleable}
-          showsVerticalScrollIndicator={false}>
-          {childrenView}
-        </ScrollView>
-      ) : (
-        <View style={{flex: 1}}>{childrenView}</View>
-      )}
-      {back && (
-        <FAB
-          style={{
-            position: 'absolute',
-            left: 16,
-            bottom: 16,
-          }}
-          icon="arrow-back-outline"
-          onPress={() => navigation.goBack()}
-          mode="flat"
-          size="small"
-        />
-      )}
-    </View>
+    </DrawerLayout>
   );
 };

@@ -41,6 +41,9 @@ export const TicketScreen = ({route}: Props) => {
   const {colors} = useTheme();
   const [loading, setLoading] = useState(false);
   const [loadingBaja, setLoadingBaja] = useState(false);
+  const [inputHeight, setInputHeight] = useState(0);
+  const minHeight = 40;
+  const maxHeight = 160;
 
   const navigation = useNavigation<StackNavigationProp<MainStackParams>>();
 
@@ -117,6 +120,7 @@ export const TicketScreen = ({route}: Props) => {
     socket.emit('message', newMensaje);
 
     setMensaje('');
+    setInputHeight(0); // Reiniciar la altura del TextInput
   };
 
   // Desplazarse al final al montar el componente
@@ -210,7 +214,11 @@ export const TicketScreen = ({route}: Props) => {
                       ' ' +
                       mensaje.emisor?.lastName +
                       ' - '}
-                  {new Date(mensaje.fecha!).toLocaleTimeString()}
+                  {new Date(mensaje.fecha!).toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                  })}
                 </Text>
                 <View
                   style={{
@@ -250,12 +258,22 @@ export const TicketScreen = ({route}: Props) => {
           paddingLeft: 63,
         }}>
         <TextInput
-          outlineStyle={{borderRadius: 8}}
-          style={{flex: 1}}
+          mode="outlined"
+          multiline
+          numberOfLines={4}
+          style={{
+            flex: 1,
+            minHeight,
+            maxHeight,
+            height: Math.min(Math.max(inputHeight, minHeight), maxHeight),
+          }}
+          outlineStyle={{borderRadius: 16}}
           value={mensaje}
           onChangeText={setMensaje}
           placeholder="Escribe un mensaje"
-          mode="outlined"
+          onContentSizeChange={e => {
+            setInputHeight(e.nativeEvent.contentSize.height);
+          }}
         />
         <IconButton
           icon={'send-outline'}

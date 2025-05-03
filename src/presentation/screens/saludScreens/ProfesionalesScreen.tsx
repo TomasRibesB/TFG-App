@@ -159,6 +159,28 @@ export const ProfesionalesScreen = () => {
                           }`;
                     return (
                       <View style={styles.modalContent}>
+                        {selectedProfesional?.hasImage ? (
+                          <Avatar.Image
+                            size={150}
+                            style={{alignSelf: 'center', marginBottom: 16}}
+                            source={{
+                              uri: getUserImageRequest(
+                                selectedProfesional.id!,
+                                new Date(),
+                              ),
+                            }}
+                          />
+                        ) : (
+                          <Avatar.Text
+                            size={150}
+                            style={{alignSelf: 'center', marginBottom: 16}}
+                            label={
+                              selectedProfesional.firstName
+                                ? selectedProfesional.firstName[0]
+                                : '?'
+                            }
+                          />
+                        )}
                         <View style={styles.modalRow}>
                           <Text style={styles.modalLabel}>Nombre:</Text>
                           <Text style={styles.modalText}>
