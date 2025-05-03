@@ -110,7 +110,7 @@ export const PlanesNutricionalesRegistroScreen = () => {
                       icon="restaurant-outline"
                       onPress={() => {}}
                       style={{margin: 5}}>
-                      {plan.caloriasDiarias} Calorias diarias
+                      {plan.caloriasDiarias} Calorías diarias
                     </Chip>
                   </View>
                   {plan.objetivos &&

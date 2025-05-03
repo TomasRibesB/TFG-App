@@ -115,7 +115,7 @@ export const PlanNutricionalScreen = () => {
                     style={{
                       margin: 5,
                     }}>
-                    {item.caloriasDiarias} Calorias diarias
+                    {item.caloriasDiarias} Calorías diarias
                   </Chip>
                   {item.macronutrientes &&
                     Object.keys(item.macronutrientes).map((key, index) => (
