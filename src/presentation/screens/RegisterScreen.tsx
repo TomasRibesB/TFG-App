@@ -253,9 +253,7 @@ export const RegisterScreen = () => {
                 fontWeight: 'bold',
               }}
               variant="bodyMedium"
-              onPress={() =>
-                Linking.openURL('http://localhost:5173/auth/terms/privacy')
-              }>
+              onPress={() => navigationAuth.navigate('PrivacyTerms')}>
               términos y condiciones
             </Text>
           </View>

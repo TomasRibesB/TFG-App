@@ -12,11 +12,13 @@ import {TicketListScreen} from '../screens/ticketsScreens/TicketListScreen';
 import {TicketScreen} from '../screens/ticketsScreens/TicketScreen';
 import {EntrenamientoRegistroScreen} from '../screens/entrenamientoScreens/EntrenamientoRegistroScreen';
 import {PlanesNutricionalesRegistroScreen} from '../screens/nutricionScreens/PlanesNutricionalesRegistroScreen';
+import { PrivacyTerms } from '../screens/PrivacyTerms';
 import {ProfileScreen} from '../screens/ProfileScreen';
 
 export type AuthStackParams = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
+  PrivacyTerms: undefined;
 };
 
 export type MainStackParams = {
@@ -55,6 +57,11 @@ const AuthStackNavigator = () => (
     <AuthStack.Screen
       name="RegisterScreen"
       component={RegisterScreen}
+      options={{cardStyleInterpolator: fadeanimation}}
+    />
+    <AuthStack.Screen
+      name="PrivacyTerms"
+      component={PrivacyTerms}
       options={{cardStyleInterpolator: fadeanimation}}
     />
   </AuthStack.Navigator>

@@ -22,6 +22,7 @@ interface Props {
   back?: boolean;
   blockProfile?: boolean;
   blockTickets?: boolean;
+  menu?: boolean;
 }
 
 export const MainLayout = ({
@@ -35,6 +36,7 @@ export const MainLayout = ({
   back = false,
   blockProfile = false,
   blockTickets = false,
+  menu = true,
 }: Props) => {
   const {top} = useSafeAreaInsets();
   const theme = useTheme();
@@ -175,7 +177,7 @@ export const MainLayout = ({
               {title && <Text variant="displaySmall">{title}</Text>}
               {subtitle && <Text variant="titleSmall">{subtitle}</Text>}
             </View>
-            {title && (
+            {title && menu && (
               <IconButton
                 icon="menu"
                 size={28}
