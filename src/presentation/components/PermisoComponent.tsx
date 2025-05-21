@@ -9,6 +9,7 @@ import {
   deletePermisoDocumentoRequest,
   setPermisoDocumentoRequest,
 } from '../../services/salud';
+import {useRefreshSalud} from '../hooks/useRefreshSalud';
 
 export const PermisoComponent = () => {
   const [permiso, setPermiso] = useState<Partial<PermisoDocumento> | null>(
@@ -22,12 +23,10 @@ export const PermisoComponent = () => {
 
   const fetchPermiso = async () => {
     const permisos = await StorageAdapter.getItem('permisos');
-    if (permisos && permisos.id) {
-      setPermiso(permisos);
-    } else {
-      setPermiso(null);
-    }
+    setPermiso(permisos && permisos.id ? permisos : null);
   };
+  
+  useRefreshSalud(fetchPermiso);
 
   const handleCopyLink = () => {
     if (permiso?.code) {
