@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {MainLayout} from '../../layouts/MainLayout';
-import {Text, useTheme, Button} from 'react-native-paper';
+import {Text, useTheme, IconButton} from 'react-native-paper';
 import {DesplegableCard} from '../../components/DesplegableCard';
 import {View, StyleSheet, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -90,18 +90,17 @@ export const Documentos = () => {
                   marginBottom: 20,
                 }}>
                 {documento.hasArchivo && (
-                  <Button
-                    icon="document-attach-outline"
+                  <IconButton
+                    icon="cloud-download-outline"
                     style={{backgroundColor: theme.colors.primaryContainer}}
-                    onPress={() => handleDownload(documento.id)}>
-                    Abrir
-                  </Button>
+                    onPress={() => handleDownload(documento.id)}
+                    accessibilityLabel="Abrir documento"
+                  />
                 )}
-                <Button // eliminar documento
+                <IconButton
                   icon="trash-outline"
-                  mode="contained-tonal"
                   style={{backgroundColor: theme.colors.error}}
-                  labelStyle={{color: theme.colors.onError}}
+                  iconColor={theme.colors.onError}
                   onPress={() =>
                     Alert.alert(
                       'Eliminar documento',
@@ -118,9 +117,9 @@ export const Documentos = () => {
                       ],
                       {cancelable: false},
                     )
-                  }>
-                  Eliminar
-                </Button>
+                  }
+                  accessibilityLabel="Eliminar documento"
+                />
               </View>
               {(documento.profesional || documento.dniProfesional) && (
                 <View
