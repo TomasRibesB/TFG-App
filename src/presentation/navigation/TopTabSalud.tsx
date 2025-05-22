@@ -1,5 +1,5 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {MiSaludScreen} from '../screens/saludScreens/MiSaludScreen';
+import {Documentos} from '../screens/saludScreens/Documentos';
 import {ProfesionalesScreen} from '../screens/saludScreens/ProfesionalesScreen';
 import {MainLayout} from '../layouts/MainLayout';
 import {FAB, useTheme} from 'react-native-paper';
@@ -7,7 +7,7 @@ import {DeviceEventEmitter} from 'react-native';
 import {useEffect, useState} from 'react';
 
 export type RootTabParams = {
-  MiSalud: undefined;
+  Documentos: undefined;
   Profesionales: undefined;
 };
 
@@ -30,7 +30,7 @@ export const TopTabSalud = () => {
   return (
     <MainLayout title="Salud" stylesChild={{paddingHorizontal: 0}}>
       <Tab.Navigator
-        initialRouteName="MiSalud"
+        initialRouteName="Documentos"
         screenOptions={{
           tabBarActiveTintColor: theme.colors.primary,
           tabBarLabelStyle: {fontSize: 12},
@@ -43,9 +43,9 @@ export const TopTabSalud = () => {
           },
         }}>
         <Tab.Screen
-          name="MiSalud"
-          component={MiSaludScreen}
-          options={{tabBarLabel: 'Mi Salud'}}
+          name="Documentos"
+          component={Documentos}
+          options={{tabBarLabel: 'Documentos'}}
         />
         <Tab.Screen
           name="Profesionales"

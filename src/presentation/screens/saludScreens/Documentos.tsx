@@ -14,9 +14,9 @@ import {
   setAsignarVisivilidadDocumentoRequest,
   deleteDocumentoHardRequest,
 } from '../../../services/salud';
-import { useRefreshSalud } from '../../hooks/useRefreshSalud';
+import {useRefreshSalud} from '../../hooks/useRefreshSalud';
 
-export const MiSaludScreen = () => {
+export const Documentos = () => {
   const [documentos, setDocumentos] = useState<Documento[]>([]);
   const [profesionales, setProfesionales] = useState<User[]>([]);
   const theme = useTheme();
@@ -82,41 +82,46 @@ export const MiSaludScreen = () => {
               <Text variant="bodyMedium" style={styles.description}>
                 {documento.descripcion}
               </Text>
-              {documento.hasArchivo && (
-                <Button
-                  icon="document-attach-outline"
-                  style={[
-                    {backgroundColor: theme.colors.primaryContainer},
-                    {marginBottom: 20},
-                  ]}
-                  onPress={() => handleDownload(documento.id)}>
-                  Abrir archivo adjunto
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 20,
+                }}>
+                {documento.hasArchivo && (
+                  <Button
+                    icon="document-attach-outline"
+                    style={{backgroundColor: theme.colors.primaryContainer}}
+                    onPress={() => handleDownload(documento.id)}>
+                    Abrir
+                  </Button>
+                )}
+                <Button // eliminar documento
+                  icon="trash-outline"
+                  mode="contained-tonal"
+                  style={{backgroundColor: theme.colors.error}}
+                  labelStyle={{color: theme.colors.onError}}
+                  onPress={() =>
+                    Alert.alert(
+                      'Eliminar documento',
+                      '¿Estás seguro de que deseas eliminar este documento?',
+                      [
+                        {
+                          text: 'Cancelar',
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Eliminar',
+                          onPress: () => handleHardDelete(documento.id),
+                        },
+                      ],
+                      {cancelable: false},
+                    )
+                  }>
+                  Eliminar
                 </Button>
-              )}
-              <Button //eliminar documento
-                icon="trash-outline"
-                mode="contained-tonal"
-                style={[{backgroundColor: theme.colors.error}]}
-                labelStyle={{color: theme.colors.onError}}
-                onPress={() =>
-                  Alert.alert(
-                    'Eliminar documento',
-                    '¿Estás seguro de que deseas eliminar este documento?',
-                    [
-                      {
-                        text: 'Cancelar',
-                        style: 'cancel',
-                      },
-                      {
-                        text: 'Eliminar',
-                        onPress: () => handleHardDelete(documento.id),
-                      },
-                    ],
-                    {cancelable: false},
-                  )
-                }>
-                Eliminar documento
-              </Button>
+              </View>
               {(documento.profesional || documento.dniProfesional) && (
                 <View
                   style={{

@@ -49,7 +49,7 @@ export const TopTabNutricion = () => {
         <Tab.Screen
           name="PlanNutricional"
           component={PlanNutricionalScreen}
-          options={{tabBarLabel: 'Plan Nutricional'}}
+          options={{tabBarLabel: 'Planes Nutricionales'}}
         />
         <Tab.Screen
           name="Nutricionista"
